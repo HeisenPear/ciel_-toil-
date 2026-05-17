@@ -1,0 +1,52 @@
+---
+// Page principale — assemble toutes les sections en one-page
+import BaseLayout from '../layouts/BaseLayout.astro';
+import Nav from '../components/Nav.astro';
+import Hero from '../components/Hero.astro';
+import Prestations from '../components/Prestations.astro';
+import Galerie from '../components/Galerie.tsx';
+import Avantages from '../components/Avantages.astro';
+import Temoignages from '../components/Temoignages.astro';
+import Contact from '../components/Contact.astro';
+---
+
+<BaseLayout
+  title="Dorian Auto Prestige — Ciel étoilé fibre optique & CarPlay sur mesure"
+  description="Artisan automobile spécialisé dans le ciel étoilé fibre optique et l'intégration CarPlay/Android Auto sur mesure. Devis gratuit, garantie 12 mois. Résultats bluffants."
+>
+  <Nav />
+  <main>
+    <Hero />
+
+    <!-- Trait séparateur discret -->
+    <div class="gold-line"></div>
+
+    <Prestations />
+    <Galerie client:visible />
+    <Avantages />
+    <Temoignages />
+    <Contact />
+  </main>
+
+  <!-- Footer minimal -->
+  <footer class="bg-surface border-t border-gold/10 py-10 px-6">
+    <div class="max-w-7xl mx-auto flex flex-col md:flex-row items-center justify-between gap-4">
+      <div class="flex items-center gap-3">
+        <svg viewBox="0 0 28 28" fill="none" xmlns="http://www.w3.org/2000/svg" class="w-5 h-5" aria-hidden="true">
+          <path d="M14 2 L15.6 11.4 L25 14 L15.6 16.6 L14 26 L12.4 16.6 L3 14 L12.4 11.4 Z" fill="#C4962A"/>
+        </svg>
+        <span class="font-display text-warm-white/60 text-sm">Dorian Auto Prestige</span>
+      </div>
+
+      <nav class="flex gap-6" aria-label="Navigation pied de page">
+        <a href="#prestations" class="font-body text-warm-white/35 hover:text-warm-white/70 text-xs tracking-wide transition-colors">Prestations</a>
+        <a href="#galerie"     class="font-body text-warm-white/35 hover:text-warm-white/70 text-xs tracking-wide transition-colors">Galerie</a>
+        <a href="#contact"     class="font-body text-warm-white/35 hover:text-warm-white/70 text-xs tracking-wide transition-colors">Contact</a>
+      </nav>
+
+      <p class="font-body text-warm-white/20 text-xs">
+        &copy; {new Date().getFullYear()} Dorian Auto Prestige — Tous droits réservés
+      </p>
+    </div>
+  </footer>
+</BaseLayout>

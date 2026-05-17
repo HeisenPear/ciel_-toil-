@@ -1,0 +1,117 @@
+---
+// Navigation principale — logo, liens desktop, menu mobile, scroll transparency
+---
+
+<header class="fixed top-0 left-0 right-0 z-50" id="site-header">
+  <nav class="max-w-7xl mx-auto px-6 py-5 flex items-center justify-between">
+
+    <!-- Logo -->
+    <a href="/" class="flex items-center gap-3 group" aria-label="Dorian Auto Prestige — accueil">
+      <svg viewBox="0 0 28 28" fill="none" xmlns="http://www.w3.org/2000/svg" class="w-7 h-7 flex-shrink-0">
+        <path d="M14 2 L15.6 11.4 L25 14 L15.6 16.6 L14 26 L12.4 16.6 L3 14 L12.4 11.4 Z" fill="#C4962A"/>
+        <circle cx="5"  cy="5"  r="1.1" fill="#C4962A" opacity="0.45"/>
+        <circle cx="23" cy="7"  r="0.8" fill="#C4962A" opacity="0.35"/>
+        <circle cx="24" cy="22" r="1"   fill="#C4962A" opacity="0.5"/>
+        <circle cx="4"  cy="21" r="0.7" fill="#C4962A" opacity="0.3"/>
+      </svg>
+      <span class="font-display text-lg tracking-wide text-warm-white group-hover:text-champagne transition-colors duration-300">
+        Dorian <span class="text-gold">Auto</span>
+      </span>
+    </a>
+
+    <!-- Desktop links -->
+    <div class="hidden md:flex items-center gap-8">
+      <a href="#prestations" class="text-warm-white/55 hover:text-warm-white font-body text-sm tracking-wide transition-colors duration-200">Prestations</a>
+      <a href="#galerie"      class="text-warm-white/55 hover:text-warm-white font-body text-sm tracking-wide transition-colors duration-200">Galerie</a>
+      <a href="#avantages"    class="text-warm-white/55 hover:text-warm-white font-body text-sm tracking-wide transition-colors duration-200">Pourquoi nous</a>
+      <a href="#temoignages"  class="text-warm-white/55 hover:text-warm-white font-body text-sm tracking-wide transition-colors duration-200">Avis clients</a>
+      <a href="#contact" class="btn-shimmer px-6 py-2.5 text-xs">
+        Devis gratuit
+      </a>
+    </div>
+
+    <!-- Mobile hamburger -->
+    <button
+      class="md:hidden text-warm-white p-2 -mr-2"
+      id="mobile-menu-btn"
+      aria-label="Ouvrir le menu de navigation"
+      aria-expanded="false"
+    >
+      <svg width="22" height="22" viewBox="0 0 22 22" fill="none" id="icon-open">
+        <path d="M3 6h16M3 11h16M3 16h16" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
+      </svg>
+      <svg width="22" height="22" viewBox="0 0 22 22" fill="none" id="icon-close" class="hidden">
+        <path d="M5 5l12 12M17 5L5 17" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
+      </svg>
+    </button>
+  </nav>
+
+  <!-- Mobile menu -->
+  <div
+    class="md:hidden overflow-hidden transition-all duration-500"
+    id="mobile-menu"
+    style="max-height: 0;"
+  >
+    <div class="bg-surface/97 backdrop-blur-xl border-t border-gold/10 px-6 pt-4 pb-8 flex flex-col gap-1">
+      <a href="#prestations" class="mobile-link">Prestations</a>
+      <a href="#galerie"      class="mobile-link">Galerie</a>
+      <a href="#avantages"    class="mobile-link">Pourquoi nous choisir</a>
+      <a href="#temoignages"  class="mobile-link">Avis clients</a>
+      <a href="#contact" class="btn-shimmer text-center py-4 mt-4 text-xs block">
+        Demander un devis gratuit
+      </a>
+    </div>
+  </div>
+</header>
+
+<style>
+  .mobile-link {
+    display: block;
+    padding: 0.85rem 0;
+    color: rgba(240, 237, 230, 0.65);
+    font-family: 'Outfit', sans-serif;
+    font-size: 0.95rem;
+    letter-spacing: 0.03em;
+    border-bottom: 1px solid rgba(196, 150, 42, 0.07);
+    transition: color 0.2s;
+  }
+  .mobile-link:hover { color: #F0EDE6; }
+</style>
+
+<script>
+  const header   = document.getElementById('site-header');
+  const btn      = document.getElementById('mobile-menu-btn');
+  const menu     = document.getElementById('mobile-menu');
+  const iconOpen  = document.getElementById('icon-open');
+  const iconClose = document.getElementById('icon-close');
+  let open = false;
+
+  // Scroll transparency
+  window.addEventListener('scroll', () => {
+    if (window.scrollY > 60) {
+      header?.classList.add('header-scrolled');
+    } else {
+      header?.classList.remove('header-scrolled');
+    }
+  }, { passive: true });
+
+  // Mobile toggle
+  btn?.addEventListener('click', () => {
+    open = !open;
+    btn.setAttribute('aria-expanded', String(open));
+    if (menu) menu.style.maxHeight = open ? menu.scrollHeight + 'px' : '0';
+    iconOpen?.classList.toggle('hidden', open);
+    iconClose?.classList.toggle('hidden', !open);
+  });
+
+  // Close on link click
+  menu?.querySelectorAll('a').forEach((link) => {
+    link.addEventListener('click', () => {
+      open = false;
+      btn?.setAttribute('aria-expanded', 'false');
+      if (menu) menu.style.maxHeight = '0';
+      iconOpen?.classList.remove('hidden');
+      iconClose?.classList.add('hidden');
+    });
+  });
+</script>

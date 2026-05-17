@@ -1,0 +1,185 @@
+---
+// Section prestations — deux cartes côte à côte avec galerie miniature et caractéristiques
+---
+
+<section id="prestations" class="py-28 px-4 bg-surface">
+  <div class="max-w-7xl mx-auto">
+
+    <!-- Header -->
+    <div class="text-center mb-20 reveal">
+      <p class="font-body text-gold text-xs tracking-[0.4em] uppercase mb-5">Ce que nous faisons</p>
+      <h2 class="font-display text-5xl md:text-6xl lg:text-7xl text-warm-white">Nos Prestations</h2>
+      <span class="section-rule mt-6"></span>
+    </div>
+
+    <!-- Cards -->
+    <div class="grid md:grid-cols-2 gap-5 lg:gap-8">
+
+      <!-- ── Ciel étoilé ── -->
+      <article class="prestation-card gold-glow reveal reveal-delay-1 flex flex-col">
+        <!-- Photo top -->
+        <div class="relative h-64 overflow-hidden flex-shrink-0">
+          <img
+            src="/images/ciel-bmw-m3.jpg"
+            alt="Ciel étoilé blanc sur BMW M3 avec sièges orange"
+            class="w-full h-full object-cover object-top transition-transform duration-700 hover:scale-105"
+            loading="lazy"
+            width="700"
+            height="350"
+          />
+          <div class="absolute inset-0 bg-gradient-to-t from-surface via-surface/30 to-transparent"></div>
+          <!-- Badge prix -->
+          <div class="absolute top-4 right-4 bg-gold px-3 py-1.5">
+            <span class="font-body text-ink text-xs font-semibold tracking-wider">À partir de 500 €</span>
+          </div>
+          <!-- Label catégorie -->
+          <div class="absolute bottom-4 left-4">
+            <span class="font-body text-warm-white/50 text-xs tracking-[0.3em] uppercase">Habitacle</span>
+          </div>
+        </div>
+
+        <div class="p-8 flex flex-col flex-1">
+          <!-- Icône -->
+          <div class="w-10 h-10 mb-6 text-gold" aria-hidden="true">
+            <svg viewBox="0 0 40 40" fill="none" xmlns="http://www.w3.org/2000/svg" class="w-full h-full">
+              <path d="M20 4 L21.8 14.2 L32 20 L21.8 25.8 L20 36 L18.2 25.8 L8 20 L18.2 14.2 Z" stroke="currentColor" stroke-width="1.2" fill="none" opacity="0.5"/>
+              <path d="M20 10 L21.2 17.8 L29 20 L21.2 22.2 L20 30 L18.8 22.2 L11 20 L18.8 17.8 Z" fill="currentColor"/>
+              <circle cx="7"  cy="8"  r="1.2" fill="currentColor" opacity="0.5"/>
+              <circle cx="34" cy="12" r="1"   fill="currentColor" opacity="0.4"/>
+              <circle cx="33" cy="32" r="1.4" fill="currentColor" opacity="0.6"/>
+              <circle cx="6"  cy="30" r="0.9" fill="currentColor" opacity="0.35"/>
+              <circle cx="17" cy="5"  r="0.7" fill="currentColor" opacity="0.3"/>
+            </svg>
+          </div>
+
+          <h3 class="font-display text-3xl lg:text-4xl text-warm-white mb-2">Ciel étoilé</h3>
+          <p class="font-body text-gold text-xs tracking-[0.25em] uppercase mb-5">Fibre optique sur mesure</p>
+
+          <p class="font-body text-warm-white/55 text-sm leading-relaxed mb-7">
+            Des centaines de fibres optiques tressées à la main dans votre plafond et contreportes.
+            Effets étoiles filantes, personnalisation avec vos initiales, choix de coloris.
+            Compatible tous véhicules.
+          </p>
+
+          <!-- Features -->
+          <ul class="space-y-2.5 mb-8 flex-1">
+            {[
+              'Pose sur mesure, véhicule par véhicule',
+              'Fibres optiques haute densité',
+              'Étoiles filantes & effets lumineux',
+              'Initiales ou motifs personnalisés',
+              'Délai 2 à 4 jours selon véhicule',
+            ].map((f) => (
+              <li class="flex items-start gap-2.5 text-warm-white/65 font-body text-sm">
+                <span class="w-1.5 h-1.5 rounded-full bg-gold flex-shrink-0 mt-1.5"></span>
+                {f}
+              </li>
+            ))}
+          </ul>
+
+          <!-- Mini galerie -->
+          <div class="flex gap-2 mb-8">
+            {[
+              { src: '/images/hero-ciel-etoile.jpg',       alt: 'Galaxie violette' },
+              { src: '/images/ciel-bmw-m2.jpg',            alt: 'BMW M2 ciel bleu' },
+              { src: '/images/ciel-rouge-initiales.jpg',   alt: 'Intérieur rouge personnalisé' },
+            ].map((img) => (
+              <a href="#galerie" class="w-16 h-16 overflow-hidden border border-white/10 hover:border-gold/50 transition-colors duration-300 focus:outline-none focus:ring-1 focus:ring-gold">
+                <img src={img.src} alt={img.alt} class="w-full h-full object-cover hover:scale-110 transition-transform duration-400" loading="lazy" width="64" height="64" />
+              </a>
+            ))}
+          </div>
+
+          <a
+            href="#contact"
+            class="inline-flex items-center gap-2 text-gold hover:text-champagne font-body text-xs tracking-[0.2em] uppercase transition-colors duration-200 group mt-auto"
+          >
+            Demander un devis
+            <svg width="14" height="14" viewBox="0 0 16 16" fill="none" aria-hidden="true" class="transition-transform duration-200 group-hover:translate-x-1">
+              <path d="M3 8h10M9 4l4 4-4 4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+            </svg>
+          </a>
+        </div>
+      </article>
+
+      <!-- ── CarPlay / Android Auto ── -->
+      <article class="prestation-card gold-glow reveal reveal-delay-2 flex flex-col">
+        <div class="relative h-64 overflow-hidden flex-shrink-0">
+          <img
+            src="/images/carplay-porsche.jpg"
+            alt="Intégration CarPlay Apple sur Porsche Cayman"
+            class="w-full h-full object-cover object-center transition-transform duration-700 hover:scale-105"
+            loading="lazy"
+            width="700"
+            height="350"
+          />
+          <div class="absolute inset-0 bg-gradient-to-t from-surface via-surface/30 to-transparent"></div>
+          <div class="absolute top-4 right-4 bg-gold px-3 py-1.5">
+            <span class="font-body text-ink text-xs font-semibold tracking-wider">À partir de 300 €</span>
+          </div>
+          <div class="absolute bottom-4 left-4">
+            <span class="font-body text-warm-white/50 text-xs tracking-[0.3em] uppercase">Console centrale</span>
+          </div>
+        </div>
+
+        <div class="p-8 flex flex-col flex-1">
+          <div class="w-10 h-10 mb-6 text-gold" aria-hidden="true">
+            <svg viewBox="0 0 40 40" fill="none" xmlns="http://www.w3.org/2000/svg" class="w-full h-full">
+              <rect x="5" y="9" width="30" height="20" rx="2.5" stroke="currentColor" stroke-width="1.2"/>
+              <path d="M13 29v4M27 29v4M11 33h18" stroke="currentColor" stroke-width="1.2" stroke-linecap="round"/>
+              <circle cx="26" cy="19" r="5.5" stroke="currentColor" stroke-width="1.2"/>
+              <path d="M26 15.5v3.5l2 2" stroke="currentColor" stroke-width="1.2" stroke-linecap="round"/>
+              <rect x="10" y="15" width="11" height="8" rx="1.5" stroke="currentColor" stroke-width="1.2"/>
+              <path d="M11.5 19h8" stroke="currentColor" stroke-width="1" stroke-linecap="round" opacity="0.5"/>
+            </svg>
+          </div>
+
+          <h3 class="font-display text-3xl lg:text-4xl text-warm-white mb-2">Écran CarPlay</h3>
+          <p class="font-body text-gold text-xs tracking-[0.25em] uppercase mb-5">Apple CarPlay & Android Auto</p>
+
+          <p class="font-body text-warm-white/55 text-sm leading-relaxed mb-7">
+            Remplacez votre autoradio par un écran tactile haute résolution intégré à l'identique.
+            Navigation GPS temps réel, streaming, appels mains-libres. Discret comme d'origine,
+            moderne comme jamais.
+          </p>
+
+          <ul class="space-y-2.5 mb-8 flex-1">
+            {[
+              'Intégration sur mesure au tableau de bord',
+              'Écran HD 7 à 10 pouces selon modèle',
+              'Compatible iPhone & Android',
+              'Navigation GPS, Spotify, Maps',
+              'Boîtier canbus — zéro perte de fonctions',
+            ].map((f) => (
+              <li class="flex items-start gap-2.5 text-warm-white/65 font-body text-sm">
+                <span class="w-1.5 h-1.5 rounded-full bg-gold flex-shrink-0 mt-1.5"></span>
+                {f}
+              </li>
+            ))}
+          </ul>
+
+          <!-- Mini galerie CarPlay -->
+          <div class="flex gap-2 mb-8">
+            <a href="#galerie" class="w-16 h-16 overflow-hidden border border-white/10 hover:border-gold/50 transition-colors duration-300">
+              <img src="/images/carplay-porsche.jpg" alt="CarPlay Porsche" class="w-full h-full object-cover hover:scale-110 transition-transform duration-400" loading="lazy" width="64" height="64" />
+            </a>
+            <div class="w-16 h-16 border border-dashed border-white/15 flex items-center justify-center">
+              <span class="font-body text-warm-white/20 text-xs text-center leading-tight px-1">+<br/>bientôt</span>
+            </div>
+          </div>
+
+          <a
+            href="#contact"
+            class="inline-flex items-center gap-2 text-gold hover:text-champagne font-body text-xs tracking-[0.2em] uppercase transition-colors duration-200 group mt-auto"
+          >
+            Demander un devis
+            <svg width="14" height="14" viewBox="0 0 16 16" fill="none" aria-hidden="true" class="transition-transform duration-200 group-hover:translate-x-1">
+              <path d="M3 8h10M9 4l4 4-4 4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+            </svg>
+          </a>
+        </div>
+      </article>
+
+    </div>
+  </div>
+</section>

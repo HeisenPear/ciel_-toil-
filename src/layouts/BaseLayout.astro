@@ -1,0 +1,79 @@
+---
+// Layout de base — HTML shell, fonts, SEO, Schema.org, WhatsApp flottant
+import SEO from '../components/SEO.astro';
+import FloatingWhatsApp from '../components/FloatingWhatsApp.tsx';
+import '../styles/global.css';
+
+interface Props {
+  title?: string;
+  description?: string;
+  ogImage?: string;
+}
+
+const {
+  title = 'Dorian Auto Prestige — Ciel étoilé fibre optique & CarPlay sur mesure',
+  description = 'Artisan automobile spécialisé dans le ciel étoilé fibre optique et l\'intégration CarPlay / Android Auto sur mesure. Devis gratuit, garantie 12 mois.',
+  ogImage = '/images/hero-ciel-etoile.jpg',
+} = Astro.props;
+
+const schemaData = {
+  '@context': 'https://schema.org',
+  '@type': 'LocalBusiness',
+  name: 'Dorian Auto Prestige',
+  description: 'Artisan automobile spécialisé dans le ciel étoilé fibre optique et l\'intégration CarPlay/Android Auto sur mesure.',
+  telephone: '+33600000000',
+  email: 'contact@dorian-auto-prestige.fr',
+  address: {
+    '@type': 'PostalAddress',
+    addressCountry: 'FR',
+  },
+  priceRange: '€€',
+  openingHours: 'Mo-Sa 09:00-19:00',
+  image: ogImage,
+  url: 'https://dorian-auto-prestige.fr',
+  sameAs: [],
+};
+---
+
+<!doctype html>
+<html lang="fr">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <meta name="theme-color" content="#06060C" />
+
+    <SEO {title} {description} {ogImage} />
+
+    <!-- Schema.org LocalBusiness -->
+    <script type="application/ld+json" set:html={JSON.stringify(schemaData)} />
+
+    <!-- Preconnect for fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;1,300;1,400;1,600&family=Outfit:wght@300;400;500;600&display=swap"
+      rel="stylesheet"
+    />
+  </head>
+
+  <body class="bg-ink text-warm-white overflow-x-hidden">
+    <slot />
+    <FloatingWhatsApp client:load />
+
+    <!-- Scroll reveal observer -->
+    <script>
+      const observer = new IntersectionObserver(
+        (entries) => {
+          entries.forEach((entry) => {
+            if (entry.isIntersecting) {
+              entry.target.classList.add('is-visible');
+            }
+          });
+        },
+        { threshold: 0.08, rootMargin: '0px 0px -50px 0px' }
+      );
+      document.querySelectorAll('.reveal').forEach((el) => observer.observe(el));
+    </script>
+  </body>
+</html>

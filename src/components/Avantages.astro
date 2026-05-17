@@ -1,0 +1,67 @@
+---
+// Section avantages — 4 arguments pour choisir Dorian Auto Prestige
+const items = [
+  {
+    glyph: '✦',
+    title: 'Pose sur mesure',
+    body: 'Chaque fibre est passée à la main, adaptée aux courbes de votre plafond. Aucun kit pré-découpé, aucun compromis sur le rendu final.',
+  },
+  {
+    glyph: '◈',
+    title: 'Matériaux premium',
+    body: "Fibres optiques haute densité, modules LED longue durée, colles spéciales habitacle. Uniquement des composants professionnels conçus pour l'automobile.",
+  },
+  {
+    glyph: '◎',
+    title: 'Garantie 12 mois',
+    body: "Chaque prestation est couverte un an. En cas de problème sur l'installation, Dorian revient sans frais supplémentaires — parole d'artisan.",
+  },
+  {
+    glyph: '◇',
+    title: 'Devis gratuit',
+    body: "Envoyez vos photos et le modèle de votre véhicule. Recevez un devis personnalisé sous 24 h, sans engagement et sans frais de déplacement.",
+  },
+];
+---
+
+<section id="avantages" class="py-28 px-4 bg-surface">
+  <div class="max-w-7xl mx-auto">
+
+    <!-- Header -->
+    <div class="text-center mb-20 reveal">
+      <p class="font-body text-gold text-xs tracking-[0.4em] uppercase mb-5">Notre promesse</p>
+      <h2 class="font-display text-5xl md:text-6xl lg:text-7xl text-warm-white">Pourquoi nous choisir</h2>
+      <span class="section-rule mt-6"></span>
+    </div>
+
+    <!-- Grid -->
+    <div class="grid sm:grid-cols-2 lg:grid-cols-4 gap-4">
+      {items.map((item, i) => (
+        <div class={`avantage-item reveal reveal-delay-${i + 1}`}>
+          <!-- Glyph décoratif -->
+          <div class="font-display text-4xl text-gold mb-6 leading-none opacity-70" aria-hidden="true">
+            {item.glyph}
+          </div>
+          <h3 class="font-display text-2xl text-warm-white mb-4">{item.title}</h3>
+          <p class="font-body text-warm-white/50 text-sm leading-relaxed">{item.body}</p>
+        </div>
+      ))}
+    </div>
+
+    <!-- Bottom CTA banner -->
+    <div class="mt-16 reveal">
+      <div class="border border-gold/20 p-10 text-center" style="background: linear-gradient(135deg, rgba(196,150,42,0.05) 0%, transparent 60%);">
+        <p class="font-display text-3xl md:text-4xl text-warm-white mb-6 italic">
+          "Le luxe, c'est quand les détails qu'on ne voit pas<br class="hidden md:block" /> font toute la différence."
+        </p>
+        <a href="#contact" class="btn-shimmer px-9 py-4 text-xs inline-flex items-center gap-3">
+          Obtenir mon devis gratuit
+          <svg width="14" height="14" viewBox="0 0 16 16" fill="none" aria-hidden="true">
+            <path d="M3 8h10M9 4l4 4-4 4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+          </svg>
+        </a>
+      </div>
+    </div>
+
+  </div>
+</section>
