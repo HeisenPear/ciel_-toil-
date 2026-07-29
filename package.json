@@ -10,7 +10,7 @@
     "prebuild": "node scripts/generate-assets.mjs",
     "build": "astro build",
     "preview": "astro preview",
-    "check": "astro check",
+    "check": "astro check && node scripts/validate-vercel-config.mjs",
     "assets": "node scripts/generate-assets.mjs"
   },
   "dependencies": {
@@ -25,6 +25,7 @@
   },
   "devDependencies": {
     "@astrojs/check": "^0.9.4",
+    "@vercel/routing-utils": "^6.4.0",
     "typescript": "^5.9.2"
   }
 }

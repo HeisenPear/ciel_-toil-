@@ -34,7 +34,7 @@ npm install
 npm run dev        # serveur de développement
 npm run build      # génération statique dans dist/
 npm run preview    # prévisualisation du build
-npm run check      # typage et diagnostics Astro
+npm run check      # typage Astro + validation de vercel.json
 npm run assets     # régénère favicon PNG et image Open Graph depuis les SVG
 ```
 
