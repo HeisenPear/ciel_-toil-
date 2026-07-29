@@ -23,3 +23,7 @@ Thumbs.db
 # Vercel
 .vercel/
 .vercel
+
+# Assets générés au build par scripts/generate-assets.mjs
+public/apple-touch-icon.png
+public/og/
