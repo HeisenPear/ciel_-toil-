@@ -1,0 +1,36 @@
+---
+import Icon from './Icon.astro';
+
+interface Props {
+  items: { name: string; url: string }[];
+  tone?: 'light' | 'dark';
+}
+
+const { items, tone = 'light' } = Astro.props;
+const muted = tone === 'dark' ? 'text-ink-400' : 'text-ink-500';
+const strong = tone === 'dark' ? 'text-ink-200' : 'text-ink-700';
+---
+
+<nav aria-label="Fil d’Ariane" class={`text-sm ${muted}`}>
+  <ol class="flex flex-wrap items-center gap-1.5">
+    <li>
+      <a href="/" class={`hover:underline ${strong}`}>Accueil</a>
+    </li>
+    {
+      items.map((item, index) => (
+        <li class="flex items-center gap-1.5">
+          <Icon name="arrow-right" size={13} class="opacity-50" />
+          {index === items.length - 1 ? (
+            <span aria-current="page" class="font-medium">
+              {item.name}
+            </span>
+          ) : (
+            <a href={item.url} class={`hover:underline ${strong}`}>
+              {item.name}
+            </a>
+          )}
+        </li>
+      ))
+    }
+  </ol>
+</nav>

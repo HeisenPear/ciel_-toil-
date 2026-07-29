@@ -1,0 +1,45 @@
+---
+import type { Commune } from '../data/communes';
+import Icon from './Icon.astro';
+
+interface Props {
+  communes: Commune[];
+  /** Affiche la distance depuis Tours sous chaque commune. */
+  showDistance?: boolean;
+  columns?: 2 | 3 | 4;
+}
+
+const { communes, showDistance = true, columns = 4 } = Astro.props;
+
+const cols = {
+  2: 'sm:grid-cols-2',
+  3: 'sm:grid-cols-2 lg:grid-cols-3',
+  4: 'sm:grid-cols-2 lg:grid-cols-4',
+};
+---
+
+<ul class={`grid gap-3 ${cols[columns]}`}>
+  {
+    communes.map((commune) => (
+      <li>
+        <a
+          href={`/location-benne/${commune.slug}`}
+          class="group flex items-center justify-between gap-3 rounded-lg border border-ink-200 bg-white px-4 py-3 transition-colors hover:border-benne-400 hover:bg-benne-50"
+        >
+          <span>
+            <span class="block font-semibold text-ink-900">{commune.name}</span>
+            <span class="block text-xs text-ink-500">
+              {commune.cp}
+              {showDistance && commune.distance > 0 && ` · ${commune.distance} km de Tours`}
+            </span>
+          </span>
+          <Icon
+            name="arrow-right"
+            size={16}
+            class="shrink-0 text-ink-300 transition-transform group-hover:translate-x-0.5 group-hover:text-benne-600"
+          />
+        </a>
+      </li>
+    ))
+  }
+</ul>

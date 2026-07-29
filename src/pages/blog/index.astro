@@ -1,0 +1,79 @@
+---
+import { getCollection } from 'astro:content';
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import PageHeader from '../../components/PageHeader.astro';
+import Section from '../../components/Section.astro';
+import Icon from '../../components/Icon.astro';
+import { SITE } from '../../config/site';
+
+const breadcrumbs = [{ name: 'Blog', url: '/blog' }];
+
+const posts = (await getCollection('blog', ({ data }) => !data.draft)).sort(
+  (a, b) => b.data.pubDate.getTime() - a.data.pubDate.getTime(),
+);
+
+const dateFmt = new Intl.DateTimeFormat('fr-FR', { dateStyle: 'long' });
+
+const schemas = [
+  {
+    '@type': 'Blog',
+    '@id': `${SITE.url}/blog#blog`,
+    name: `Conseils et guides — ${SITE.name}`,
+    description:
+      'Guides pratiques sur la location de bennes, le tri des déchets de chantier et la réglementation en Indre-et-Loire.',
+    inLanguage: 'fr-FR',
+    blogPost: posts.map((post) => ({
+      '@type': 'BlogPosting',
+      headline: post.data.title,
+      description: post.data.description,
+      datePublished: post.data.pubDate.toISOString(),
+      url: `${SITE.url}/blog/${post.id}`,
+    })),
+  },
+];
+---
+
+<BaseLayout
+  title="Conseils et guides sur la location de bennes en Indre-et-Loire"
+  description="Guides pratiques : choisir le bon volume de benne, comprendre les prix, obtenir une autorisation de voirie à Tours et trier les déchets de chantier."
+  path="/blog"
+  breadcrumbs={breadcrumbs}
+  schemas={schemas}
+>
+  <PageHeader
+    breadcrumbs={breadcrumbs}
+    eyebrow="Ressources"
+    title="Conseils, guides et réglementation"
+    lead="Ce que nous expliquons chaque semaine au téléphone, mis par écrit : dimensionner une benne, comprendre un tarif, obtenir une autorisation, trier correctement."
+  />
+
+  <Section tone="white">
+    <div class="grid gap-8 md:grid-cols-2 lg:grid-cols-3">
+      {
+        posts.map((post) => (
+          <article class="group relative flex flex-col rounded-card border border-ink-200 bg-white p-7 transition-all hover:-translate-y-1 hover:border-benne-300 hover:shadow-[var(--shadow-lift)]">
+            <p class="flex items-center gap-2 text-xs font-bold uppercase tracking-[0.14em] text-benne-700">
+              <Icon name="box" size={14} />
+              {post.data.category}
+            </p>
+            <h2 class="mt-3 text-xl font-bold leading-snug text-ink-950">
+              <a href={`/blog/${post.id}`} class="after:absolute after:inset-0">
+                {post.data.title}
+              </a>
+            </h2>
+            <p class="mt-3 flex-1 text-sm leading-relaxed text-ink-600">{post.data.description}</p>
+            <div class="mt-6 flex items-center justify-between border-t border-ink-100 pt-4 text-sm">
+              <time datetime={post.data.pubDate.toISOString()} class="text-ink-500">
+                {dateFmt.format(post.data.pubDate)}
+              </time>
+              <span class="inline-flex items-center gap-1.5 font-semibold text-benne-700 transition-transform group-hover:translate-x-0.5">
+                Lire
+                <Icon name="arrow-right" size={15} />
+              </span>
+            </div>
+          </article>
+        ))
+      }
+    </div>
+  </Section>
+</BaseLayout>

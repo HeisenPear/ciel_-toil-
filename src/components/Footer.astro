@@ -1,0 +1,170 @@
+---
+import { SITE, CONTACT } from '../config/site';
+import { BENNES } from '../data/bennes';
+import { priorityCommunes, COMMUNES } from '../data/communes';
+import Icon from './Icon.astro';
+import Logo from './Logo.astro';
+import CtaBand from './CtaBand.astro';
+
+interface Props {
+  hideCta?: boolean;
+}
+const { hideCta = false } = Astro.props;
+
+const year = new Date().getFullYear();
+
+/* Maillage interne : on expose les communes prioritaires plus quelques villes
+   secondaires, pour distribuer le jus de lien vers les pages locales. */
+const villesFooter = [
+  ...priorityCommunes(),
+  ...COMMUNES.filter((c) => !c.priority).slice(0, 10),
+];
+---
+
+{!hideCta && <CtaBand />}
+
+<footer class="bg-ink-950 text-ink-200">
+  <div class="container-page py-14 lg:py-16">
+    <div class="grid gap-10 lg:grid-cols-12 lg:gap-8">
+      <div class="lg:col-span-4">
+        <Logo class="h-11 w-auto" light />
+        <p class="mt-5 max-w-sm text-sm leading-relaxed text-ink-300">
+          Location de bennes de 1 à 30 m³ pour les professionnels du bâtiment et les particuliers,
+          à Tours et dans l’ensemble de l’Indre-et-Loire. Livraison sous 24 à 48 h, tri et
+          valorisation des déchets en centre agréé.
+        </p>
+
+        <address class="mt-6 space-y-2.5 not-italic text-sm">
+          <a
+            href={`tel:${CONTACT.phoneE164}`}
+            class="flex items-center gap-2.5 font-semibold text-white hover:text-benne-300"
+          >
+            <Icon name="phone" size={18} class="text-benne-400" />
+            {CONTACT.phone}
+          </a>
+          <a
+            href={`mailto:${CONTACT.email}`}
+            class="flex items-center gap-2.5 text-ink-300 hover:text-white"
+          >
+            <Icon name="mail" size={18} class="text-benne-400" />
+            {CONTACT.email}
+          </a>
+          <p class="flex items-start gap-2.5 text-ink-300">
+            <Icon name="pin" size={18} class="mt-0.5 shrink-0 text-benne-400" />
+            <span>
+              {CONTACT.address.street}<br />
+              {`${CONTACT.address.postalCode} ${CONTACT.address.city}`}
+            </span>
+          </p>
+        </address>
+
+        <dl class="mt-6 space-y-1 border-t border-ink-800 pt-5 text-sm">
+          {
+            CONTACT.openingHoursHuman.map((h) => (
+              <div class="flex justify-between gap-4">
+                <dt class="text-ink-400">{h.label}</dt>
+                <dd class="font-medium text-ink-200">{h.value}</dd>
+              </div>
+            ))
+          }
+        </dl>
+      </div>
+
+      <nav class="lg:col-span-2" aria-labelledby="footer-bennes">
+        <h2 id="footer-bennes" class="text-sm font-semibold uppercase tracking-wider text-white">
+          Nos bennes
+        </h2>
+        <ul class="mt-4 space-y-2.5 text-sm">
+          {
+            BENNES.map((benne) => (
+              <li>
+                <a href={`/nos-bennes/${benne.slug}`} class="text-ink-300 hover:text-benne-300">
+                  {benne.name}
+                </a>
+              </li>
+            ))
+          }
+        </ul>
+      </nav>
+
+      <nav class="lg:col-span-3" aria-labelledby="footer-services">
+        <h2 id="footer-services" class="text-sm font-semibold uppercase tracking-wider text-white">
+          Services
+        </h2>
+        <ul class="mt-4 space-y-2.5 text-sm">
+          <li>
+            <a href="/location-benne-chantier" class="text-ink-300 hover:text-benne-300"
+              >Location de benne pour chantier</a
+            >
+          </li>
+          <li>
+            <a href="/location-benne-demenagement" class="text-ink-300 hover:text-benne-300"
+              >Location de benne pour déménagement</a
+            >
+          </li>
+          <li>
+            <a href="/tarifs" class="text-ink-300 hover:text-benne-300">Tarifs et devis</a>
+          </li>
+          <li>
+            <a href="/dechets-acceptes" class="text-ink-300 hover:text-benne-300"
+              >Déchets acceptés et interdits</a
+            >
+          </li>
+          <li>
+            <a href="/zones-desservies" class="text-ink-300 hover:text-benne-300"
+              >Zones desservies en Indre-et-Loire</a
+            >
+          </li>
+          <li>
+            <a href="/faq" class="text-ink-300 hover:text-benne-300">Questions fréquentes</a>
+          </li>
+          <li>
+            <a href="/blog" class="text-ink-300 hover:text-benne-300">Conseils et actualités</a>
+          </li>
+        </ul>
+      </nav>
+
+      <nav class="lg:col-span-3" aria-labelledby="footer-villes">
+        <h2 id="footer-villes" class="text-sm font-semibold uppercase tracking-wider text-white">
+          Location de benne près de chez vous
+        </h2>
+        <ul class="mt-4 flex flex-wrap gap-x-3 gap-y-2 text-sm">
+          {
+            villesFooter.map((commune) => (
+              <li>
+                <a
+                  href={`/location-benne/${commune.slug}`}
+                  class="text-ink-300 hover:text-benne-300"
+                >
+                  {commune.name}
+                </a>
+              </li>
+            ))
+          }
+        </ul>
+        <a
+          href="/zones-desservies"
+          class="mt-4 inline-flex items-center gap-1.5 text-sm font-semibold text-benne-400 hover:text-benne-300"
+        >
+          Voir les 272 communes desservies
+          <Icon name="arrow-right" size={16} />
+        </a>
+      </nav>
+    </div>
+
+    <div
+      class="mt-12 flex flex-col gap-4 border-t border-ink-800 pt-6 text-xs text-ink-400 sm:flex-row sm:items-center sm:justify-between"
+    >
+      <p>© {year} {SITE.legalName} — Tous droits réservés. SIRET {CONTACT.siret}.</p>
+      <ul class="flex flex-wrap gap-x-5 gap-y-2">
+        <li><a href="/mentions-legales" class="hover:text-white">Mentions légales</a></li>
+        <li>
+          <a href="/politique-de-confidentialite" class="hover:text-white"
+            >Politique de confidentialité</a
+          >
+        </li>
+        <li><a href="/plan-du-site" class="hover:text-white">Plan du site</a></li>
+      </ul>
+    </div>
+  </div>
+</footer>

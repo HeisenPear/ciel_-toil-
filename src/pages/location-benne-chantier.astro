@@ -1,0 +1,266 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import PageHeader from '../components/PageHeader.astro';
+import Section from '../components/Section.astro';
+import AnswerBox from '../components/AnswerBox.astro';
+import BenneCard from '../components/BenneCard.astro';
+import Steps from '../components/Steps.astro';
+import Faq from '../components/Faq.astro';
+import DevisForm from '../components/DevisForm.astro';
+import CommuneLinks from '../components/CommuneLinks.astro';
+import Icon from '../components/Icon.astro';
+import Button from '../components/Button.astro';
+
+import { BENNES } from '../data/bennes';
+import { faqByTopic } from '../data/faq';
+import { COMMUNES, priorityCommunes } from '../data/communes';
+import { SITE } from '../config/site';
+import { serviceSchema, faqSchema, howToSchema } from '../lib/schema';
+
+const breadcrumbs = [{ name: 'Location de benne pour chantier', url: '/location-benne-chantier' }];
+const faq = faqByTopic('chantier');
+const bennesChantier = BENNES.filter((b) => b.volume >= 8);
+
+const metiers = [
+  {
+    icon: 'hammer' as const,
+    title: 'Maçons et entreprises de gros œuvre',
+    text: 'Bennes 8 m³ à gravats pour la démolition, rotations rapprochées en phase de terrassement.',
+  },
+  {
+    icon: 'home' as const,
+    title: 'Couvreurs et charpentiers',
+    text: 'Évacuation de tuiles, ardoises et liteaux. Benne 8 m³ pour la couverture, 15 m³ en mélange charpente.',
+  },
+  {
+    icon: 'building' as const,
+    title: 'Entreprises générales et rénovation',
+    text: 'Benne 15 ou 20 m³ pour les déchets en mélange, avec tri en centre agréé et bordereau de suivi.',
+  },
+  {
+    icon: 'box' as const,
+    title: 'Plaquistes et second œuvre',
+    text: 'Flux plâtre dédié : les plaques triées à part sont recyclées en nouvelles plaques.',
+  },
+  {
+    icon: 'leaf' as const,
+    title: 'Paysagistes et élagueurs',
+    text: 'Bennes 20 et 30 m³ à déchets verts, orientées vers une plateforme de compostage locale.',
+  },
+  {
+    icon: 'shield' as const,
+    title: 'Syndics et bailleurs',
+    text: 'Vidage de caves collectives, ravalements, réfections de toiture. Facturation directe au syndic.',
+  },
+];
+
+const etapes = [
+  {
+    title: 'Ouverture de compte',
+    text: 'Compte professionnel créé en 24 h : tarifs négociés, commande par téléphone ou e-mail, facturation mensuelle.',
+    icon: 'shield' as const,
+  },
+  {
+    title: 'Planification du chantier',
+    text: 'Nous calons les déposes et les rotations sur votre planning de travaux, phase par phase.',
+    icon: 'calendar' as const,
+  },
+  {
+    title: 'Rotations à la demande',
+    text: 'Un appel avant 10 h suffit pour une rotation le jour même sur l’agglomération de Tours.',
+    icon: 'truck' as const,
+  },
+  {
+    title: 'Traçabilité et bordereaux',
+    text: 'Pesée, nature du flux et centre de traitement consignés sur chaque bordereau de suivi.',
+    icon: 'recycle' as const,
+  },
+];
+
+const schemas = [
+  serviceSchema({
+    name: 'Location de benne de chantier en Indre-et-Loire',
+    description:
+      'Location de bennes 8 à 30 m³ pour les professionnels du bâtiment à Tours et en Indre-et-Loire : rotations rapides, tri en centre agréé et bordereau de suivi des déchets.',
+    url: `${SITE.url}/location-benne-chantier`,
+    areaServed: COMMUNES.map((c) => c.name),
+    offers: bennesChantier.map((b) => ({
+      name: b.name,
+      description: b.punchline,
+      price: b.priceFrom,
+      url: `/nos-bennes/${b.slug}`,
+    })),
+  }),
+  howToSchema({
+    name: 'Organiser l’évacuation des déchets d’un chantier en Indre-et-Loire',
+    description:
+      'Méthode en quatre étapes pour gérer les déchets d’un chantier du bâtiment avec un loueur de bennes local.',
+    steps: etapes.map((e) => ({ name: e.title, text: e.text })),
+  }),
+  faqSchema(faq),
+];
+---
+
+<BaseLayout
+  title="Location de benne de chantier à Tours (37) — pros du bâtiment"
+  description="Bennes de chantier 8 à 30 m³ pour artisans et entreprises du bâtiment à Tours et dans le 37. Rotation sous 24 h, bordereau de suivi, compte pro."
+  path="/location-benne-chantier"
+  breadcrumbs={breadcrumbs}
+  schemas={schemas}
+>
+  <PageHeader
+    breadcrumbs={breadcrumbs}
+    eyebrow="Professionnels du bâtiment"
+    title="Location de benne de chantier à Tours et en Indre-et-Loire"
+    lead="Bennes 8 à 30 m³, rotations sous 24 h, tri en centre agréé et bordereau de suivi systématique. Un interlocuteur unique du premier devis à la dernière rotation."
+    stats={[
+      { label: 'Rotation', value: '24 h' },
+      { label: 'Volumes', value: '8 à 30 m³' },
+      { label: 'Traçabilité', value: 'BSD fourni' },
+    ]}
+  />
+
+  <Section tone="white" class="!pt-12 !pb-0">
+    <AnswerBox
+      question="Quelle benne louer pour un chantier du bâtiment ?"
+      facts={[
+        { label: 'Gravats', value: 'Benne 8 m³' },
+        { label: 'Rénovation', value: 'Benne 15 m³' },
+        { label: 'Gros œuvre', value: 'Benne 20 m³' },
+        { label: 'Curage', value: 'Benne 30 m³' },
+      ]}
+    >
+      <p>
+        Pour un chantier, le format se choisit selon la phase de travaux : une
+        <strong>benne 8 m³</strong> pour les gravats et la démolition, une
+        <strong>benne 15 m³</strong> pour une rénovation en déchets mélangés, une
+        <strong>benne 20 m³</strong> pour le gros œuvre et une <strong>benne 30 m³</strong>
+        pour un curage de local. Les entreprises soumises à l’obligation de traçabilité
+        reçoivent un bordereau de suivi des déchets à chaque enlèvement, avec le tonnage
+        pesé et le centre de traitement. Sur Tours et sa première couronne, une rotation
+        demandée avant 10 h est réalisée le jour même.
+      </p>
+    </AnswerBox>
+  </Section>
+
+  <Section
+    tone="white"
+    eyebrow="Nos clients pros"
+    title="Une offre calée sur les métiers du bâtiment"
+    lead="Chaque corps d’état produit un flux dominant. Nous adaptons le format et la filière plutôt que de proposer une benne unique."
+  >
+    <ul class="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
+      {
+        metiers.map((metier) => (
+          <li class="rounded-card border border-ink-200 bg-white p-6 transition-shadow hover:shadow-[var(--shadow-soft)]">
+            <span class="flex h-11 w-11 items-center justify-center rounded-xl bg-ink-950 text-benne-400">
+              <Icon name={metier.icon} size={22} />
+            </span>
+            <h3 class="mt-4 text-lg font-bold text-ink-950">{metier.title}</h3>
+            <p class="mt-2 text-sm leading-relaxed text-ink-600">{metier.text}</p>
+          </li>
+        ))
+      }
+    </ul>
+  </Section>
+
+  <Section
+    tone="muted"
+    eyebrow="Formats disponibles"
+    title="Les bennes adaptées aux chantiers"
+    lead="Du 8 m³ à gravats au 30 m³ pour déchets légers volumineux."
+  >
+    <div class="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
+      {bennesChantier.map((benne) => <BenneCard benne={benne} />)}
+    </div>
+  </Section>
+
+  <Section
+    tone="dark"
+    eyebrow="Compte professionnel"
+    title="Comment travailler avec nous au quotidien"
+  >
+    <Steps steps={etapes} tone="dark" />
+  </Section>
+
+  <Section tone="white">
+    <div class="grid gap-12 lg:grid-cols-2 lg:gap-16">
+      <div class="prose-fr max-w-none">
+        <h2>Obligations de tri sur les chantiers du bâtiment</h2>
+        <p>
+          Depuis l’entrée en vigueur du tri « 7 flux », les entreprises du bâtiment doivent
+          séparer le bois, les métaux, le plâtre, le verre, le papier-carton, le plastique et
+          les fractions minérales. Ce tri peut être réalisé sur le chantier, avec plusieurs
+          bennes mono-flux, ou après collecte dans un centre agréé — c’est le cas de nos bennes
+          « déchets en mélange ».
+        </p>
+        <p>
+          Dans les deux cas, l’entreprise reste responsable de ses déchets jusqu’au traitement
+          final. Le <strong>bordereau de suivi des déchets</strong> que nous remettons à chaque
+          enlèvement constitue la preuve de cette traçabilité : il mentionne le producteur,
+          le transporteur, la nature du flux, le tonnage pesé et l’installation de destination.
+        </p>
+
+        <h2>Pourquoi trier à la source coûte moins cher</h2>
+        <p>
+          Un chargement homogène part directement en filière de valorisation. Un chargement
+          mélangé passe par une chaîne de tri, dont le coût est répercuté à la tonne.
+          L’écart est particulièrement marqué sur les gravats : purs, ils sont concassés et
+          réemployés en sous-couche routière ; contaminés par du plâtre ou du plastique,
+          ils perdent leur statut de déchets inertes.
+        </p>
+        <p>
+          Concrètement, sur un chantier de rénovation, prévoir <strong>deux bennes distinctes</strong>
+          — une pour les gravats, une pour le mélange — revient presque toujours moins cher
+          qu’une seule benne tout-venant.
+        </p>
+
+        <h2>Accès, sécurité et signalisation</h2>
+        <p>
+          Le camion ampliroll lève la benne à la verticale : il faut <strong>4,5 m de hauteur
+          libre</strong> au-dessus de l’emplacement, sans branche, câble ni auvent. Le sol doit
+          supporter un poids lourd ; sur terrain meuble ou revêtement fragile, nous posons des
+          plaques de répartition sans supplément.
+        </p>
+        <p>
+          Sur voirie, la benne doit être signalée et l’occupation du domaine public autorisée
+          par la mairie. Nous fournissons la signalisation temporaire et déposons la demande
+          d’arrêté à votre place, y compris à Tours où le délai d’instruction est d’environ
+          dix jours ouvrés.
+        </p>
+      </div>
+
+      <div>
+        <div class="rounded-card border border-ink-200 bg-ink-50 p-6 lg:p-8">
+          <p class="text-xs font-bold uppercase tracking-[0.18em] text-benne-700">Compte pro</p>
+          <h2 class="mt-2 text-2xl font-bold text-ink-950">Ouvrir un compte entreprise</h2>
+          <p class="mt-2 text-ink-600">
+            Tarifs négociés, commande simplifiée, facturation mensuelle groupée. Réponse sous
+            2 h ouvrées.
+          </p>
+          <div class="mt-6">
+            <DevisForm />
+          </div>
+        </div>
+      </div>
+    </div>
+  </Section>
+
+  <Section
+    tone="muted"
+    eyebrow="Zone d’intervention"
+    title="Nous intervenons sur tous les chantiers d’Indre-et-Loire"
+    lead="De l’agglomération de Tours aux chantiers de Chinon, Loches, Amboise ou Château-Renault."
+  >
+    <CommuneLinks communes={priorityCommunes()} />
+    <p class="mt-8">
+      <Button href="/zones-desservies" variant="dark" iconAfter="arrow-right">
+        Voir toutes les communes desservies
+      </Button>
+    </p>
+  </Section>
+
+  <Section tone="white" eyebrow="Questions fréquentes" title="Bennes de chantier : vos questions" align="center">
+    <Faq items={faq} openFirst />
+  </Section>
+</BaseLayout>

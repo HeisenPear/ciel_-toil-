@@ -1,0 +1,43 @@
+---
+import Icon from './Icon.astro';
+import type { IconName } from './Icon.astro';
+
+interface Props {
+  steps: { title: string; text: string; icon: IconName }[];
+  tone?: 'light' | 'dark';
+}
+
+const { steps, tone = 'light' } = Astro.props;
+const dark = tone === 'dark';
+---
+
+<ol class="grid gap-6 md:grid-cols-2 lg:grid-cols-4">
+  {
+    steps.map((step, index) => (
+      <li
+        class:list={[
+          'relative rounded-card border p-6',
+          dark ? 'border-ink-800 bg-ink-900' : 'border-ink-200 bg-white',
+        ]}
+      >
+        <div class="flex items-center gap-3">
+          <span
+            class:list={[
+              'flex h-10 w-10 shrink-0 items-center justify-center rounded-full font-display text-lg font-bold',
+              dark ? 'bg-benne-500 text-ink-950' : 'bg-ink-950 text-benne-400',
+            ]}
+          >
+            {index + 1}
+          </span>
+          <Icon name={step.icon} size={22} class={dark ? 'text-benne-400' : 'text-benne-600'} />
+        </div>
+        <h3 class:list={['mt-4 text-lg font-bold', dark ? 'text-white' : 'text-ink-950']}>
+          {step.title}
+        </h3>
+        <p class:list={['mt-2 text-sm leading-relaxed', dark ? 'text-ink-300' : 'text-ink-600']}>
+          {step.text}
+        </p>
+      </li>
+    ))
+  }
+</ol>

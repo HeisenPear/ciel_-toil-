@@ -1,0 +1,185 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import PageHeader from '../components/PageHeader.astro';
+import Section from '../components/Section.astro';
+import DevisForm from '../components/DevisForm.astro';
+import Steps from '../components/Steps.astro';
+import Icon from '../components/Icon.astro';
+
+import { SITE, CONTACT } from '../config/site';
+import { COMMUNES } from '../data/communes';
+import { serviceSchema } from '../lib/schema';
+
+const breadcrumbs = [{ name: 'Contact', url: '/contact' }];
+
+const etapes = [
+  {
+    title: 'Vous décrivez le besoin',
+    text: 'Volume, type de déchets, commune et date souhaitée. Une minute suffit.',
+    icon: 'mail' as const,
+  },
+  {
+    title: 'Nous répondons sous 2 h',
+    text: 'Un tarif ferme et tout compris, valable 30 jours, sans engagement.',
+    icon: 'clock' as const,
+  },
+  {
+    title: 'Vous validez la date',
+    text: 'Nous calons le créneau de dépose et prenons en charge l’autorisation de voirie si besoin.',
+    icon: 'calendar' as const,
+  },
+  {
+    title: 'La benne arrive',
+    text: 'Sous 24 à 48 h sur Tours, 48 à 72 h sur le reste de l’Indre-et-Loire.',
+    icon: 'truck' as const,
+  },
+];
+
+const schemas = [
+  serviceSchema({
+    name: 'Devis gratuit pour une location de benne',
+    description:
+      'Demande de devis gratuit et sans engagement pour la location d’une benne à Tours et en Indre-et-Loire. Réponse sous 2 h ouvrées.',
+    url: `${SITE.url}/contact`,
+    areaServed: COMMUNES.filter((c) => c.priority).map((c) => c.name),
+  }),
+  {
+    '@type': 'ContactPage',
+    name: `Contact — ${SITE.name}`,
+    url: `${SITE.url}/contact`,
+    mainEntity: { '@id': `${SITE.url}/#localbusiness` },
+  },
+];
+---
+
+<BaseLayout
+  title="Contact et devis gratuit — location de benne à Tours"
+  description="Demandez un devis gratuit pour la location d'une benne à Tours ou en Indre-et-Loire. Réponse sous 2 h ouvrées, tarif ferme et tout compris, livraison sous 24 à 48 h."
+  path="/contact"
+  breadcrumbs={breadcrumbs}
+  schemas={schemas}
+  hideFooterCta
+>
+  <PageHeader
+    breadcrumbs={breadcrumbs}
+    eyebrow="Devis gratuit"
+    title="Parlons de votre chantier"
+    lead="Décrivez votre besoin en une minute : nous répondons sous 2 h ouvrées avec un tarif ferme, tout compris et sans engagement."
+    stats={[
+      { label: 'Réponse', value: 'sous 2 h' },
+      { label: 'Livraison', value: '24 à 48 h' },
+      { label: 'Devis', value: 'gratuit' },
+    ]}
+  />
+
+  <Section tone="white" class="!pt-12">
+    <div class="grid gap-12 lg:grid-cols-5 lg:gap-16">
+      <div class="lg:col-span-3">
+        <h2 class="text-2xl font-bold text-ink-950">Demander un devis</h2>
+        <p class="mt-2 text-ink-600">
+          Les champs marqués d’un astérisque sont nécessaires pour établir un tarif ferme.
+          Plus vous êtes précis sur les déchets et l’accès, plus le devis est fiable.
+        </p>
+        <div class="mt-8">
+          <DevisForm />
+        </div>
+      </div>
+
+      <div class="lg:col-span-2">
+        <div class="rounded-card border border-ink-200 bg-ink-50 p-7">
+          <h2 class="text-xl font-bold text-ink-950">Nous joindre directement</h2>
+
+          <ul class="mt-6 space-y-5">
+            <li>
+              <a
+                href={`tel:${CONTACT.phoneE164}`}
+                class="flex items-start gap-3 text-ink-900 hover:text-benne-700"
+              >
+                <span class="flex h-10 w-10 shrink-0 items-center justify-center rounded-lg bg-benne-500 text-ink-950">
+                  <Icon name="phone" size={19} />
+                </span>
+                <span>
+                  <span class="block text-xs uppercase tracking-wide text-ink-500">Téléphone</span>
+                  <span class="block font-display text-lg font-bold">{CONTACT.phone}</span>
+                </span>
+              </a>
+            </li>
+            <li>
+              <a
+                href={`tel:${CONTACT.mobileE164}`}
+                class="flex items-start gap-3 text-ink-900 hover:text-benne-700"
+              >
+                <span class="flex h-10 w-10 shrink-0 items-center justify-center rounded-lg bg-ink-950 text-benne-400">
+                  <Icon name="phone" size={19} />
+                </span>
+                <span>
+                  <span class="block text-xs uppercase tracking-wide text-ink-500">
+                    Mobile / urgences chantier
+                  </span>
+                  <span class="block font-display text-lg font-bold">{CONTACT.mobile}</span>
+                </span>
+              </a>
+            </li>
+            <li>
+              <a
+                href={`mailto:${CONTACT.email}`}
+                class="flex items-start gap-3 text-ink-900 hover:text-benne-700"
+              >
+                <span class="flex h-10 w-10 shrink-0 items-center justify-center rounded-lg bg-ink-950 text-benne-400">
+                  <Icon name="mail" size={19} />
+                </span>
+                <span>
+                  <span class="block text-xs uppercase tracking-wide text-ink-500">E-mail</span>
+                  <span class="block font-semibold">{CONTACT.email}</span>
+                </span>
+              </a>
+            </li>
+          </ul>
+
+          <div class="mt-7 border-t border-ink-200 pt-6">
+            <h3 class="flex items-center gap-2 font-bold text-ink-950">
+              <Icon name="pin" size={18} class="text-benne-700" />
+              Dépôt
+            </h3>
+            <address class="mt-2 not-italic text-ink-700">
+              {CONTACT.address.street}<br />
+              {CONTACT.address.postalCode} {CONTACT.address.city}<br />
+              {CONTACT.address.region}
+            </address>
+          </div>
+
+          <div class="mt-6 border-t border-ink-200 pt-6">
+            <h3 class="flex items-center gap-2 font-bold text-ink-950">
+              <Icon name="clock" size={18} class="text-benne-700" />
+              Horaires
+            </h3>
+            <dl class="mt-2 space-y-1 text-sm">
+              {
+                CONTACT.openingHoursHuman.map((h) => (
+                  <div class="flex justify-between gap-4">
+                    <dt class="text-ink-600">{h.label}</dt>
+                    <dd class="font-medium text-ink-900">{h.value}</dd>
+                  </div>
+                ))
+              }
+            </dl>
+          </div>
+
+          <p class="mt-6 border-t border-ink-200 pt-6 text-sm text-ink-600">
+            Nous intervenons dans les 272 communes d’Indre-et-Loire.{' '}
+            <a
+              href="/zones-desservies"
+              class="font-semibold underline decoration-benne-400 underline-offset-2"
+            >
+              Vérifier votre secteur
+            </a>
+          </p>
+        </div>
+      </div>
+    </div>
+  </Section>
+
+  <Section tone="muted" eyebrow="Après votre demande" title="Ce qui se passe ensuite">
+    <Steps steps={etapes} />
+  </Section>
+</BaseLayout>

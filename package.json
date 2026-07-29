@@ -1,26 +1,29 @@
 {
-  "name": "dorian-auto-prestige",
+  "name": "benne-express-37",
   "type": "module",
   "version": "1.0.0",
+  "private": true,
+  "description": "Site vitrine — location de bennes à Tours et en Indre-et-Loire (37)",
   "scripts": {
     "dev": "astro dev",
+    "start": "astro dev",
     "build": "astro build",
-    "preview": "astro preview"
+    "preview": "astro preview",
+    "check": "astro check",
+    "assets": "node scripts/generate-assets.mjs"
   },
   "dependencies": {
-    "@astrojs/react": "^3.6.0",
-    "@astrojs/sitemap": "^3.2.0",
-    "@astrojs/tailwind": "^5.1.0",
-    "astro": "^4.16.0",
-    "framer-motion": "^11.11.0",
-    "react": "^18.3.1",
-    "react-dom": "^18.3.1",
-    "yet-another-react-lightbox": "^3.21.6"
+    "@astrojs/sitemap": "^3.7.3",
+    "@fontsource-variable/archivo": "^5.3.0",
+    "@fontsource-variable/inter": "^5.3.0",
+    "@tailwindcss/vite": "^4.3.3",
+    "astro": "^7.1.5",
+    "sharp": "^0.35.3",
+    "tailwindcss": "^4.3.3",
+    "zod": "^4.4.3"
   },
   "devDependencies": {
-    "@types/react": "^18.3.5",
-    "@types/react-dom": "^18.3.0",
-    "autoprefixer": "^10.4.20",
-    "tailwindcss": "^3.4.13"
+    "@astrojs/check": "^0.9.4",
+    "typescript": "^5.9.2"
   }
 }

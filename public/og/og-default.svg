@@ -1,0 +1,26 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="630" viewBox="0 0 1200 630">
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0%" stop-color="#1B2333"/>
+      <stop offset="100%" stop-color="#0F1622"/>
+    </linearGradient>
+  </defs>
+  <rect width="1200" height="630" fill="url(#bg)"/>
+  <g opacity="0.08" stroke="#FFFFFF" stroke-width="1">
+    <path d="M0 0 V630"/><path d="M56 0 V630"/><path d="M112 0 V630"/><path d="M168 0 V630"/><path d="M224 0 V630"/><path d="M280 0 V630"/><path d="M336 0 V630"/><path d="M392 0 V630"/><path d="M448 0 V630"/><path d="M504 0 V630"/><path d="M560 0 V630"/><path d="M616 0 V630"/><path d="M672 0 V630"/><path d="M728 0 V630"/><path d="M784 0 V630"/><path d="M840 0 V630"/><path d="M896 0 V630"/><path d="M952 0 V630"/><path d="M1008 0 V630"/><path d="M1064 0 V630"/><path d="M1120 0 V630"/><path d="M1176 0 V630"/>
+    <path d="M0 0 H1200"/><path d="M0 56 H1200"/><path d="M0 112 H1200"/><path d="M0 168 H1200"/><path d="M0 224 H1200"/><path d="M0 280 H1200"/><path d="M0 336 H1200"/><path d="M0 392 H1200"/><path d="M0 448 H1200"/><path d="M0 504 H1200"/><path d="M0 560 H1200"/><path d="M0 616 H1200"/>
+  </g>
+
+  <g transform="translate(800 118) scale(1.15)" stroke="#7A5209" stroke-width="8" stroke-linejoin="round">
+    <path d="M20 240 L54 108 H228 L262 240 Z" fill="#F2A413"/>
+    <path d="M64 146 H218" stroke-opacity="0.35" stroke-width="8"/>
+    <path d="M50 190 H232" stroke-opacity="0.35" stroke-width="8"/>
+  </g>
+
+  <text x="80" y="230" font-family="Archivo, Arial, sans-serif" font-size="40" font-weight="700" fill="#F2A413" letter-spacing="6">TOURS · INDRE-ET-LOIRE 37</text>
+  <text x="80" y="330" font-family="Archivo, Arial, sans-serif" font-size="76" font-weight="800" fill="#FFFFFF">Location de bennes</text>
+  <text x="80" y="415" font-family="Archivo, Arial, sans-serif" font-size="76" font-weight="800" fill="#FFFFFF">de 1 à 30 m³</text>
+  <text x="80" y="480" font-family="Inter, Arial, sans-serif" font-size="32" fill="#A6B4C9">Chantier · Rénovation · Déménagement · Particuliers</text>
+  <rect x="80" y="520" width="360" height="6" fill="#F2A413"/>
+  <text x="80" y="576" font-family="Inter, Arial, sans-serif" font-size="28" font-weight="600" fill="#E9EDF3">Livraison sous 24 à 48 h — devis gratuit</text>
+</svg>

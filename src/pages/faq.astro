@@ -1,0 +1,95 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import PageHeader from '../components/PageHeader.astro';
+import Section from '../components/Section.astro';
+import Faq from '../components/Faq.astro';
+import Button from '../components/Button.astro';
+
+import { FAQ, faqByTopic, type Topic } from '../data/faq';
+import { faqSchema } from '../lib/schema';
+
+const breadcrumbs = [{ name: 'FAQ', url: '/faq' }];
+
+/* Regroupement thématique : une page unique, mais scannable —
+   c'est ce qui permet à un moteur de citer la bonne réponse. */
+const groupes: { topic: Topic; title: string; id: string }[] = [
+  { topic: 'general', title: 'Questions générales', id: 'general' },
+  { topic: 'tarifs', title: 'Tarifs et facturation', id: 'tarifs' },
+  { topic: 'logistique', title: 'Livraison, accès et durée', id: 'logistique' },
+  { topic: 'dechets', title: 'Déchets et tri', id: 'dechets' },
+  { topic: 'chantier', title: 'Chantiers et professionnels', id: 'chantier' },
+  { topic: 'demenagement', title: 'Déménagement et particuliers', id: 'demenagement' },
+  { topic: 'local', title: 'Zone d’intervention en Indre-et-Loire', id: 'local' },
+];
+
+const schemas = [faqSchema(FAQ)];
+---
+
+<BaseLayout
+  title="FAQ location de benne — 16 questions et réponses"
+  description="Prix, délais, autorisation de voirie, taille de benne, déchets interdits, rotations, bordereau de suivi : les réponses pour louer une benne en Indre-et-Loire."
+  path="/faq"
+  breadcrumbs={breadcrumbs}
+  schemas={schemas}
+>
+  <PageHeader
+    breadcrumbs={breadcrumbs}
+    eyebrow="Questions fréquentes"
+    title="Tout ce qu’il faut savoir avant de louer une benne"
+    lead="Les questions que l’on nous pose chaque jour au téléphone, avec des réponses précises et chiffrées."
+    stats={[
+      { label: 'Questions', value: String(FAQ.length) },
+      { label: 'Thèmes', value: String(groupes.length) },
+    ]}
+  />
+
+  <Section tone="white" class="!pb-8">
+    <nav aria-label="Sommaire de la FAQ" class="mx-auto max-w-3xl">
+      <h2 class="text-sm font-bold uppercase tracking-wider text-ink-900">Aller directement à</h2>
+      <ul class="mt-4 flex flex-wrap gap-2">
+        {
+          groupes.map((groupe) => (
+            <li>
+              <a
+                href={`#${groupe.id}`}
+                class="inline-block rounded-full border border-ink-200 px-4 py-2 text-sm font-medium text-ink-700 transition-colors hover:border-benne-400 hover:bg-benne-50 hover:text-benne-800"
+              >
+                {groupe.title}
+              </a>
+            </li>
+          ))
+        }
+      </ul>
+    </nav>
+  </Section>
+
+  {
+    groupes.map((groupe, index) => {
+      const items = faqByTopic(groupe.topic);
+      if (items.length === 0) return null;
+      return (
+        <Section
+          id={groupe.id}
+          tone={index % 2 === 0 ? 'white' : 'muted'}
+          title={groupe.title}
+          level={2}
+          class="!py-12"
+        >
+          <Faq items={items} />
+        </Section>
+      );
+    })
+  }
+
+  <Section tone="dark" align="center" title="Votre question n’est pas là ?" >
+    <p class="mx-auto max-w-2xl text-center text-ink-300">
+      Appelez-nous ou décrivez votre chantier : nous répondons sous 2 h ouvrées, même pour
+      une simple question de dimensionnement.
+    </p>
+    <p class="mt-8 text-center">
+      <Button href="/contact" variant="primary" size="lg" iconAfter="arrow-right">
+        Poser ma question
+      </Button>
+    </p>
+  </Section>
+</BaseLayout>

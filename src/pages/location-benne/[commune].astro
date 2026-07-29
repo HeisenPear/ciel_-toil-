@@ -1,0 +1,275 @@
+---
+import type { GetStaticPaths } from 'astro';
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import PageHeader from '../../components/PageHeader.astro';
+import Section from '../../components/Section.astro';
+import AnswerBox from '../../components/AnswerBox.astro';
+import BenneCard from '../../components/BenneCard.astro';
+import DevisForm from '../../components/DevisForm.astro';
+import Faq from '../../components/Faq.astro';
+import CommuneLinks from '../../components/CommuneLinks.astro';
+import Icon from '../../components/Icon.astro';
+import Button from '../../components/Button.astro';
+
+import { COMMUNES, voisinesDe, type Commune } from '../../data/communes';
+import { BENNES, featuredBennes } from '../../data/bennes';
+import { faqByTopic, type QA } from '../../data/faq';
+import { SITE, CONTACT } from '../../config/site';
+import { serviceSchema, faqSchema } from '../../lib/schema';
+
+export const getStaticPaths = (() =>
+  COMMUNES.map((commune) => ({
+    params: { commune: commune.slug },
+    props: { commune },
+  }))) satisfies GetStaticPaths;
+
+const { commune } = Astro.props as { commune: Commune };
+
+/* Le délai annoncé découle de la distance réelle : c'est une donnée
+   propre à chaque commune, pas un texte recopié d'une page à l'autre. */
+const delai =
+  commune.distance <= 12 ? '24 à 48 h' : commune.distance <= 30 ? '48 h' : '48 à 72 h';
+
+const tarifNote =
+  commune.distance <= 12
+    ? `Le tarif appliqué ${commune.prep} est identique à celui de Tours, sans majoration de transport.`
+    : commune.distance <= 30
+      ? `${commune.name} est desservie par nos tournées régulières : la participation au transport reste modérée.`
+      : `${commune.name} se situe en limite de nos tournées longue distance. Réservez 3 à 4 jours à l’avance pour caler la dépose sur notre passage dans le secteur.`;
+
+const voisines = voisinesDe(commune);
+const url = `${SITE.url}/location-benne/${commune.slug}`;
+const breadcrumbs = [
+  { name: 'Zones desservies', url: '/zones-desservies' },
+  { name: commune.name, url: `/location-benne/${commune.slug}` },
+];
+
+/* FAQ locale : deux questions réellement spécifiques à la commune,
+   complétées par des questions générales. */
+const faqLocale: QA[] = [
+  {
+    q: `Sous quel délai livrez-vous une benne ${commune.prep} ?`,
+    a:
+      `Une benne est livrée ${commune.prep} sous ${delai} ouvrées pour toute commande validée avant 16 h. ` +
+      `La commune se situe à environ ${commune.distance} km de notre dépôt de Tours et relève du secteur « ${commune.zone} ». ` +
+      tarifNote,
+    topics: ['local'],
+  },
+  {
+    q: `Faut-il une autorisation pour poser une benne ${commune.prep} ?`,
+    a:
+      `Oui, si la benne est posée sur la voie publique ${commune.prep} : une autorisation d’occupation temporaire du domaine public ` +
+      `doit être demandée à la mairie de ${commune.name}, généralement une dizaine de jours ouvrés avant la pose. ` +
+      `Nous déposons le dossier à votre place. Sur un terrain privé — allée, cour, parking, pelouse stabilisée — aucune démarche n’est nécessaire.`,
+    topics: ['local'],
+  },
+  {
+    q: `Combien coûte une benne ${commune.prep} ?`,
+    a:
+      `${commune.prep.charAt(0).toUpperCase()}${commune.prep.slice(1)}, comptez à partir de 290 € TTC pour une benne 8 m³ à gravats, ` +
+      `320 € TTC pour une benne 10 m³ de déménagement et 390 € TTC pour une benne 15 m³ de rénovation, ` +
+      `livraison, 7 jours de location, enlèvement et traitement inclus. ` +
+      tarifNote,
+    topics: ['local'],
+  },
+  ...faqByTopic('general', 3),
+];
+
+const schemas = [
+  serviceSchema({
+    name: `Location de benne ${commune.prep} (${commune.cp})`,
+    description: `Location de bennes de 1 à 30 m³ ${commune.prep}, livrées sous ${delai} depuis notre dépôt de Tours. Chantier, rénovation, déménagement et particuliers.`,
+    url,
+    areaServed: [commune.name, ...voisines.map((v) => v.name)],
+    offers: featuredBennes().map((b) => ({
+      name: b.name,
+      description: b.punchline,
+      price: b.priceFrom,
+      url: `/nos-bennes/${b.slug}`,
+    })),
+  }),
+  faqSchema(faqLocale),
+  {
+    '@type': 'Place',
+    name: commune.name,
+    address: {
+      '@type': 'PostalAddress',
+      addressLocality: commune.name,
+      postalCode: commune.cp,
+      addressRegion: 'Centre-Val de Loire',
+      addressCountry: 'FR',
+    },
+  },
+];
+---
+
+<BaseLayout
+  title={`Location de benne ${commune.prep} (${commune.cp})`}
+  description={`Benne de 1 à 30 m³ ${commune.prep} (${commune.cp}) : livraison sous ${delai}, tarif tout compris dès 290 € TTC. Chantier, rénovation, déménagement.`}
+  path={`/location-benne/${commune.slug}`}
+  breadcrumbs={breadcrumbs}
+  schemas={schemas}
+>
+  <PageHeader
+    breadcrumbs={breadcrumbs}
+    eyebrow={`${commune.name} · ${commune.cp}`}
+    title={`Location de benne ${commune.prep}`}
+    lead={`Bennes de 1 à 30 m³ livrées ${commune.prep} sous ${delai} ouvrées, pour les chantiers du bâtiment comme pour les particuliers en déménagement ou en rénovation.`}
+    stats={[
+      { label: 'Délai', value: delai },
+      { label: 'Depuis Tours', value: commune.distance === 0 ? 'Dépôt sur place' : `${commune.distance} km` },
+      { label: 'Secteur', value: commune.zone },
+    ]}
+  />
+
+  <Section tone="white" class="!pt-12">
+    <div class="grid gap-12 lg:grid-cols-3 lg:gap-16">
+      <div class="lg:col-span-2">
+        <AnswerBox
+          question={`Comment louer une benne ${commune.prep} ?`}
+          facts={[
+            { label: 'Code postal', value: commune.cp },
+            { label: 'Délai', value: delai },
+            { label: 'À partir de', value: '290 € TTC' },
+            { label: 'Volumes', value: '1 à 30 m³' },
+          ]}
+        >
+          <p>
+            Pour louer une benne {commune.prep} ({commune.cp}), indiquez le volume souhaité,
+            la nature des déchets et l’adresse de livraison : nous confirmons un tarif ferme
+            sous 2 h ouvrées et déposons la benne sous <strong>{delai}</strong>.
+            {' '}{commune.name} se situe à {commune.distance === 0 ? 'l’emplacement même de notre dépôt' : `environ ${commune.distance} km de notre dépôt de Tours`}
+            {' '}et relève du secteur « {commune.zone} ». {tarifNote}
+          </p>
+        </AnswerBox>
+
+        <div class="prose-fr mt-12 max-w-none">
+          <h2>Nos interventions {commune.prep}</h2>
+          <p>{commune.angle}</p>
+
+          <h3>Quartiers et lieux-dits desservis</h3>
+          <p>
+            Nous livrons dans l’ensemble de la commune, y compris
+            {' '}{commune.reperes.slice(0, -1).join(', ')}
+            {commune.reperes.length > 1 ? ' et ' : ''}
+            {commune.reperes[commune.reperes.length - 1]}.
+            Les hameaux et lieux-dits isolés sont également desservis : indiquez-nous
+            simplement les contraintes d’accès lors de la demande de devis.
+          </p>
+
+          <h3>Quelle benne pour un chantier {commune.prep} ?</h3>
+          <p>
+            Le choix du format dépend d’abord de la densité du déchet. Pour des
+            <strong> gravats</strong> issus d’une démolition ou d’une réfection de terrasse,
+            une <a href="/nos-bennes/benne-8m3">benne 8 m³</a> suffit : sa charge utile de
+            8 tonnes est atteinte avant le remplissage. Pour un
+            <strong> déménagement ou un débarras</strong>, la
+            <a href="/nos-bennes/benne-10m3">benne 10 m³</a> absorbe le contenu d’un T3
+            complet. Pour une <strong>rénovation intérieure</strong> avec cloisons,
+            menuiseries et isolants, comptez une
+            <a href="/nos-bennes/benne-15m3">benne 15 m³</a>.
+          </p>
+
+          <h3>Dépose sur voie publique {commune.prep}</h3>
+          <p>
+            Si aucun emplacement privé n’est disponible, la benne peut être posée sur la
+            voirie ou sur une place de stationnement, sous réserve d’une autorisation
+            d’occupation temporaire du domaine public délivrée par la mairie de
+            {' '}{commune.name}. Nous déposons la demande à votre place et fournissons la
+            signalisation temporaire réglementaire. Prévoyez une dizaine de jours ouvrés
+            d’instruction.
+          </p>
+          <p>
+            Dans tous les cas, l’emplacement doit offrir <strong>4,5 m de hauteur libre</strong> :
+            le camion ampliroll lève la benne à la verticale. Branches, câbles électriques,
+            auvents et porches sont les obstacles les plus fréquents.
+          </p>
+
+          <h3>Traitement et valorisation des déchets</h3>
+          <p>
+            Les déchets collectés {commune.prep} sont pesés puis dirigés vers un centre de
+            traitement agréé d’Indre-et-Loire. Gravats concassés et réemployés en travaux
+            publics, bois broyé, métaux refondus, déchets verts compostés localement : plus
+            de 85 % de nos tonnages sont valorisés. Les professionnels reçoivent un
+            <a href="/dechets-acceptes"> bordereau de suivi des déchets</a> à chaque enlèvement.
+          </p>
+        </div>
+
+        <div
+          class="mt-10 flex flex-col gap-4 rounded-card border-2 border-dashed border-benne-300 bg-benne-50 p-6 sm:flex-row sm:items-center sm:justify-between"
+        >
+          <p class="flex items-start gap-3 text-ink-800">
+            <Icon name="phone" size={22} class="mt-0.5 shrink-0 text-benne-700" />
+            <span>
+              Une question sur un accès difficile {commune.prep} ?
+              Appelez-nous, nous connaissons le secteur.
+            </span>
+          </p>
+          <a
+            href={`tel:${CONTACT.phoneE164}`}
+            class="shrink-0 rounded-full bg-ink-950 px-6 py-3 font-semibold text-white transition-colors hover:bg-ink-800"
+          >
+            {CONTACT.phone}
+          </a>
+        </div>
+      </div>
+
+      <aside class="lg:col-span-1">
+        <div class="sticky top-28 rounded-card border border-ink-200 bg-ink-50 p-6">
+          <p class="text-xs font-bold uppercase tracking-[0.18em] text-benne-700">Devis gratuit</p>
+          <h2 class="mt-2 text-xl font-bold text-ink-950">
+            Une benne {commune.prep}
+          </h2>
+          <p class="mt-2 text-sm text-ink-600">
+            Réponse sous 2 h ouvrées, livraison sous {delai}.
+          </p>
+          <div class="mt-6">
+            <DevisForm defaultCommune={commune.name} compact />
+          </div>
+        </div>
+      </aside>
+    </div>
+  </Section>
+
+  <Section
+    tone="muted"
+    eyebrow="Formats disponibles"
+    title={`Les bennes les plus demandées ${commune.prep}`}
+  >
+    <div class="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
+      {featuredBennes().map((benne) => <BenneCard benne={benne} />)}
+    </div>
+    <p class="mt-8">
+      <Button href="/nos-bennes" variant="dark" iconAfter="arrow-right">
+        Voir les {BENNES.length} formats de bennes
+      </Button>
+    </p>
+  </Section>
+
+  {
+    voisines.length > 0 && (
+      <Section
+        tone="white"
+        eyebrow="À proximité"
+        title="Nous livrons aussi dans les communes voisines"
+        lead={`Autour de ${commune.name}, ces communes sont desservies lors des mêmes tournées.`}
+      >
+        <CommuneLinks communes={voisines} columns={4} />
+        <p class="mt-8">
+          <Button href="/zones-desservies" variant="outline" iconAfter="arrow-right">
+            Toutes les communes d’Indre-et-Loire
+          </Button>
+        </p>
+      </Section>
+    )
+  }
+
+  <Section
+    tone="muted"
+    eyebrow="Questions fréquentes"
+    title={`Location de benne ${commune.prep} : vos questions`}
+    align="center"
+  >
+    <Faq items={faqLocale} openFirst />
+  </Section>
+</BaseLayout>

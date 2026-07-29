@@ -1,0 +1,105 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import PageHeader from '../components/PageHeader.astro';
+import Section from '../components/Section.astro';
+import { SITE, CONTACT } from '../config/site';
+
+const breadcrumbs = [
+  { name: 'Politique de confidentialité', url: '/politique-de-confidentialite' },
+];
+---
+
+<BaseLayout
+  title="Politique de confidentialité"
+  description="Traitement des données personnelles collectées via le formulaire de devis : finalité, base légale, durée de conservation et droits des personnes."
+  path="/politique-de-confidentialite"
+  breadcrumbs={breadcrumbs}
+  noindex
+  hideFooterCta
+>
+  <PageHeader breadcrumbs={breadcrumbs} title="Politique de confidentialité" />
+
+  <Section tone="white">
+    <div class="prose-fr mx-auto">
+      <p>
+        <strong>À vérifier avant la mise en ligne.</strong> Ce texte décrit le fonctionnement
+        du site tel qu’il est développé. Il doit être relu et complété si des outils
+        supplémentaires (analytics, publicité, CRM) sont ajoutés.
+      </p>
+
+      <h2>Responsable du traitement</h2>
+      <p>
+        {SITE.legalName}, {CONTACT.address.street}, {CONTACT.address.postalCode}
+        {' '}{CONTACT.address.city}. Contact : {CONTACT.email}.
+      </p>
+
+      <h2>Données collectées</h2>
+      <p>
+        Le site ne collecte que les données que vous transmettez volontairement via le
+        formulaire de demande de devis :
+      </p>
+      <ul>
+        <li>nom et prénom ;</li>
+        <li>numéro de téléphone ;</li>
+        <li>adresse e-mail ;</li>
+        <li>commune de livraison ;</li>
+        <li>informations relatives au chantier (volume, type de déchets, date, précisions).</li>
+      </ul>
+      <p>
+        Aucune donnée sensible au sens de l’article 9 du RGPD n’est demandée. Aucun profilage
+        ni décision automatisée n’est réalisé.
+      </p>
+
+      <h2>Finalité et base légale</h2>
+      <p>
+        Ces données sont utilisées exclusivement pour traiter votre demande de devis et assurer
+        le suivi commercial qui en découle. La base légale est votre <strong>consentement</strong>,
+        recueilli par la case à cocher du formulaire, ainsi que l’exécution de mesures
+        précontractuelles prises à votre demande.
+      </p>
+
+      <h2>Destinataires</h2>
+      <p>
+        Les données sont destinées aux seuls services internes de {SITE.legalName} en charge des
+        devis et de l’exploitation. Elles ne sont ni vendues, ni louées, ni transmises à des
+        tiers à des fins commerciales. Le prestataire technique assurant l’acheminement des
+        formulaires agit en qualité de sous-traitant au sens du RGPD.
+      </p>
+
+      <h2>Durée de conservation</h2>
+      <p>
+        Les demandes de devis non converties sont conservées trois ans à compter du dernier
+        contact. Les données liées à une prestation réalisée sont conservées pendant la durée
+        légale de conservation des pièces comptables.
+      </p>
+
+      <h2>Cookies et mesure d’audience</h2>
+      <p>
+        Ce site ne dépose <strong>aucun cookie publicitaire ni traceur tiers</strong>. Les polices
+        de caractères sont auto-hébergées : aucune requête n’est adressée à un service externe
+        lors de la consultation des pages. Si un outil de mesure d’audience est ajouté
+        ultérieurement, cette page sera mise à jour et un bandeau de consentement sera mis en
+        place lorsque la réglementation l’impose.
+      </p>
+
+      <h2>Vos droits</h2>
+      <p>
+        Conformément au Règlement général sur la protection des données et à la loi
+        « Informatique et Libertés », vous disposez d’un droit d’accès, de rectification,
+        d’effacement, de limitation, d’opposition et de portabilité de vos données.
+      </p>
+      <p>
+        Pour exercer ces droits, écrivez à {CONTACT.email} ou à l’adresse postale indiquée
+        ci-dessus. Vous pouvez également introduire une réclamation auprès de la CNIL
+        (3 place de Fontenoy, 75007 Paris — www.cnil.fr).
+      </p>
+
+      <h2>Sécurité</h2>
+      <p>
+        Le site est servi intégralement en HTTPS. Les données transmises via le formulaire
+        sont chiffrées en transit. L’accès aux demandes reçues est limité aux personnes
+        habilitées.
+      </p>
+    </div>
+  </Section>
+</BaseLayout>

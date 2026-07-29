@@ -1,0 +1,95 @@
+---
+import type { Benne } from '../data/bennes';
+import Icon from './Icon.astro';
+
+interface Props {
+  benne: Benne;
+  /** Affiche la description longue en plus des caractéristiques. */
+  detailed?: boolean;
+}
+
+const { benne, detailed = false } = Astro.props;
+const { long, larg, haut } = benne.dimensions;
+
+/* La vignette respecte les proportions réelles : sa largeur est relative
+   à la plus longue benne du catalogue (6,5 m), sa hauteur découle du ratio
+   longueur/hauteur. Un big bag ne peut donc pas paraître aussi grand
+   qu'une benne 30 m³. */
+const LONGUEUR_MAX = 6.5;
+const largeurVignette = Math.max(18, Math.round((long / LONGUEUR_MAX) * 84));
+---
+
+<article
+  class="group relative flex flex-col overflow-hidden rounded-card border border-ink-200 bg-white transition-all duration-200 hover:-translate-y-1 hover:border-benne-300 hover:shadow-[var(--shadow-lift)]"
+>
+  <!-- Vignette schématique : proportions réelles de la benne, sans photo à charger -->
+  <div class="relative flex h-36 items-end justify-center overflow-hidden bg-ink-50 px-5 pb-5 pt-8">
+    <div
+      class="bg-benne-500"
+      style={`width: ${largeurVignette}%; aspect-ratio: ${long} / ${Math.max(haut, 0.85)}; clip-path: polygon(0 0, 100% 0, 93% 100%, 7% 100%);`}
+      aria-hidden="true"
+    >
+    </div>
+    <div
+      class="absolute bottom-5 left-5 right-5 h-0.5 bg-ink-300"
+      aria-hidden="true"
+    >
+    </div>
+    <span
+      class="absolute right-4 top-4 rounded-full bg-ink-950 px-3 py-1 font-display text-sm font-bold text-benne-400"
+    >
+      {benne.volume} m³
+    </span>
+  </div>
+
+  <div class="flex flex-1 flex-col p-6">
+    <h3 class="text-xl font-bold text-ink-950">
+      <a href={`/nos-bennes/${benne.slug}`} class="after:absolute after:inset-0">
+        {benne.name}
+      </a>
+    </h3>
+    <p class="mt-2 text-sm leading-relaxed text-ink-600">
+      {detailed ? benne.answer : benne.punchline}
+    </p>
+
+    <dl class="mt-5 space-y-2 text-sm">
+      <div class="flex items-center gap-2 text-ink-700">
+        <Icon name="ruler" size={16} class="shrink-0 text-benne-600" />
+        <dt class="sr-only">Dimensions</dt>
+        <dd>{long} × {larg} × {haut} m</dd>
+      </div>
+      <div class="flex items-center gap-2 text-ink-700">
+        <Icon name="weight" size={16} class="shrink-0 text-benne-600" />
+        <dt class="sr-only">Charge utile</dt>
+        <dd>Jusqu’à {benne.charge} tonnes</dd>
+      </div>
+      <div class="flex items-start gap-2 text-ink-700">
+        <Icon name="box" size={16} class="mt-0.5 shrink-0 text-benne-600" />
+        <dt class="sr-only">Équivalence</dt>
+        <dd>{benne.equivalence}</dd>
+      </div>
+    </dl>
+
+    <ul class="mt-5 flex flex-wrap gap-1.5">
+      {
+        benne.dechets.slice(0, 4).map((d) => (
+          <li class="rounded-full bg-ink-50 px-2.5 py-1 text-xs font-medium text-ink-600">{d}</li>
+        ))
+      }
+    </ul>
+
+    <div class="mt-auto flex items-end justify-between gap-3 pt-6">
+      <p class="text-sm text-ink-500">
+        à partir de
+        <span class="block font-display text-2xl font-bold text-ink-950">{benne.priceFrom} €</span>
+        <span class="text-xs">TTC · 7 jours</span>
+      </p>
+      <span
+        class="inline-flex items-center gap-1.5 text-sm font-semibold text-benne-700 transition-transform group-hover:translate-x-0.5"
+      >
+        Détails
+        <Icon name="arrow-right" size={16} />
+      </span>
+    </div>
+  </div>
+</article>

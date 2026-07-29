@@ -1,0 +1,279 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import PageHeader from '../components/PageHeader.astro';
+import Section from '../components/Section.astro';
+import AnswerBox from '../components/AnswerBox.astro';
+import BenneCard from '../components/BenneCard.astro';
+import Steps from '../components/Steps.astro';
+import Faq from '../components/Faq.astro';
+import DevisForm from '../components/DevisForm.astro';
+import CommuneLinks from '../components/CommuneLinks.astro';
+import Icon from '../components/Icon.astro';
+import Button from '../components/Button.astro';
+
+import { BENNES, getBenne } from '../data/bennes';
+import { faqByTopic } from '../data/faq';
+import { COMMUNES, priorityCommunes } from '../data/communes';
+import { SITE } from '../config/site';
+import { serviceSchema, faqSchema, howToSchema } from '../lib/schema';
+
+const breadcrumbs = [
+  { name: 'Location de benne pour déménagement', url: '/location-benne-demenagement' },
+];
+const faq = faqByTopic('demenagement');
+const bennesParticuliers = BENNES.filter((b) => b.volume <= 20);
+
+const situations = [
+  {
+    icon: 'home' as const,
+    title: 'Déménagement',
+    text: 'Tout ce qui ne part pas dans le camion : vieux meubles, matelas, moquettes, cartons.',
+    benne: 'benne-10m3',
+  },
+  {
+    icon: 'box' as const,
+    title: 'Vide-maison et succession',
+    text: 'Un logement complet à débarrasser, souvent dans un délai contraint avant la vente.',
+    benne: 'benne-20m3',
+  },
+  {
+    icon: 'building' as const,
+    title: 'Débarras de cave ou de grenier',
+    text: 'Volumes accumulés sur des décennies, mélangeant bois, métal et encombrants.',
+    benne: 'benne-10m3',
+  },
+  {
+    icon: 'hammer' as const,
+    title: 'Rénovation de salle de bain ou de cuisine',
+    text: 'Faïence, carrelage, sanitaires : des déchets lourds qui saturent vite une petite benne.',
+    benne: 'benne-8m3',
+  },
+  {
+    icon: 'leaf' as const,
+    title: 'Élagage et entretien de jardin',
+    text: 'Tailles, branchages et souches, valorisés en compostage.',
+    benne: 'benne-20m3',
+  },
+  {
+    icon: 'ruler' as const,
+    title: 'Petits travaux en centre-ville',
+    text: 'Quand aucun camion ne peut accéder : le big bag est enlevé par grue.',
+    benne: 'big-bag-1m3',
+  },
+];
+
+const etapes = [
+  {
+    title: 'Vous estimez votre volume',
+    text: 'Une benne 10 m³ absorbe le débarras complet d’un T3. Dans le doute, appelez : nous dimensionnons avec vous.',
+    icon: 'ruler' as const,
+  },
+  {
+    title: 'Vous choisissez la date',
+    text: 'Livraison sous 24 à 48 h sur Tours. Réservez plutôt en début de semaine pour les week-ends de déménagement.',
+    icon: 'calendar' as const,
+  },
+  {
+    title: 'Vous chargez à votre rythme',
+    text: 'La benne reste 7 jours sur place. Chargez le soir, le week-end, quand vous voulez.',
+    icon: 'box' as const,
+  },
+  {
+    title: 'Nous enlevons',
+    text: 'Un appel suffit. L’enlèvement anticipé est gratuit si vous terminez avant la fin des 7 jours.',
+    icon: 'truck' as const,
+  },
+];
+
+const schemas = [
+  serviceSchema({
+    name: 'Location de benne pour déménagement et particuliers',
+    description:
+      'Location de bennes pour les particuliers d’Indre-et-Loire : déménagement, vide-maison, débarras de cave, rénovation. Sans minimum de commande, livraison sous 24 à 48 h.',
+    url: `${SITE.url}/location-benne-demenagement`,
+    areaServed: COMMUNES.map((c) => c.name),
+    offers: bennesParticuliers.map((b) => ({
+      name: b.name,
+      description: b.punchline,
+      price: b.priceFrom,
+      url: `/nos-bennes/${b.slug}`,
+    })),
+  }),
+  howToSchema({
+    name: 'Louer une benne pour un déménagement',
+    description:
+      'Les quatre étapes pour évacuer les encombrants d’un déménagement ou d’un vide-maison avec une benne.',
+    steps: etapes.map((e) => ({ name: e.title, text: e.text })),
+  }),
+  faqSchema(faq),
+];
+---
+
+<BaseLayout
+  title="Location de benne déménagement à Tours — particuliers, dès 130 €"
+  description="Benne pour déménagement, vide-maison ou débarras à Tours et dans le 37. Sans minimum de commande, 7 jours sur place, livraison sous 24 à 48 h."
+  path="/location-benne-demenagement"
+  breadcrumbs={breadcrumbs}
+  schemas={schemas}
+>
+  <PageHeader
+    breadcrumbs={breadcrumbs}
+    eyebrow="Particuliers"
+    title="Location de benne pour déménagement et débarras"
+    lead="Déménagement, vide-maison, cave à vider ou salle de bain à refaire : une benne déposée devant chez vous, que vous chargez à votre rythme pendant 7 jours."
+    stats={[
+      { label: 'Sans', value: 'minimum de commande' },
+      { label: 'Sur place', value: '7 jours' },
+      { label: 'À partir de', value: '130 € TTC' },
+    ]}
+  />
+
+  <Section tone="white" class="!pt-12 !pb-0">
+    <AnswerBox
+      question="Quelle benne louer pour un déménagement ?"
+      facts={[
+        { label: 'Studio / T2', value: 'Benne 8 m³' },
+        { label: 'T3 / T4', value: 'Benne 10 m³' },
+        { label: 'Maison', value: 'Benne 15 m³' },
+        { label: 'Vide-maison', value: 'Benne 20 m³' },
+      ]}
+    >
+      <p>
+        Pour un déménagement, la <strong>benne 10 m³</strong> est le format le plus adapté :
+        elle absorbe le contenu encombrant d’un T3 complet — meubles, matelas, moquettes,
+        cartons — pour environ <strong>320 € TTC</strong> tout compris. En dessous de
+        deux ou trois remorques de voiture, la déchèterie reste plus économique ; au-delà,
+        la benne devient rentable dès le premier week-end, en évitant une dizaine
+        d’allers-retours, les frais de carburant et l’attente. La benne reste
+        <strong>7 jours</strong> devant chez vous et l’enlèvement anticipé est gratuit.
+      </p>
+    </AnswerBox>
+  </Section>
+
+  <Section
+    tone="white"
+    eyebrow="Situations courantes"
+    title="Dans quels cas louer une benne quand on est particulier ?"
+    lead="Six situations reviennent en permanence chez nos clients d’Indre-et-Loire — avec, à chaque fois, un format qui s’impose."
+  >
+    <ul class="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
+      {
+        situations.map((situation) => {
+          const benne = getBenne(situation.benne);
+          return (
+            <li class="flex flex-col rounded-card border border-ink-200 bg-white p-6 transition-shadow hover:shadow-[var(--shadow-soft)]">
+              <span class="flex h-11 w-11 items-center justify-center rounded-xl bg-benne-50 text-benne-700">
+                <Icon name={situation.icon} size={22} />
+              </span>
+              <h3 class="mt-4 text-lg font-bold text-ink-950">{situation.title}</h3>
+              <p class="mt-2 flex-1 text-sm leading-relaxed text-ink-600">{situation.text}</p>
+              {benne && (
+                <a
+                  href={`/nos-bennes/${benne.slug}`}
+                  class="mt-4 inline-flex items-center gap-1.5 text-sm font-semibold text-benne-700 hover:text-benne-800"
+                >
+                  Conseillé : {benne.name}
+                  <Icon name="arrow-right" size={15} />
+                </a>
+              )}
+            </li>
+          );
+        })
+      }
+    </ul>
+  </Section>
+
+  <Section
+    tone="muted"
+    eyebrow="Formats"
+    title="Les bennes les plus demandées par les particuliers"
+    lead="Du big bag pour un centre-ville de Tours inaccessible au 20 m³ pour un vide-maison complet."
+  >
+    <div class="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
+      {bennesParticuliers.map((benne) => <BenneCard benne={benne} />)}
+    </div>
+  </Section>
+
+  <Section tone="dark" eyebrow="En pratique" title="Comment ça se passe, concrètement">
+    <Steps steps={etapes} tone="dark" />
+  </Section>
+
+  <Section tone="white">
+    <div class="grid gap-12 lg:grid-cols-2 lg:gap-16">
+      <div class="prose-fr max-w-none">
+        <h2>Benne ou déchèterie : que choisir ?</h2>
+        <p>
+          Les déchèteries d’Indre-et-Loire sont gratuites pour les particuliers, mais elles
+          imposent des volumes limités par passage, des horaires contraints et un tri sur place.
+          Pour un déménagement ou un vide-maison, l’équation change vite : au-delà de
+          <strong>deux à trois remorques</strong>, le temps passé et les frais de carburant
+          dépassent le coût d’une benne.
+        </p>
+        <p>
+          La benne présente un autre avantage, moins évident : elle reste sur place. Vous
+          n’êtes plus obligé de tout sortir le jour du déménagement — vous chargez le soir,
+          le week-end, au fur et à mesure du tri.
+        </p>
+
+        <h2>Où poser la benne chez un particulier ?</h2>
+        <p>
+          L’emplacement idéal est un terrain privé : allée, cour, parking, pelouse stabilisée.
+          Aucune autorisation n’est nécessaire et la manœuvre est plus rapide. Prévoyez la
+          longueur de la benne plus deux mètres de dégagement, et surtout
+          <strong>4,5 m de hauteur libre</strong> : le camion lève la benne à la verticale.
+          Attention aux branches d’arbres, aux fils électriques et aux porches.
+        </p>
+        <p>
+          Si la seule option est la rue ou une place de stationnement, il faut une autorisation
+          d’occupation du domaine public. Nous déposons la demande en mairie à votre place :
+          comptez environ dix jours ouvrés d’instruction à Tours, un peu moins dans les
+          communes périphériques.
+        </p>
+
+        <h2>Ce que vous ne pouvez pas mettre dans la benne</h2>
+        <p>
+          Trois catégories reviennent systématiquement lors des déménagements et posent
+          problème : l’<strong>électroménager</strong> et les écrans (filière DEEE, repris
+          gratuitement en déchèterie ou chez le distributeur), les <strong>peintures,
+          solvants et produits d’entretien</strong> (déchets dangereux), et les
+          <strong>bouteilles de gaz</strong> (à rapporter au distributeur).
+        </p>
+        <p>
+          Les meubles, matelas, textiles, moquettes, jouets et objets divers, en revanche,
+          partent sans difficulté dans une benne à encombrants.
+          <a href="/dechets-acceptes">Consultez le guide complet du tri</a> avant de commander.
+        </p>
+      </div>
+
+      <div>
+        <div class="rounded-card border border-ink-200 bg-ink-50 p-6 lg:p-8">
+          <p class="text-xs font-bold uppercase tracking-[0.18em] text-benne-700">Devis gratuit</p>
+          <h2 class="mt-2 text-2xl font-bold text-ink-950">Réserver votre benne</h2>
+          <p class="mt-2 text-ink-600">
+            Sans minimum de commande. Réponse sous 2 h ouvrées avec un tarif ferme.
+          </p>
+          <div class="mt-6">
+            <DevisForm defaultBenne="benne-10m3" />
+          </div>
+        </div>
+      </div>
+    </div>
+  </Section>
+
+  <Section
+    tone="muted"
+    eyebrow="Zone d’intervention"
+    title="Livraison chez les particuliers dans tout le 37"
+  >
+    <CommuneLinks communes={priorityCommunes()} />
+    <p class="mt-8">
+      <Button href="/zones-desservies" variant="dark" iconAfter="arrow-right">
+        Voir toutes les communes desservies
+      </Button>
+    </p>
+  </Section>
+
+  <Section tone="white" eyebrow="Questions fréquentes" title="Déménagement et débarras : vos questions" align="center">
+    <Faq items={faq} openFirst />
+  </Section>
+</BaseLayout>

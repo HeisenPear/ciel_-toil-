@@ -1,79 +1,144 @@
 ---
-// Layout de base — HTML shell, fonts, SEO, Schema.org, WhatsApp flottant
-import SEO from '../components/SEO.astro';
-import FloatingWhatsApp from '../components/FloatingWhatsApp.tsx';
+import { SITE } from '../config/site';
+import { COMMUNES } from '../data/communes';
+import {
+  graph,
+  organizationSchema,
+  websiteSchema,
+  localBusinessSchema,
+  breadcrumbSchema,
+} from '../lib/schema';
+import Header from '../components/Header.astro';
+import Footer from '../components/Footer.astro';
 import '../styles/global.css';
 
+export interface Crumb {
+  name: string;
+  url: string;
+}
+
 interface Props {
-  title?: string;
-  description?: string;
+  title: string;
+  description: string;
+  /** Chemin canonique sans slash final (ex. `/tarifs`). Par défaut : URL courante. */
+  path?: string;
   ogImage?: string;
+  ogType?: 'website' | 'article';
+  noindex?: boolean;
+  breadcrumbs?: Crumb[];
+  /** Nœuds JSON-LD additionnels propres à la page. */
+  schemas?: object[];
+  /** Masque le bandeau d'appel à l'action global du pied de page. */
+  hideFooterCta?: boolean;
 }
 
 const {
-  title = 'Dorian Auto Prestige — Ciel étoilé fibre optique & CarPlay sur mesure',
-  description = 'Artisan automobile spécialisé dans le ciel étoilé fibre optique et l\'intégration CarPlay / Android Auto sur mesure. Devis gratuit, garantie 12 mois.',
-  ogImage = '/images/hero-ciel-etoile.jpg',
+  title,
+  description,
+  path,
+  ogImage = '/og/og-default.jpg',
+  ogType = 'website',
+  noindex = false,
+  breadcrumbs = [],
+  schemas = [],
+  hideFooterCta = false,
 } = Astro.props;
 
-const schemaData = {
-  '@context': 'https://schema.org',
-  '@type': 'LocalBusiness',
-  name: 'Dorian Auto Prestige',
-  description: 'Artisan automobile spécialisé dans le ciel étoilé fibre optique et l\'intégration CarPlay/Android Auto sur mesure.',
-  telephone: '+33600000000',
-  email: 'contact@dorian-auto-prestige.fr',
-  address: {
-    '@type': 'PostalAddress',
-    addressCountry: 'FR',
-  },
-  priceRange: '€€',
-  openingHours: 'Mo-Sa 09:00-19:00',
-  image: ogImage,
-  url: 'https://dorian-auto-prestige.fr',
-  sameAs: [],
-};
+const pathname = path ?? Astro.url.pathname.replace(/\/$/, '');
+const canonical = `${SITE.url}${pathname === '' ? '/' : pathname}`;
+
+/* Google tronque les titles autour de 60-65 caractères. On n'ajoute le suffixe
+   de marque que s'il tient dans cette limite : sur les pages locales, dont le
+   title contient déjà la commune et le code postal, mieux vaut garder les
+   mots-clés visibles que la marque. */
+const TITLE_MAX = 62;
+const withBrand = `${title} | ${SITE.name}`;
+const fullTitle =
+  title.includes(SITE.name) || withBrand.length > TITLE_MAX ? title : withBrand;
+
+const areaServed = COMMUNES.filter((c) => c.priority).map((c) => c.name);
+
+const jsonLd = graph([
+  organizationSchema(),
+  websiteSchema(),
+  localBusinessSchema(areaServed),
+  ...(breadcrumbs.length
+    ? [breadcrumbSchema([{ name: 'Accueil', url: '/' }, ...breadcrumbs])]
+    : []),
+  ...schemas,
+]);
 ---
 
 <!doctype html>
 <html lang="fr">
   <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
-    <meta name="theme-color" content="#06060C" />
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
 
-    <SEO {title} {description} {ogImage} />
+    <title>{fullTitle}</title>
+    <meta name="description" content={description} />
+    <link rel="canonical" href={canonical} />
 
-    <!-- Schema.org LocalBusiness -->
-    <script type="application/ld+json" set:html={JSON.stringify(schemaData)} />
+    {
+      noindex ? (
+        <meta name="robots" content="noindex, nofollow" />
+      ) : (
+        <meta
+          name="robots"
+          content="index, follow, max-snippet:-1, max-image-preview:large, max-video-preview:-1"
+        />
+      )
+    }
 
-    <!-- Preconnect for fonts -->
-    <link rel="preconnect" href="https://fonts.googleapis.com" />
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-    <link
-      href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;1,300;1,400;1,600&family=Outfit:wght@300;400;500;600&display=swap"
-      rel="stylesheet"
-    />
+    <meta name="theme-color" content={SITE.themeColor} />
+    <meta name="format-detection" content="telephone=yes" />
+    <meta name="author" content={SITE.name} />
+    <link rel="alternate" hreflang="fr-FR" href={canonical} />
+    <link rel="alternate" hreflang="x-default" href={canonical} />
+
+    <!-- Signaux géographiques historiques, encore lus par certains agrégateurs locaux -->
+    <meta name="geo.region" content="FR-CVL" />
+    <meta name="geo.placename" content="Tours, Indre-et-Loire" />
+    <meta name="ICBM" content="47.394144, 0.68484" />
+
+    <meta property="og:type" content={ogType} />
+    <meta property="og:site_name" content={SITE.name} />
+    <meta property="og:locale" content={SITE.locale} />
+    <meta property="og:title" content={fullTitle} />
+    <meta property="og:description" content={description} />
+    <meta property="og:url" content={canonical} />
+    <meta property="og:image" content={`${SITE.url}${ogImage}`} />
+    <meta property="og:image:width" content="1200" />
+    <meta property="og:image:height" content="630" />
+    <meta property="og:image:alt" content={`${SITE.name} — ${SITE.tagline}`} />
+
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content={fullTitle} />
+    <meta name="twitter:description" content={description} />
+    <meta name="twitter:image" content={`${SITE.url}${ogImage}`} />
+
+    <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
+    <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
+    <link rel="manifest" href="/site.webmanifest" />
+    <link rel="sitemap" href="/sitemap-index.xml" />
+
+    <script type="application/ld+json" is:inline set:html={JSON.stringify(jsonLd)} />
   </head>
 
-  <body class="bg-ink text-warm-white overflow-x-hidden">
-    <slot />
-    <FloatingWhatsApp client:load />
+  <body class="min-h-screen bg-white antialiased">
+    <a
+      href="#contenu"
+      class="sr-only focus:not-sr-only focus:absolute focus:left-4 focus:top-4 focus:z-[100] focus:rounded-lg focus:bg-ink-950 focus:px-4 focus:py-2 focus:text-white"
+    >
+      Aller au contenu principal
+    </a>
 
-    <!-- Scroll reveal observer -->
-    <script>
-      const observer = new IntersectionObserver(
-        (entries) => {
-          entries.forEach((entry) => {
-            if (entry.isIntersecting) {
-              entry.target.classList.add('is-visible');
-            }
-          });
-        },
-        { threshold: 0.08, rootMargin: '0px 0px -50px 0px' }
-      );
-      document.querySelectorAll('.reveal').forEach((el) => observer.observe(el));
-    </script>
+    <Header />
+
+    <main id="contenu">
+      <slot />
+    </main>
+
+    <Footer hideCta={hideFooterCta} />
   </body>
 </html>

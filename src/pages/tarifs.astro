@@ -1,0 +1,268 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import PageHeader from '../components/PageHeader.astro';
+import Section from '../components/Section.astro';
+import AnswerBox from '../components/AnswerBox.astro';
+import Faq from '../components/Faq.astro';
+import DevisForm from '../components/DevisForm.astro';
+import Icon from '../components/Icon.astro';
+
+import { BENNES } from '../data/bennes';
+import { faqByTopic } from '../data/faq';
+import { COMMUNES } from '../data/communes';
+import { SITE } from '../config/site';
+import { serviceSchema, faqSchema } from '../lib/schema';
+
+const breadcrumbs = [{ name: 'Tarifs', url: '/tarifs' }];
+const faq = faqByTopic('tarifs');
+
+const inclus = [
+  'La livraison de la benne à l’adresse indiquée',
+  '7 jours calendaires de mise à disposition',
+  'L’enlèvement de la benne pleine',
+  'Le transport jusqu’au centre de traitement agréé',
+  'Le tri et le traitement des déchets, dans la limite de la charge utile',
+  'Les plaques de répartition si le sol l’exige',
+  'La signalisation temporaire en cas de dépose sur voirie',
+];
+
+const supplements = [
+  {
+    label: 'Jour d’immobilisation supplémentaire',
+    price: 'à partir de 12 € TTC / jour',
+    note: 'Au-delà des 7 jours inclus. La formule au mois est plus économique sur un chantier long.',
+  },
+  {
+    label: 'Tonne supplémentaire',
+    price: 'selon le flux',
+    note: 'Facturée uniquement en cas de dépassement de la charge utile, sur la base de la pesée.',
+  },
+  {
+    label: 'Redevance d’occupation du domaine public',
+    price: 'tarif de la commune',
+    note: 'Refacturée à l’euro près. Nous déposons la demande d’arrêté à votre place, sans frais de dossier.',
+  },
+  {
+    label: 'Rotation (enlèvement + nouvelle benne)',
+    price: 'prix d’une location',
+    note: 'Sans frais de déplacement supplémentaire si la rotation a lieu au même emplacement.',
+  },
+  {
+    label: 'Benne non conforme (déchets interdits)',
+    price: 'sur devis',
+    note: 'Tri manuel et redirection vers la bonne filière. Évitable en vérifiant le guide du tri.',
+  },
+];
+
+const schemas = [
+  serviceSchema({
+    name: 'Tarifs de location de benne en Indre-et-Loire',
+    description:
+      'Grille tarifaire de la location de bennes à Tours et en Indre-et-Loire : de 130 € TTC pour un big bag 1 m³ à 520 € TTC pour une benne 30 m³, tout compris.',
+    url: `${SITE.url}/tarifs`,
+    areaServed: COMMUNES.filter((c) => c.priority).map((c) => c.name),
+    offers: BENNES.map((b) => ({
+      name: b.name,
+      description: b.punchline,
+      price: b.priceFrom,
+      url: `/nos-bennes/${b.slug}`,
+    })),
+  }),
+  faqSchema(faq),
+];
+---
+
+<BaseLayout
+  title="Tarifs location de benne à Tours (37) — grille 2026 tout compris"
+  description="Prix d'une benne à Tours et en Indre-et-Loire : de 130 à 520 € TTC, livraison, enlèvement et traitement inclus. Ce qui est compris, ce qui est en supplément."
+  path="/tarifs"
+  breadcrumbs={breadcrumbs}
+  schemas={schemas}
+>
+  <PageHeader
+    breadcrumbs={breadcrumbs}
+    eyebrow="Prix transparents"
+    title="Tarifs de location de benne à Tours et en Indre-et-Loire"
+    lead="Un prix ferme, annoncé avant la commande, incluant la livraison, 7 jours de location, l’enlèvement et le traitement des déchets."
+    stats={[
+      { label: 'Dès', value: '130 € TTC' },
+      { label: 'Location incluse', value: '7 jours' },
+      { label: 'Devis', value: 'sous 2 h' },
+    ]}
+  />
+
+  <Section tone="white" class="!pt-12 !pb-0">
+    <AnswerBox
+      question="Combien coûte la location d’une benne à Tours ?"
+      facts={[
+        { label: 'Big bag 1 m³', value: '130 €' },
+        { label: 'Benne 8 m³', value: '290 €' },
+        { label: 'Benne 15 m³', value: '390 €' },
+        { label: 'Benne 30 m³', value: '520 €' },
+      ]}
+    >
+      <p>
+        À Tours, la location d’une benne coûte entre <strong>290 et 520 € TTC</strong> selon le
+        volume, pour 7 jours de mise à disposition incluant la livraison, l’enlèvement et le
+        traitement des déchets. Le big bag de 1 m³ démarre à 130 € TTC. Trois facteurs font
+        varier le prix : le <strong>volume</strong> de la benne, la <strong>nature du déchet</strong>
+        (les gravats purs coûtent moins cher à traiter qu’un mélange non trié) et la
+        <strong>commune de livraison</strong>. Sur l’ensemble de l’agglomération de Tours,
+        le tarif est identique ; au-delà, une participation au transport peut s’appliquer
+        pour les secteurs les plus éloignés.
+      </p>
+    </AnswerBox>
+  </Section>
+
+  <Section
+    tone="white"
+    eyebrow="Grille tarifaire"
+    title="Prix par format de benne"
+    lead="Tarifs TTC pour une location de 7 jours sur l’agglomération de Tours, tout compris."
+  >
+    <div class="overflow-x-auto rounded-card border border-ink-200">
+      <table class="w-full min-w-[44rem] border-collapse text-sm">
+        <caption class="sr-only">Grille tarifaire par format de benne</caption>
+        <thead>
+          <tr class="bg-ink-950 text-left text-white">
+            <th scope="col" class="px-5 py-4 font-semibold">Format</th>
+            <th scope="col" class="px-5 py-4 font-semibold">Charge utile</th>
+            <th scope="col" class="px-5 py-4 font-semibold">Usage type</th>
+            <th scope="col" class="px-5 py-4 text-right font-semibold">Prix TTC / 7 jours</th>
+          </tr>
+        </thead>
+        <tbody class="divide-y divide-ink-200 bg-white">
+          {
+            BENNES.map((benne) => (
+              <tr class="transition-colors hover:bg-benne-50/60">
+                <th scope="row" class="px-5 py-4 text-left">
+                  <a
+                    href={`/nos-bennes/${benne.slug}`}
+                    class="font-semibold text-ink-950 underline decoration-benne-400 decoration-2 underline-offset-4 hover:text-benne-700"
+                  >
+                    {benne.name}
+                  </a>
+                  <span class="mt-0.5 block text-xs font-normal text-ink-500">
+                    {benne.equivalence}
+                  </span>
+                </th>
+                <td class="px-5 py-4 text-ink-700">{benne.charge} t</td>
+                <td class="px-5 py-4 text-ink-700">{benne.usages.join(', ')}</td>
+                <td class="whitespace-nowrap px-5 py-4 text-right">
+                  <span class="font-display text-xl font-bold text-ink-950">
+                    {benne.priceFrom} €
+                  </span>
+                  <span class="block text-xs text-ink-500">à partir de</span>
+                </td>
+              </tr>
+            ))
+          }
+        </tbody>
+      </table>
+    </div>
+
+    <p class="mt-4 flex items-start gap-2 text-sm text-ink-500">
+      <Icon name="warning" size={16} class="mt-0.5 shrink-0 text-benne-600" />
+      Tarifs indicatifs. Le devis nominatif, gratuit et sans engagement, fixe un prix ferme
+      tenant compte du flux de déchets et de la commune de livraison.
+    </p>
+  </Section>
+
+  <Section tone="muted" eyebrow="Transparence" title="Ce qui est inclus, ce qui est en supplément">
+    <div class="grid gap-8 lg:grid-cols-2">
+      <div class="rounded-card border border-tri-500/30 bg-tri-50 p-7">
+        <h3 class="flex items-center gap-2.5 text-xl font-bold text-tri-700">
+          <Icon name="check" size={22} />
+          Compris dans le prix annoncé
+        </h3>
+        <ul class="mt-5 space-y-3">
+          {
+            inclus.map((item) => (
+              <li class="flex items-start gap-2.5 text-ink-700">
+                <Icon name="check" size={17} class="mt-0.5 shrink-0 text-tri-600" />
+                {item}
+              </li>
+            ))
+          }
+        </ul>
+      </div>
+
+      <div class="rounded-card border border-ink-200 bg-white p-7">
+        <h3 class="flex items-center gap-2.5 text-xl font-bold text-ink-950">
+          <Icon name="euro" size={22} class="text-benne-700" />
+          Facturé en supplément, le cas échéant
+        </h3>
+        <dl class="mt-5 divide-y divide-ink-200">
+          {
+            supplements.map((item) => (
+              <div class="py-4 first:pt-0 last:pb-0">
+                <div class="flex flex-wrap items-baseline justify-between gap-2">
+                  <dt class="font-semibold text-ink-900">{item.label}</dt>
+                  <dd class="text-sm font-bold text-benne-700">{item.price}</dd>
+                </div>
+                <p class="mt-1 text-sm text-ink-600">{item.note}</p>
+              </div>
+            ))
+          }
+        </dl>
+      </div>
+    </div>
+  </Section>
+
+  <Section tone="white">
+    <div class="grid gap-12 lg:grid-cols-2 lg:gap-16">
+      <div class="prose-fr max-w-none">
+        <h2>Pourquoi le prix varie-t-il selon le type de déchet ?</h2>
+        <p>
+          Le coût de traitement d’une tonne de déchets varie du simple au quintuple selon le flux.
+          Des gravats inertes purs sont concassés et réemployés : leur traitement est peu coûteux.
+          Un mélange non trié passe par une chaîne de tri manuelle et mécanisée, dont le coût est
+          répercuté à la tonne. C’est pour cette raison que nous demandons toujours la nature
+          du déchet avant d’établir un devis.
+        </p>
+        <p>
+          Conséquence pratique : <strong>trier à la source fait baisser la facture</strong>.
+          Sur un chantier de rénovation, deux bennes distinctes — une pour les gravats, une pour
+          le mélange — reviennent presque toujours moins cher qu’une seule benne tout-venant.
+        </p>
+
+        <h2>Le tarif est-il le même dans tout le département ?</h2>
+        <p>
+          Sur l’agglomération de Tours — Tours, Joué-lès-Tours, Saint-Cyr-sur-Loire,
+          Saint-Pierre-des-Corps, Chambray-lès-Tours, Saint-Avertin, La Riche, Fondettes,
+          Ballan-Miré — le tarif affiché s’applique sans majoration.
+        </p>
+        <p>
+          Au-delà, nous regroupons les livraisons par tournées de secteur, ce qui limite fortement
+          le surcoût : Amboise, Loches, Chinon, Bourgueil ou Château-Renault restent accessibles
+          avec une participation au transport modérée. Consultez la page
+          <a href="/zones-desservies">zones desservies</a> pour connaître les délais par secteur.
+        </p>
+
+        <h2>Comment payer ?</h2>
+        <p>
+          Les particuliers règlent par carte bancaire ou virement à la commande. Les entreprises
+          disposant d’un compte professionnel bénéficient d’une facturation mensuelle groupée,
+          avec un récapitulatif détaillé par chantier et les bordereaux de suivi correspondants.
+        </p>
+      </div>
+
+      <div>
+        <div class="rounded-card border border-ink-200 bg-ink-50 p-6 lg:p-8">
+          <p class="text-xs font-bold uppercase tracking-[0.18em] text-benne-700">Gratuit</p>
+          <h2 class="mt-2 text-2xl font-bold text-ink-950">Obtenir un tarif ferme</h2>
+          <p class="mt-2 text-ink-600">
+            Décrivez votre besoin en une minute, nous répondons sous 2 h ouvrées.
+          </p>
+          <div class="mt-6">
+            <DevisForm />
+          </div>
+        </div>
+      </div>
+    </div>
+  </Section>
+
+  <Section tone="muted" eyebrow="Questions fréquentes" title="Tarifs et facturation" align="center">
+    <Faq items={faq} openFirst />
+  </Section>
+</BaseLayout>

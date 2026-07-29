@@ -1,0 +1,159 @@
+---
+import type { GetStaticPaths } from 'astro';
+import { getCollection, render } from 'astro:content';
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import PageHeader from '../../components/PageHeader.astro';
+import Section from '../../components/Section.astro';
+import AnswerBox from '../../components/AnswerBox.astro';
+import Button from '../../components/Button.astro';
+import Icon from '../../components/Icon.astro';
+import { SITE } from '../../config/site';
+import { articleSchema } from '../../lib/schema';
+
+export const getStaticPaths = (async () => {
+  const posts = await getCollection('blog', ({ data }) => !data.draft);
+  return posts.map((post) => ({
+    params: { slug: post.id },
+    props: { post, posts },
+  }));
+}) satisfies GetStaticPaths;
+
+const { post, posts } = Astro.props;
+const { Content, headings } = await render(post);
+
+const url = `${SITE.url}/blog/${post.id}`;
+const breadcrumbs = [
+  { name: 'Blog', url: '/blog' },
+  { name: post.data.title, url: `/blog/${post.id}` },
+];
+
+const dateFmt = new Intl.DateTimeFormat('fr-FR', { dateStyle: 'long' });
+
+const autres = posts
+  .filter((p) => p.id !== post.id)
+  .sort((a, b) => b.data.pubDate.getTime() - a.data.pubDate.getTime())
+  .slice(0, 3);
+
+/* Seuls les H2 alimentent le sommaire : au-delà, la navigation devient illisible. */
+const sommaire = headings.filter((h) => h.depth === 2);
+
+const schemas = [
+  articleSchema({
+    title: post.data.title,
+    description: post.data.description,
+    url,
+    datePublished: post.data.pubDate.toISOString(),
+    dateModified: post.data.updatedDate?.toISOString(),
+  }),
+];
+---
+
+<BaseLayout
+  title={post.data.title}
+  description={post.data.description}
+  path={`/blog/${post.id}`}
+  ogType="article"
+  breadcrumbs={breadcrumbs}
+  schemas={schemas}
+>
+  <PageHeader
+    breadcrumbs={[{ name: 'Blog', url: '/blog' }, { name: post.data.category, url: '/blog' }]}
+    eyebrow={post.data.category}
+    title={post.data.title}
+    lead={post.data.description}
+  />
+
+  <Section tone="white" class="!pt-12">
+    <div class="grid gap-12 lg:grid-cols-3 lg:gap-16">
+      <div class="lg:col-span-2">
+        <AnswerBox question="En résumé">
+          <p>{post.data.answer}</p>
+        </AnswerBox>
+
+        <p class="mt-8 flex flex-wrap items-center gap-x-4 gap-y-2 text-sm text-ink-500">
+          <span class="flex items-center gap-1.5">
+            <Icon name="calendar" size={15} />
+            Publié le <time datetime={post.data.pubDate.toISOString()}>
+              {dateFmt.format(post.data.pubDate)}
+            </time>
+          </span>
+          {
+            post.data.updatedDate && (
+              <span class="flex items-center gap-1.5">
+                <Icon name="clock" size={15} />
+                Mis à jour le{' '}
+                <time datetime={post.data.updatedDate.toISOString()}>
+                  {dateFmt.format(post.data.updatedDate)}
+                </time>
+              </span>
+            )
+          }
+        </p>
+
+        <article class="prose-fr mt-8 max-w-none">
+          <Content />
+        </article>
+      </div>
+
+      <aside class="lg:col-span-1">
+        <div class="sticky top-28 space-y-6">
+          {
+            sommaire.length > 2 && (
+              <nav aria-labelledby="sommaire" class="rounded-card border border-ink-200 bg-ink-50 p-6">
+                <h2 id="sommaire" class="text-sm font-bold uppercase tracking-wider text-ink-900">
+                  Sommaire
+                </h2>
+                <ol class="mt-4 space-y-2.5 text-sm">
+                  {sommaire.map((heading) => (
+                    <li>
+                      <a
+                        href={`#${heading.slug}`}
+                        class="text-ink-600 transition-colors hover:text-benne-700"
+                      >
+                        {heading.text}
+                      </a>
+                    </li>
+                  ))}
+                </ol>
+              </nav>
+            )
+          }
+
+          <div class="rounded-card bg-ink-950 p-6 text-white">
+            <h2 class="text-lg font-bold">Besoin d’une benne ?</h2>
+            <p class="mt-2 text-sm text-ink-300">
+              Devis ferme sous 2 h ouvrées, livraison sous 24 à 48 h sur Tours et l’Indre-et-Loire.
+            </p>
+            <div class="mt-5">
+              <Button href="/contact" variant="primary" iconAfter="arrow-right" class="w-full">
+                Devis gratuit
+              </Button>
+            </div>
+          </div>
+        </div>
+      </aside>
+    </div>
+  </Section>
+
+  {
+    autres.length > 0 && (
+      <Section tone="muted" eyebrow="À lire aussi" title="D’autres guides pratiques">
+        <div class="grid gap-6 md:grid-cols-3">
+          {autres.map((other) => (
+            <article class="group relative rounded-card border border-ink-200 bg-white p-6 transition-all hover:-translate-y-1 hover:border-benne-300">
+              <p class="text-xs font-bold uppercase tracking-[0.14em] text-benne-700">
+                {other.data.category}
+              </p>
+              <h3 class="mt-2.5 text-lg font-bold leading-snug text-ink-950">
+                <a href={`/blog/${other.id}`} class="after:absolute after:inset-0">
+                  {other.data.title}
+                </a>
+              </h3>
+              <p class="mt-2 text-sm text-ink-600">{other.data.description}</p>
+            </article>
+          ))}
+        </div>
+      </Section>
+    )
+  }
+</BaseLayout>

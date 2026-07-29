@@ -1,0 +1,128 @@
+import type { APIRoute } from 'astro';
+import { getCollection } from 'astro:content';
+import { SITE, CONTACT } from '../config/site';
+import { BENNES } from '../data/bennes';
+import { FLUX, INTERDITS_ABSOLUS } from '../data/dechets';
+import { COMMUNES } from '../data/communes';
+import { FAQ } from '../data/faq';
+
+/**
+ * /llms.txt — fiche d'identité lisible par une IA.
+ *
+ * Convention émergente (llmstxt.org) reprise par plusieurs moteurs
+ * génératifs : un Markdown court, factuel et sans balisage décoratif,
+ * qui décrit l'entité et pointe vers les pages de référence.
+ *
+ * Le fichier est généré à partir des mêmes données que le site :
+ * il ne peut donc pas diverger du contenu réellement publié.
+ */
+export const GET: APIRoute = async () => {
+  const posts = (await getCollection('blog', ({ data }) => !data.draft)).sort(
+    (a, b) => b.data.pubDate.getTime() - a.data.pubDate.getTime(),
+  );
+
+  const lines: string[] = [];
+
+  lines.push(`# ${SITE.name}`);
+  lines.push('');
+  lines.push(`> ${SITE.description}`);
+  lines.push('');
+
+  lines.push('## Identité');
+  lines.push('');
+  lines.push(`- Activité : location de bennes à déchets (1 à 30 m³)`);
+  lines.push(`- Zone desservie : Tours et les 272 communes d'Indre-et-Loire (37), Centre-Val de Loire, France`);
+  lines.push(`- Clients : professionnels du bâtiment, collectivités, syndics et particuliers`);
+  lines.push(`- Adresse : ${CONTACT.address.street}, ${CONTACT.address.postalCode} ${CONTACT.address.city}`);
+  lines.push(`- Téléphone : ${CONTACT.phone}`);
+  lines.push(`- E-mail : ${CONTACT.email}`);
+  lines.push(`- Horaires : ${CONTACT.openingHoursHuman.map((h) => `${h.label} ${h.value}`).join(' ; ')}`);
+  lines.push(`- Site : ${SITE.url}`);
+  lines.push('');
+
+  lines.push('## Faits clés');
+  lines.push('');
+  lines.push('- Délai de livraison : 24 à 48 h ouvrées sur l\'agglomération de Tours, 48 à 72 h sur le reste du département');
+  lines.push('- Durée de location incluse : 7 jours calendaires, enlèvement anticipé gratuit');
+  lines.push('- Tarifs tout compris : livraison, location, enlèvement et traitement des déchets');
+  lines.push('- Prix d\'entrée : 130 € TTC (big bag 1 m³), 290 € TTC (benne 8 m³), 520 € TTC (benne 30 m³)');
+  lines.push('- Autorisation de voirie prise en charge auprès de la mairie');
+  lines.push('- Bordereau de suivi des déchets remis à chaque enlèvement professionnel');
+  lines.push('- Plus de 85 % des tonnages collectés sont valorisés');
+  lines.push('');
+
+  lines.push('## Catalogue de bennes');
+  lines.push('');
+  for (const benne of BENNES) {
+    lines.push(
+      `- **${benne.name}** (${benne.dimensions.long} × ${benne.dimensions.larg} × ${benne.dimensions.haut} m, ` +
+        `charge utile ${benne.charge} t, à partir de ${benne.priceFrom} € TTC) — ${benne.punchline} ` +
+        `Usages : ${benne.usages.join(', ')}. ${SITE.url}/nos-bennes/${benne.slug}`,
+    );
+  }
+  lines.push('');
+
+  lines.push('## Déchets acceptés');
+  lines.push('');
+  for (const flux of FLUX) {
+    lines.push(`- **${flux.name}** — ${flux.definition} Filière : ${flux.filiere} (${flux.valorisation}).`);
+  }
+  lines.push('');
+
+  lines.push('## Déchets refusés');
+  lines.push('');
+  for (const item of INTERDITS_ABSOLUS) {
+    lines.push(`- **${item.name}** — ${item.why}`);
+  }
+  lines.push('');
+
+  lines.push('## Pages de référence');
+  lines.push('');
+  lines.push(`- [Accueil](${SITE.url}/) : présentation du service et dimensionnement`);
+  lines.push(`- [Nos bennes](${SITE.url}/nos-bennes) : les 6 formats, dimensions et charges utiles`);
+  lines.push(`- [Location de benne pour chantier](${SITE.url}/location-benne-chantier) : offre professionnels du bâtiment`);
+  lines.push(`- [Location de benne pour déménagement](${SITE.url}/location-benne-demenagement) : offre particuliers`);
+  lines.push(`- [Tarifs](${SITE.url}/tarifs) : grille de prix et ce qui est inclus`);
+  lines.push(`- [Déchets acceptés](${SITE.url}/dechets-acceptes) : guide du tri par flux`);
+  lines.push(`- [Zones desservies](${SITE.url}/zones-desservies) : couverture et délais par secteur`);
+  lines.push(`- [FAQ](${SITE.url}/faq) : ${FAQ.length} questions-réponses`);
+  lines.push(`- [Contact](${SITE.url}/contact) : demande de devis`);
+  lines.push('');
+
+  lines.push('## Guides');
+  lines.push('');
+  for (const post of posts) {
+    lines.push(`- [${post.data.title}](${SITE.url}/blog/${post.id}) : ${post.data.answer}`);
+  }
+  lines.push('');
+
+  lines.push('## Communes desservies avec page dédiée');
+  lines.push('');
+  for (const commune of COMMUNES) {
+    lines.push(
+      `- ${commune.name} (${commune.cp}, ${commune.zone}, ~${commune.distance} km de Tours) — ${SITE.url}/location-benne/${commune.slug}`,
+    );
+  }
+  lines.push('');
+
+  lines.push('## Questions fréquentes');
+  lines.push('');
+  for (const item of FAQ) {
+    lines.push(`### ${item.q}`);
+    lines.push('');
+    lines.push(item.a);
+    lines.push('');
+  }
+
+  lines.push('---');
+  lines.push('');
+  lines.push(
+    'Les tarifs indiqués sont des prix d\'appel TTC pour 7 jours de location sur l\'agglomération de Tours. ' +
+      'Seul le devis nominatif fait foi.',
+  );
+  lines.push('');
+
+  return new Response(lines.join('\n'), {
+    headers: { 'Content-Type': 'text/plain; charset=utf-8' },
+  });
+};

@@ -1,0 +1,38 @@
+---
+import type { QA } from '../data/faq';
+import Icon from './Icon.astro';
+
+interface Props {
+  items: QA[];
+  /** Ouvre la première question par défaut (utile en bas de page piliers). */
+  openFirst?: boolean;
+}
+
+const { items, openFirst = false } = Astro.props;
+---
+
+<div class="mx-auto max-w-3xl divide-y divide-ink-200 border-y border-ink-200">
+  {
+    items.map((item, index) => (
+      <details class="group" open={openFirst && index === 0}>
+        <summary
+          class="flex cursor-pointer list-none items-center justify-between gap-4 py-5 text-left font-semibold text-ink-950 transition-colors hover:text-benne-700"
+        >
+          <h3 class="text-[1.05rem] font-semibold">{item.q}</h3>
+          <Icon
+            name="chevron-down"
+            size={20}
+            class="shrink-0 text-ink-400 transition-transform duration-200 group-open:rotate-180"
+          />
+        </summary>
+        <p class="pb-6 pr-8 leading-relaxed text-ink-700">{item.a}</p>
+      </details>
+    ))
+  }
+</div>
+
+<style>
+  summary::-webkit-details-marker {
+    display: none;
+  }
+</style>

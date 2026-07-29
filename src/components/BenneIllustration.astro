@@ -1,0 +1,84 @@
+---
+/**
+ * Illustration vectorielle d'un camion ampliroll déposant une benne.
+ * Choix assumé : pas de photographie tant que le client n'a pas fourni
+ * ses propres visuels — un SVG pèse 3 Ko et ne dégrade pas le LCP.
+ */
+interface Props {
+  class?: string;
+}
+const { class: className = '' } = Astro.props;
+---
+
+<svg
+  class={className}
+  viewBox="0 0 520 300"
+  fill="none"
+  xmlns="http://www.w3.org/2000/svg"
+  role="img"
+  aria-label="Camion ampliroll déposant une benne de chantier jaune"
+>
+  <defs>
+    <linearGradient id="sky" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0%" stop-color="#1B2333" />
+      <stop offset="100%" stop-color="#0F1622" />
+    </linearGradient>
+    <linearGradient id="benneFace" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0%" stop-color="#FFC74C" />
+      <stop offset="100%" stop-color="#F2A413" />
+    </linearGradient>
+  </defs>
+
+  <rect width="520" height="300" rx="20" fill="url(#sky)" />
+
+  <!-- Sol -->
+  <path d="M0 232h520v68H0z" fill="#1B2333" />
+  <path d="M0 232h520" stroke="#37455E" stroke-width="2" />
+  <g stroke="#F2A413" stroke-width="3" stroke-linecap="round" opacity="0.35">
+    <path d="M30 252h44" /><path d="M104 252h44" /><path d="M178 252h44" />
+    <path d="M252 252h44" /><path d="M326 252h44" /><path d="M400 252h44" /><path d="M474 252h30" />
+  </g>
+
+  <!-- Benne déposée au premier plan -->
+  <g>
+    <path d="M46 232 L66 148 H214 L226 232 Z" fill="url(#benneFace)" />
+    <path d="M46 232 L66 148 H214 L226 232 Z" stroke="#0F1622" stroke-width="4" stroke-linejoin="round" />
+    <path d="M70 172 H211" stroke="#0F1622" stroke-width="3" opacity="0.35" />
+    <path d="M63 200 H218" stroke="#0F1622" stroke-width="3" opacity="0.35" />
+    <rect x="96" y="152" width="14" height="80" fill="#0F1622" opacity="0.15" />
+    <rect x="168" y="152" width="14" height="80" fill="#0F1622" opacity="0.15" />
+    <!-- Crochet ampliroll -->
+    <path d="M136 148v-16a10 10 0 0 1 20 0" stroke="#0F1622" stroke-width="5" stroke-linecap="round" />
+  </g>
+
+  <!-- Camion porteur -->
+  <g>
+    <path d="M300 232V166h96l30 30v36z" fill="#E9EDF3" />
+    <path d="M300 232V166h96l30 30v36z" stroke="#0F1622" stroke-width="4" stroke-linejoin="round" />
+    <path d="M398 172h20l20 22h-40z" fill="#A6B4C9" stroke="#0F1622" stroke-width="3.5" stroke-linejoin="round" />
+    <rect x="248" y="196" width="60" height="36" fill="#F2A413" stroke="#0F1622" stroke-width="4" />
+    <path d="M262 208h34" stroke="#0F1622" stroke-width="3" opacity="0.4" />
+    <!-- Bras de levage -->
+    <path d="M256 196 L236 152" stroke="#0F1622" stroke-width="6" stroke-linecap="round" />
+    <circle cx="236" cy="150" r="7" fill="#F2A413" stroke="#0F1622" stroke-width="4" />
+    <!-- Roues -->
+    <circle cx="300" cy="234" r="20" fill="#0F1622" />
+    <circle cx="300" cy="234" r="8" fill="#556C8D" />
+    <circle cx="398" cy="234" r="20" fill="#0F1622" />
+    <circle cx="398" cy="234" r="8" fill="#556C8D" />
+  </g>
+
+  <!-- Repères d'échelle -->
+  <g stroke="#758AA8" stroke-width="2" stroke-dasharray="5 6" opacity="0.6">
+    <path d="M46 250 h180" />
+  </g>
+  <text
+    x="136"
+    y="272"
+    text-anchor="middle"
+    fill="#A6B4C9"
+    font-family="Inter, system-ui, sans-serif"
+    font-size="14"
+    font-weight="600">1 à 30 m³</text
+  >
+</svg>
