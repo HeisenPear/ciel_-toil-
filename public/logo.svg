@@ -1,0 +1,10 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" role="img" aria-label="Benne Express 37">
+  <rect width="512" height="512" rx="96" fill="#0F1622"/>
+  <g stroke="#0F1622" stroke-width="20" stroke-linejoin="round" stroke-linecap="round">
+    <path d="M96 344 L140 168 H372 L416 344 Z" fill="#F2A413"/>
+    <path d="M152 216 H360" stroke-opacity="0.4" stroke-width="16"/>
+    <path d="M136 272 H376" stroke-opacity="0.4" stroke-width="16"/>
+  </g>
+  <path d="M72 380 H440" stroke="#F2A413" stroke-width="26" stroke-linecap="round"/>
+  <text x="256" y="452" text-anchor="middle" font-family="Archivo, Arial, sans-serif" font-size="58" font-weight="800" fill="#FFFFFF">37</text>
+</svg>

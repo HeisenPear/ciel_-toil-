@@ -1,0 +1,54 @@
+---
+import Icon from './Icon.astro';
+import type { IconName } from './Icon.astro';
+
+interface Props {
+  href: string;
+  variant?: 'primary' | 'dark' | 'outline' | 'ghost';
+  size?: 'md' | 'lg';
+  icon?: IconName;
+  iconAfter?: IconName;
+  class?: string;
+  'aria-label'?: string;
+  'data-umami-event'?: string;
+}
+
+const {
+  href,
+  variant = 'primary',
+  size = 'md',
+  icon,
+  iconAfter,
+  class: className = '',
+  ...rest
+} = Astro.props;
+
+const base =
+  'inline-flex items-center justify-center gap-2 rounded-full font-semibold transition-all duration-200 no-underline';
+
+const variants = {
+  primary:
+    'bg-benne-500 text-ink-950 hover:bg-benne-400 shadow-[0_10px_24px_-12px_rgba(242,164,19,0.9)] hover:-translate-y-0.5',
+  dark: 'bg-ink-950 text-white hover:bg-ink-800 hover:-translate-y-0.5',
+  outline: 'border-2 border-ink-200 text-ink-900 hover:border-ink-950 hover:bg-ink-50',
+  ghost: 'text-ink-900 hover:text-benne-700 underline decoration-benne-400 decoration-2 underline-offset-4',
+};
+
+const sizes = {
+  md: 'px-5 py-2.5 text-[0.95rem]',
+  lg: 'px-7 py-3.5 text-base',
+};
+
+const isExternal = href.startsWith('http') || href.startsWith('tel:') || href.startsWith('mailto:');
+---
+
+<a
+  href={href}
+  class={`${base} ${variants[variant]} ${variant === 'ghost' ? '' : sizes[size]} ${className}`}
+  {...isExternal ? {} : {}}
+  {...rest}
+>
+  {icon && <Icon name={icon} size={20} />}
+  <slot />
+  {iconAfter && <Icon name={iconAfter} size={18} />}
+</a>

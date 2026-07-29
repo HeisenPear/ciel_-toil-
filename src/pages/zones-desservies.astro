@@ -1,0 +1,169 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import PageHeader from '../components/PageHeader.astro';
+import Section from '../components/Section.astro';
+import AnswerBox from '../components/AnswerBox.astro';
+import CommuneLinks from '../components/CommuneLinks.astro';
+import Faq from '../components/Faq.astro';
+import Icon from '../components/Icon.astro';
+import Button from '../components/Button.astro';
+
+import { COMMUNES, communesByZone } from '../data/communes';
+import { faqByTopic } from '../data/faq';
+import { SITE } from '../config/site';
+import { serviceSchema, faqSchema } from '../lib/schema';
+
+const breadcrumbs = [{ name: 'Zones desservies', url: '/zones-desservies' }];
+const faq = faqByTopic('local');
+const groupes = communesByZone();
+
+/* Délais annoncés par secteur : information concrète et différenciante,
+   c'est ce que les internautes cherchent réellement sur cette page. */
+const delais: Record<string, string> = {
+  'Agglomération de Tours': '24 à 48 h ouvrées',
+  'Val de Loire est': '48 h ouvrées',
+  'Val de Loire ouest': '48 à 72 h ouvrées',
+  'Nord Touraine': '48 h ouvrées',
+  'Sud Touraine': '48 à 72 h ouvrées',
+};
+
+const schemas = [
+  serviceSchema({
+    name: 'Zone d’intervention — location de bennes en Indre-et-Loire',
+    description:
+      'Livraison de bennes dans les 272 communes d’Indre-et-Loire depuis notre dépôt de Tours, avec des délais de 24 à 72 h selon le secteur.',
+    url: `${SITE.url}/zones-desservies`,
+    areaServed: COMMUNES.map((c) => c.name),
+  }),
+  faqSchema(faq),
+  {
+    '@type': 'ItemList',
+    name: 'Communes desservies en Indre-et-Loire',
+    numberOfItems: COMMUNES.length,
+    itemListElement: COMMUNES.map((commune, index) => ({
+      '@type': 'ListItem',
+      position: index + 1,
+      name: `Location de benne à ${commune.name}`,
+      url: `${SITE.url}/location-benne/${commune.slug}`,
+    })),
+  },
+];
+---
+
+<BaseLayout
+  title="Zones desservies — location de benne en Indre-et-Loire (37)"
+  description="Nous livrons des bennes dans les 272 communes d'Indre-et-Loire depuis Tours : agglomération, Val de Loire, Nord et Sud Touraine. Délais par secteur."
+  path="/zones-desservies"
+  breadcrumbs={breadcrumbs}
+  schemas={schemas}
+>
+  <PageHeader
+    breadcrumbs={breadcrumbs}
+    eyebrow="Indre-et-Loire (37)"
+    title="Location de benne dans toute l’Indre-et-Loire"
+    lead="Notre dépôt est à Tours. Nous organisons des tournées par secteur pour desservir l’ensemble du département, de Château-Renault à Descartes et de Bléré à Bourgueil."
+    stats={[
+      { label: 'Communes', value: '272' },
+      { label: 'Secteurs', value: '5' },
+      { label: 'Délai', value: '24 à 72 h' },
+    ]}
+  />
+
+  <Section tone="white" class="!pt-12 !pb-0">
+    <AnswerBox
+      question="Où livrons-nous des bennes en Indre-et-Loire ?"
+      facts={[
+        { label: 'Agglo de Tours', value: '24 à 48 h' },
+        { label: 'Val de Loire', value: '48 h' },
+        { label: 'Nord Touraine', value: '48 h' },
+        { label: 'Sud Touraine', value: '48 à 72 h' },
+      ]}
+    >
+      <p>
+        Nous livrons des bennes dans les <strong>272 communes d’Indre-et-Loire</strong>,
+        depuis notre dépôt de Tours. Sur l’agglomération — Tours, Joué-lès-Tours,
+        Saint-Cyr-sur-Loire, Saint-Pierre-des-Corps, Chambray-lès-Tours, Saint-Avertin —
+        la livraison intervient sous <strong>24 à 48 h ouvrées</strong> et le tarif est
+        identique partout. Sur le reste du département, les livraisons sont regroupées en
+        tournées de secteur : comptez 48 h vers Amboise, Vouvray ou Château-Renault, et
+        48 à 72 h vers Chinon, Bourgueil, Loches ou Descartes.
+      </p>
+    </AnswerBox>
+  </Section>
+
+  {
+    groupes.map((groupe) => (
+      <Section
+        tone={groupe.zone === 'Val de Loire est' || groupe.zone === 'Nord Touraine' ? 'muted' : 'white'}
+        eyebrow={`Délai : ${delais[groupe.zone]}`}
+        title={groupe.zone}
+        lead={`${groupe.communes.length} communes référencées dans ce secteur, avec une page dédiée pour chacune.`}
+      >
+        <CommuneLinks communes={groupe.communes} />
+      </Section>
+    ))
+  }
+
+  <Section tone="dark">
+    <div class="grid gap-10 lg:grid-cols-2 lg:gap-16">
+      <div>
+        <h2 class="text-3xl text-white">Votre commune n’est pas dans la liste ?</h2>
+        <p class="mt-4 leading-relaxed text-ink-300">
+          Les pages ci-dessus couvrent les communes où nous intervenons le plus souvent.
+          Notre zone d’intervention, elle, couvre l’intégralité du département : les 272
+          communes d’Indre-et-Loire sont livrables, y compris les plus petites et les
+          hameaux isolés.
+        </p>
+        <p class="mt-4 leading-relaxed text-ink-300">
+          Nous intervenons également ponctuellement en limite de département, dans le
+          Loir-et-Cher, la Vienne, l’Indre et le Maine-et-Loire, lorsque le chantier se
+          situe à proximité d’une de nos tournées.
+        </p>
+        <div class="mt-8 flex flex-col gap-3 sm:flex-row">
+          <Button href="/contact" variant="primary" iconAfter="arrow-right">
+            Vérifier la disponibilité chez moi
+          </Button>
+        </div>
+      </div>
+
+      <ul class="grid gap-4 sm:grid-cols-2">
+        <li class="rounded-card border border-ink-800 bg-ink-900 p-6">
+          <Icon name="truck" size={22} class="text-benne-400" />
+          <h3 class="mt-3 font-bold text-white">Tournées groupées</h3>
+          <p class="mt-2 text-sm text-ink-300">
+            Les secteurs éloignés sont desservis lors de tournées planifiées : réservez
+            3 à 4 jours à l’avance pour caler la dépose sur notre passage.
+          </p>
+        </li>
+        <li class="rounded-card border border-ink-800 bg-ink-900 p-6">
+          <Icon name="euro" size={22} class="text-benne-400" />
+          <h3 class="mt-3 font-bold text-white">Tarif unique sur l’agglo</h3>
+          <p class="mt-2 text-sm text-ink-300">
+            Aucune majoration entre Tours, Joué-lès-Tours, Saint-Cyr-sur-Loire ou
+            Chambray-lès-Tours.
+          </p>
+        </li>
+        <li class="rounded-card border border-ink-800 bg-ink-900 p-6">
+          <Icon name="clock" size={22} class="text-benne-400" />
+          <h3 class="mt-3 font-bold text-white">Rotation le jour même</h3>
+          <p class="mt-2 text-sm text-ink-300">
+            Sur l’agglomération, une rotation demandée avant 10 h est réalisée dans la
+            journée.
+          </p>
+        </li>
+        <li class="rounded-card border border-ink-800 bg-ink-900 p-6">
+          <Icon name="shield" size={22} class="text-benne-400" />
+          <h3 class="mt-3 font-bold text-white">Autorisations de voirie</h3>
+          <p class="mt-2 text-sm text-ink-300">
+            Nous connaissons les procédures de chaque mairie du département et déposons
+            la demande à votre place.
+          </p>
+        </li>
+      </ul>
+    </div>
+  </Section>
+
+  <Section tone="white" eyebrow="Questions fréquentes" title="Livraison et zone d’intervention" align="center">
+    <Faq items={faq} openFirst />
+  </Section>
+</BaseLayout>

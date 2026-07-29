@@ -1,0 +1,175 @@
+---
+import { CONTACT, FORM, SITE } from '../config/site';
+import { BENNES } from '../data/bennes';
+import { FLUX } from '../data/dechets';
+import { COMMUNES } from '../data/communes';
+import Icon from './Icon.astro';
+
+interface Props {
+  /** Pré-sélectionne un volume de benne (pages produit). */
+  defaultBenne?: string;
+  /** Pré-remplit la commune (pages locales). */
+  defaultCommune?: string;
+  compact?: boolean;
+}
+
+const { defaultBenne, defaultCommune, compact = false } = Astro.props;
+
+/* Sans endpoint configuré, on retombe sur un mailto : le formulaire reste
+   fonctionnel dès la mise en ligne, même avant le branchement du service. */
+const usesMailto = FORM.endpoint === '';
+const action = usesMailto ? `mailto:${CONTACT.email}` : FORM.endpoint;
+const method = usesMailto ? 'post' : 'POST';
+const enctype = usesMailto ? 'text/plain' : undefined;
+
+const field =
+  'mt-1.5 w-full rounded-lg border border-ink-200 bg-white px-3.5 py-2.5 text-ink-900 shadow-sm transition-colors placeholder:text-ink-400 focus:border-benne-500 focus:outline-none focus:ring-2 focus:ring-benne-200';
+const label = 'block text-sm font-semibold text-ink-800';
+---
+
+<form
+  action={action}
+  method={method}
+  enctype={enctype}
+  class:list={['grid gap-5', compact ? 'sm:grid-cols-1' : 'sm:grid-cols-2']}
+  novalidate={false}
+>
+  {!usesMailto && <input type="hidden" name="_subject" value={`Demande de devis — ${SITE.name}`} />}
+  {!usesMailto && <input type="hidden" name="_redirect" value={FORM.redirect} />}
+  {!usesMailto && <input type="hidden" name="_next" value={`${SITE.url}${FORM.redirect}`} />}
+
+  <!-- Pot de miel anti-spam : invisible et ignoré des lecteurs d'écran -->
+  <div class="hidden" aria-hidden="true">
+    <label for="societe-web">Ne pas remplir</label>
+    <input type="text" id="societe-web" name="_gotcha" tabindex="-1" autocomplete="off" />
+  </div>
+
+  <div>
+    <label class={label} for="nom">Nom et prénom <span class="text-benne-700">*</span></label>
+    <input
+      class={field}
+      type="text"
+      id="nom"
+      name="nom"
+      required
+      autocomplete="name"
+      placeholder="Marie Dupont"
+    />
+  </div>
+
+  <div>
+    <label class={label} for="telephone">Téléphone <span class="text-benne-700">*</span></label>
+    <input
+      class={field}
+      type="tel"
+      id="telephone"
+      name="telephone"
+      required
+      autocomplete="tel"
+      inputmode="tel"
+      placeholder="06 12 34 56 78"
+    />
+  </div>
+
+  <div class:list={[!compact && 'sm:col-span-2']}>
+    <label class={label} for="email">E-mail <span class="text-benne-700">*</span></label>
+    <input
+      class={field}
+      type="email"
+      id="email"
+      name="email"
+      required
+      autocomplete="email"
+      placeholder="marie.dupont@exemple.fr"
+    />
+  </div>
+
+  <div>
+    <label class={label} for="commune">Commune de livraison <span class="text-benne-700">*</span></label>
+    <input
+      class={field}
+      type="text"
+      id="commune"
+      name="commune"
+      required
+      list="communes-37"
+      value={defaultCommune}
+      placeholder="Tours"
+      autocomplete="address-level2"
+    />
+    <datalist id="communes-37">
+      {COMMUNES.map((commune) => <option value={commune.name}>{commune.cp}</option>)}
+    </datalist>
+  </div>
+
+  <div>
+    <label class={label} for="benne">Benne souhaitée</label>
+    <select class={field} id="benne" name="benne">
+      <option value="">Je ne sais pas encore — conseillez-moi</option>
+      {
+        BENNES.map((benne) => (
+          <option value={benne.name} selected={benne.slug === defaultBenne}>
+            {benne.name} — {benne.equivalence}
+          </option>
+        ))
+      }
+    </select>
+  </div>
+
+  <div>
+    <label class={label} for="dechets">Type de déchets <span class="text-benne-700">*</span></label>
+    <select class={field} id="dechets" name="dechets" required>
+      <option value="">Sélectionnez un flux</option>
+      {FLUX.map((flux) => <option value={flux.name}>{flux.name}</option>)}
+      <option value="Autre / je ne sais pas">Autre / je ne sais pas</option>
+    </select>
+  </div>
+
+  <div>
+    <label class={label} for="date">Date de livraison souhaitée</label>
+    <input class={field} type="date" id="date" name="date" />
+  </div>
+
+  <div class:list={[!compact && 'sm:col-span-2']}>
+    <label class={label} for="message">Précisions sur votre chantier</label>
+    <textarea
+      class={field}
+      id="message"
+      name="message"
+      rows="4"
+      placeholder="Accès, durée souhaitée, contraintes de stationnement, volume estimé…"></textarea>
+  </div>
+
+  <div class:list={[!compact && 'sm:col-span-2']}>
+    <label class="flex items-start gap-3 text-sm text-ink-600">
+      <input
+        type="checkbox"
+        name="consentement"
+        required
+        value="oui"
+        class="mt-1 h-4 w-4 rounded border-ink-300 text-benne-600 focus:ring-benne-400"
+      />
+      <span>
+        J’accepte que mes données soient utilisées pour traiter ma demande de devis.
+        Elles ne sont ni revendues ni transmises à des tiers.{' '}
+        <a href="/politique-de-confidentialite" class="underline decoration-benne-400 underline-offset-2"
+          >En savoir plus</a
+        >. <span class="text-benne-700">*</span>
+      </span>
+    </label>
+  </div>
+
+  <div class:list={['flex flex-col gap-3 sm:flex-row sm:items-center', !compact && 'sm:col-span-2']}>
+    <button
+      type="submit"
+      class="inline-flex items-center justify-center gap-2 rounded-full bg-benne-500 px-7 py-3.5 font-semibold text-ink-950 shadow-[0_10px_24px_-12px_rgba(242,164,19,0.9)] transition-all hover:-translate-y-0.5 hover:bg-benne-400"
+    >
+      Recevoir mon devis gratuit
+      <Icon name="arrow-right" size={18} />
+    </button>
+    <p class="flex items-center gap-2 text-sm text-ink-500">
+      <Icon name="clock" size={16} class="text-benne-600" />
+      Réponse sous 2 h ouvrées
+    </p>
+  </div>
+</form>

@@ -1,52 +1,266 @@
 ---
-// Page principale — assemble toutes les sections en one-page
 import BaseLayout from '../layouts/BaseLayout.astro';
-import Nav from '../components/Nav.astro';
 import Hero from '../components/Hero.astro';
-import Prestations from '../components/Prestations.astro';
-import Galerie from '../components/Galerie.tsx';
-import Avantages from '../components/Avantages.astro';
-import Temoignages from '../components/Temoignages.astro';
-import Contact from '../components/Contact.astro';
+import Section from '../components/Section.astro';
+import AnswerBox from '../components/AnswerBox.astro';
+import UspGrid from '../components/UspGrid.astro';
+import BenneCard from '../components/BenneCard.astro';
+import Steps from '../components/Steps.astro';
+import Faq from '../components/Faq.astro';
+import CommuneLinks from '../components/CommuneLinks.astro';
+import Button from '../components/Button.astro';
+import Icon from '../components/Icon.astro';
+
+import { SITE } from '../config/site';
+import { BENNES, featuredBennes } from '../data/bennes';
+import { FLUX } from '../data/dechets';
+import { faqByTopic } from '../data/faq';
+import { priorityCommunes, COMMUNES } from '../data/communes';
+import { serviceSchema, howToSchema, faqSchema } from '../lib/schema';
+
+const faq = faqByTopic('general');
+
+const etapes = [
+  {
+    title: 'Vous demandez un devis',
+    text: 'Par téléphone ou via le formulaire, en précisant le volume, le type de déchets et la commune de livraison.',
+    icon: 'mail' as const,
+  },
+  {
+    title: 'Nous confirmons sous 2 h',
+    text: 'Vous recevez un tarif ferme, tout compris : livraison, location 7 jours, enlèvement et traitement.',
+    icon: 'euro' as const,
+  },
+  {
+    title: 'La benne est déposée',
+    text: 'Sous 24 à 48 h sur Tours, au créneau convenu, sur plaques de répartition si le sol l’exige.',
+    icon: 'truck' as const,
+  },
+  {
+    title: 'Nous enlevons et valorisons',
+    text: 'Un appel suffit. Pesée, bordereau de suivi et tri en centre agréé d’Indre-et-Loire.',
+    icon: 'recycle' as const,
+  },
+];
+
+const schemas = [
+  serviceSchema({
+    name: 'Location de bennes à Tours et en Indre-et-Loire',
+    description: SITE.description,
+    url: SITE.url,
+    areaServed: COMMUNES.map((c) => c.name),
+    offers: BENNES.map((b) => ({
+      name: b.name,
+      description: b.punchline,
+      price: b.priceFrom,
+      url: `/nos-bennes/${b.slug}`,
+    })),
+  }),
+  howToSchema({
+    name: 'Comment louer une benne à Tours',
+    description:
+      'Les quatre étapes d’une location de benne en Indre-et-Loire, de la demande de devis à la valorisation des déchets.',
+    steps: etapes.map((e) => ({ name: e.title, text: e.text })),
+  }),
+  faqSchema(faq),
+];
 ---
 
 <BaseLayout
-  title="Dorian Auto Prestige — Ciel étoilé fibre optique & CarPlay sur mesure"
-  description="Artisan automobile spécialisé dans le ciel étoilé fibre optique et l'intégration CarPlay/Android Auto sur mesure. Devis gratuit, garantie 12 mois. Résultats bluffants."
+  title="Location de benne à Tours (37) — Livraison 24 h, dès 290 €"
+  description="Bennes de 1 à 30 m³ livrées à Tours et dans toute l'Indre-et-Loire sous 24 à 48 h. Chantier, rénovation, déménagement. Devis gratuit, tarif tout compris."
+  path="/"
+  schemas={schemas}
 >
-  <Nav />
-  <main>
-    <Hero />
+  <Hero
+    title="Location de benne à Tours et dans toute l’Indre-et-Loire"
+    lead="Benne Express 37 livre des bennes de 1 à 30 m³ à Tours et dans les 272 communes d’Indre-et-Loire, sous 24 à 48 h, pour les chantiers du bâtiment comme pour les particuliers en déménagement ou en rénovation."
+  />
 
-    <!-- Trait séparateur discret -->
-    <div class="gold-line"></div>
+  <Section tone="white" class="!pb-0 !pt-14">
+    <AnswerBox
+      question="Comment louer une benne à Tours et en Indre-et-Loire ?"
+      facts={[
+        { label: 'Volumes', value: '1 à 30 m³' },
+        { label: 'Délai', value: '24 à 48 h' },
+        { label: 'À partir de', value: '290 € TTC' },
+        { label: 'Zone', value: 'Tout le 37' },
+      ]}
+    >
+      <p>
+        Pour louer une benne à Tours, choisissez le volume adapté à votre déchet — 8 m³ pour des
+        gravats, 10 m³ pour un déménagement, 15 à 30 m³ pour un chantier — puis demandez un devis en
+        indiquant la commune de livraison. Chez <strong>{SITE.name}</strong>, le tarif est ferme et
+        tout compris (livraison, location 7 jours, enlèvement, traitement) et la benne est déposée
+        sous 24 à 48 h ouvrées. Comptez de <strong>290 € TTC</strong> pour une benne 8 m³ à gravats à
+        <strong>520 € TTC</strong> pour une benne 30 m³. Si la benne est posée sur la voie publique,
+        nous nous chargeons de l’autorisation de voirie auprès de la mairie.
+      </p>
+    </AnswerBox>
+  </Section>
 
-    <Prestations />
-    <Galerie client:visible />
-    <Avantages />
-    <Temoignages />
-    <Contact />
-  </main>
+  <Section
+    tone="white"
+    eyebrow="Pourquoi nous choisir"
+    title="Un loueur de bennes local, pas une plateforme d’intermédiation"
+    lead="Nos camions partent de Tours. Vous parlez directement à l’équipe qui déposera la benne, ce qui change tout sur les délais, les accès difficiles et les imprévus de chantier."
+  >
+    <UspGrid />
+  </Section>
 
-  <!-- Footer minimal -->
-  <footer class="bg-surface border-t border-gold/10 py-10 px-6">
-    <div class="max-w-7xl mx-auto flex flex-col md:flex-row items-center justify-between gap-4">
-      <div class="flex items-center gap-3">
-        <svg viewBox="0 0 28 28" fill="none" xmlns="http://www.w3.org/2000/svg" class="w-5 h-5" aria-hidden="true">
-          <path d="M14 2 L15.6 11.4 L25 14 L15.6 16.6 L14 26 L12.4 16.6 L3 14 L12.4 11.4 Z" fill="#C4962A"/>
-        </svg>
-        <span class="font-display text-warm-white/60 text-sm">Dorian Auto Prestige</span>
-      </div>
+  <Section
+    id="bennes"
+    tone="muted"
+    eyebrow="Nos bennes"
+    title="Quelle taille de benne choisir ?"
+    lead="Le bon volume dépend d’abord de la nature du déchet. Les gravats atteignent la charge utile avant le volume ; les encombrants, l’inverse."
+  >
+    <div class="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
+      {featuredBennes().map((benne) => <BenneCard benne={benne} />)}
+    </div>
 
-      <nav class="flex gap-6" aria-label="Navigation pied de page">
-        <a href="#prestations" class="font-body text-warm-white/35 hover:text-warm-white/70 text-xs tracking-wide transition-colors">Prestations</a>
-        <a href="#galerie"     class="font-body text-warm-white/35 hover:text-warm-white/70 text-xs tracking-wide transition-colors">Galerie</a>
-        <a href="#contact"     class="font-body text-warm-white/35 hover:text-warm-white/70 text-xs tracking-wide transition-colors">Contact</a>
-      </nav>
+    <div class="mt-10 flex flex-wrap items-center gap-4">
+      <Button href="/nos-bennes" variant="dark" iconAfter="arrow-right">
+        Voir les 6 formats de bennes
+      </Button>
+      <Button href="/tarifs" variant="ghost">Consulter la grille tarifaire</Button>
+    </div>
+  </Section>
 
-      <p class="font-body text-warm-white/20 text-xs">
-        &copy; {new Date().getFullYear()} Dorian Auto Prestige — Tous droits réservés
+  <Section
+    tone="white"
+    eyebrow="Deux usages, deux approches"
+    title="Chantiers professionnels et particuliers"
+    lead="Les contraintes ne sont pas les mêmes : traçabilité et rotations d’un côté, simplicité et délai de l’autre."
+  >
+    <div class="grid gap-6 lg:grid-cols-2">
+      <article class="group relative flex flex-col rounded-card border border-ink-200 bg-white p-8 transition-all hover:-translate-y-1 hover:border-benne-300 hover:shadow-[var(--shadow-lift)]">
+        <span class="flex h-12 w-12 items-center justify-center rounded-xl bg-ink-950 text-benne-400">
+          <Icon name="hammer" size={24} />
+        </span>
+        <h3 class="mt-5 text-2xl font-bold text-ink-950">
+          <a href="/location-benne-chantier" class="after:absolute after:inset-0"
+            >Benne de chantier</a
+          >
+        </h3>
+        <p class="mt-3 leading-relaxed text-ink-600">
+          Pour les artisans, entreprises générales, couvreurs, maçons et syndics d’Indre-et-Loire :
+          bennes 8 à 30 m³, rotations sous 24 h, bordereau de suivi des déchets systématique et
+          facturation mensuelle possible.
+        </p>
+        <ul class="mt-5 space-y-2 text-sm text-ink-700">
+          <li class="flex gap-2"><Icon name="check" size={16} class="mt-0.5 text-benne-600" />Rotation le jour même sur l’agglomération</li>
+          <li class="flex gap-2"><Icon name="check" size={16} class="mt-0.5 text-benne-600" />Traçabilité et BSD conformes</li>
+          <li class="flex gap-2"><Icon name="check" size={16} class="mt-0.5 text-benne-600" />Compte pro et facturation groupée</li>
+        </ul>
+        <span class="mt-6 inline-flex items-center gap-1.5 font-semibold text-benne-700">
+          Voir l’offre chantier <Icon name="arrow-right" size={16} />
+        </span>
+      </article>
+
+      <article class="group relative flex flex-col rounded-card border border-ink-200 bg-white p-8 transition-all hover:-translate-y-1 hover:border-benne-300 hover:shadow-[var(--shadow-lift)]">
+        <span class="flex h-12 w-12 items-center justify-center rounded-xl bg-benne-500 text-ink-950">
+          <Icon name="home" size={24} />
+        </span>
+        <h3 class="mt-5 text-2xl font-bold text-ink-950">
+          <a href="/location-benne-demenagement" class="after:absolute after:inset-0"
+            >Benne pour déménagement et particuliers</a
+          >
+        </h3>
+        <p class="mt-3 leading-relaxed text-ink-600">
+          Déménagement, vide-maison, débarras de cave ou de grenier, rénovation de salle de bain,
+          élagage de jardin : une benne 8 ou 10 m³ déposée devant chez vous, que vous chargez à
+          votre rythme pendant 7 jours.
+        </p>
+        <ul class="mt-5 space-y-2 text-sm text-ink-700">
+          <li class="flex gap-2"><Icon name="check" size={16} class="mt-0.5 text-benne-600" />Sans minimum de commande</li>
+          <li class="flex gap-2"><Icon name="check" size={16} class="mt-0.5 text-benne-600" />Autorisation de voirie prise en charge</li>
+          <li class="flex gap-2"><Icon name="check" size={16} class="mt-0.5 text-benne-600" />Plus rentable que 10 allers-retours en déchèterie</li>
+        </ul>
+        <span class="mt-6 inline-flex items-center gap-1.5 font-semibold text-benne-700">
+          Voir l’offre particuliers <Icon name="arrow-right" size={16} />
+        </span>
+      </article>
+    </div>
+  </Section>
+
+  <Section
+    tone="dark"
+    eyebrow="Comment ça marche"
+    title="Louer une benne en 4 étapes"
+    lead="Aucune visite préalable dans la majorité des cas : un échange téléphonique suffit à valider l’accès et le volume."
+  >
+    <Steps steps={etapes} tone="dark" />
+  </Section>
+
+  <Section
+    tone="white"
+    eyebrow="Tri et valorisation"
+    title="Quels déchets peut-on mettre dans une benne ?"
+    lead="Huit flux distincts, chacun avec sa filière de traitement. Trier à la source reste toujours l’option la plus économique."
+  >
+    <ul class="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
+      {
+        FLUX.map((flux) => (
+          <li class="rounded-card border border-ink-200 p-5 transition-colors hover:border-tri-500">
+            <span class="flex h-9 w-9 items-center justify-center rounded-lg bg-tri-50 text-tri-600">
+              <Icon name="recycle" size={18} />
+            </span>
+            <h3 class="mt-3 font-bold text-ink-950">
+              <a href={`/dechets-acceptes#${flux.slug}`} class="hover:text-benne-700">
+                {flux.name}
+              </a>
+            </h3>
+            <p class="mt-1.5 text-sm text-tri-700">{flux.valorisation}</p>
+          </li>
+        ))
+      }
+    </ul>
+
+    <div
+      class="mt-8 flex flex-col gap-4 rounded-card border-2 border-dashed border-benne-300 bg-benne-50 p-6 sm:flex-row sm:items-center sm:justify-between"
+    >
+      <p class="flex items-start gap-3 text-ink-800">
+        <Icon name="warning" size={22} class="mt-0.5 shrink-0 text-benne-700" />
+        <span>
+          <strong>Jamais en benne :</strong> amiante, peintures et solvants, bouteilles de gaz, pneus,
+          électroménager et déchets de soins. Ces flux relèvent de filières dédiées.
+        </span>
+      </p>
+      <Button href="/dechets-acceptes" variant="dark" class="shrink-0">Guide complet du tri</Button>
+    </div>
+  </Section>
+
+  <Section
+    tone="muted"
+    eyebrow="Zone d’intervention"
+    title="Location de benne dans toute l’Indre-et-Loire"
+    lead="Notre dépôt est à Tours. Nous organisons des tournées par secteur, ce qui nous permet de desservir Chinon, Loches, Amboise ou Château-Renault sans surcoût prohibitif."
+  >
+    <CommuneLinks communes={priorityCommunes()} />
+
+    <div class="mt-8 flex flex-wrap items-center gap-4">
+      <Button href="/zones-desservies" variant="dark" iconAfter="arrow-right">
+        Toutes les communes desservies
+      </Button>
+      <p class="text-sm text-ink-600">
+        Votre commune n’est pas listée ? Nous livrons partout dans le 37 —
+        <a href="/contact" class="font-semibold underline decoration-benne-400 underline-offset-2"
+          >demandez votre devis</a
+        >.
       </p>
     </div>
-  </footer>
+  </Section>
+
+  <Section
+    tone="white"
+    eyebrow="Questions fréquentes"
+    title="Tout ce qu’il faut savoir avant de commander"
+    align="center"
+  >
+    <Faq items={faq} openFirst />
+    <p class="mt-8 text-center">
+      <Button href="/faq" variant="outline" iconAfter="arrow-right">Voir les 16 questions</Button>
+    </p>
+  </Section>
 </BaseLayout>

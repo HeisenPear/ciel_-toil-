@@ -1,0 +1,236 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import PageHeader from '../components/PageHeader.astro';
+import Section from '../components/Section.astro';
+import AnswerBox from '../components/AnswerBox.astro';
+import Faq from '../components/Faq.astro';
+import Icon from '../components/Icon.astro';
+import Button from '../components/Button.astro';
+
+import { FLUX, INTERDITS_ABSOLUS } from '../data/dechets';
+import { getBenne, BENNES } from '../data/bennes';
+import { faqByTopic } from '../data/faq';
+import { faqSchema } from '../lib/schema';
+
+const breadcrumbs = [{ name: 'Déchets acceptés', url: '/dechets-acceptes' }];
+const faq = faqByTopic('dechets');
+
+const schemas = [
+  faqSchema(faq),
+  {
+    '@type': 'ItemList',
+    name: 'Flux de déchets acceptés en benne',
+    itemListElement: FLUX.map((flux, index) => ({
+      '@type': 'ListItem',
+      position: index + 1,
+      name: flux.name,
+      description: flux.definition,
+    })),
+  },
+];
+
+const benneFor = (volume: number) => BENNES.find((b) => b.volume === volume) ?? getBenne('benne-10m3');
+---
+
+<BaseLayout
+  title="Déchets acceptés en benne : guide du tri en Indre-et-Loire"
+  description="Quels déchets peut-on mettre dans une benne ? Gravats, bois, plâtre, ferraille, encombrants, DIB : ce qui est accepté, ce qui est interdit, et vers quelle filière."
+  path="/dechets-acceptes"
+  breadcrumbs={breadcrumbs}
+  schemas={schemas}
+>
+  <PageHeader
+    breadcrumbs={breadcrumbs}
+    eyebrow="Guide du tri"
+    title="Quels déchets peut-on mettre dans une benne ?"
+    lead="Huit flux acceptés, six catégories formellement interdites. Un tri correct fait baisser la facture et garantit la valorisation."
+    stats={[
+      { label: 'Flux acceptés', value: '8' },
+      { label: 'Valorisation', value: '> 85 %' },
+      { label: 'Traçabilité', value: 'BSD fourni' },
+    ]}
+  />
+
+  <Section tone="white" class="!pt-12 !pb-0">
+    <AnswerBox question="Que peut-on jeter dans une benne de location ?">
+      <p>
+        Une benne de location accepte <strong>tous les déchets non dangereux</strong> :
+        gravats et déchets inertes, bois, déchets verts, ferraille et métaux, plâtre et
+        plaques de plâtre, encombrants et mobilier, cartons et plastiques, et déchets de
+        chantier en mélange. Sont en revanche <strong>formellement interdits</strong>
+        l’amiante, les peintures et solvants, les bouteilles de gaz et extincteurs, les
+        pneumatiques, l’électroménager et le matériel électrique (DEEE) ainsi que les
+        déchets de soins : ces flux relèvent de filières réglementées spécifiques.
+        Trier à la source — notamment séparer les gravats du plâtre — réduit sensiblement
+        le coût de traitement.
+      </p>
+    </AnswerBox>
+  </Section>
+
+  <Section
+    tone="white"
+    eyebrow="Flux acceptés"
+    title="Les 8 flux que nous collectons"
+    lead="Pour chaque flux : la définition, ce qui est accepté, ce qui ne l’est pas, la benne conseillée et la filière de traitement."
+  >
+    <div class="space-y-8">
+      {
+        FLUX.map((flux) => (
+          <article
+            id={flux.slug}
+            class="grid gap-6 rounded-card border border-ink-200 bg-white p-6 lg:grid-cols-3 lg:p-8"
+          >
+            <div class="lg:col-span-1">
+              <span class="flex h-11 w-11 items-center justify-center rounded-xl bg-tri-50 text-tri-600">
+                <Icon name="recycle" size={22} />
+              </span>
+              <h3 class="mt-4 text-xl font-bold text-ink-950">{flux.name}</h3>
+              <p class="mt-3 text-sm leading-relaxed text-ink-600">{flux.definition}</p>
+
+              <dl class="mt-5 space-y-3 border-t border-ink-200 pt-4 text-sm">
+                <div>
+                  <dt class="font-semibold text-ink-800">Filière de traitement</dt>
+                  <dd class="mt-0.5 text-ink-600">{flux.filiere}</dd>
+                </div>
+                <div>
+                  <dt class="font-semibold text-ink-800">Taux de valorisation</dt>
+                  <dd class="mt-0.5 font-semibold text-tri-600">{flux.valorisation}</dd>
+                </div>
+                <div>
+                  <dt class="font-semibold text-ink-800">Bennes conseillées</dt>
+                  <dd class="mt-1.5 flex flex-wrap gap-1.5">
+                    {flux.bennesConseillees.map((volume) => {
+                      const benne = benneFor(volume);
+                      return benne ? (
+                        <a
+                          href={`/nos-bennes/${benne.slug}`}
+                          class="rounded-full bg-ink-100 px-2.5 py-1 text-xs font-semibold text-ink-800 transition-colors hover:bg-benne-200"
+                        >
+                          {benne.name}
+                        </a>
+                      ) : null;
+                    })}
+                  </dd>
+                </div>
+              </dl>
+            </div>
+
+            <div class="grid gap-6 sm:grid-cols-2 lg:col-span-2">
+              <div class="rounded-lg border border-tri-500/25 bg-tri-50/60 p-5">
+                <h4 class="flex items-center gap-2 font-bold text-tri-700">
+                  <Icon name="check" size={18} />
+                  Accepté
+                </h4>
+                <ul class="mt-3 space-y-1.5 text-sm text-ink-700">
+                  {flux.exemples.map((item) => (
+                    <li class="flex items-start gap-2">
+                      <Icon name="check" size={15} class="mt-0.5 shrink-0 text-tri-600" />
+                      {item}
+                    </li>
+                  ))}
+                </ul>
+              </div>
+
+              <div class="rounded-lg border border-ink-200 bg-ink-50 p-5">
+                <h4 class="flex items-center gap-2 font-bold text-ink-800">
+                  <Icon name="ban" size={18} class="text-benne-700" />
+                  À exclure de ce flux
+                </h4>
+                <ul class="mt-3 space-y-1.5 text-sm text-ink-700">
+                  {flux.interdits.map((item) => (
+                    <li class="flex items-start gap-2">
+                      <Icon name="ban" size={15} class="mt-0.5 shrink-0 text-ink-400" />
+                      {item}
+                    </li>
+                  ))}
+                </ul>
+              </div>
+            </div>
+          </article>
+        ))
+      }
+    </div>
+  </Section>
+
+  <Section
+    id="interdits"
+    tone="dark"
+    eyebrow="Interdits absolus"
+    title="Ce qui ne doit jamais partir en benne"
+    lead="Ces six catégories relèvent de filières réglementées. Les retrouver dans un chargement entraîne un tri manuel facturé et retarde le traitement."
+  >
+    <ul class="grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
+      {
+        INTERDITS_ABSOLUS.map((item) => (
+          <li class="rounded-card border border-ink-800 bg-ink-900 p-6">
+            <span class="flex h-10 w-10 items-center justify-center rounded-lg bg-benne-500/15 text-benne-400">
+              <Icon name="warning" size={20} />
+            </span>
+            <h3 class="mt-4 font-bold text-white">{item.name}</h3>
+            <p class="mt-2 text-sm leading-relaxed text-ink-300">{item.why}</p>
+          </li>
+        ))
+      }
+    </ul>
+
+    <p class="mt-8 text-ink-300">
+      Un doute sur un déchet précis ?
+      <a href="/contact" class="font-semibold text-benne-400 underline underline-offset-4">
+        Posez-nous la question
+      </a>
+      — nous vous orientons vers la bonne filière, même si ce n’est pas la nôtre.
+    </p>
+  </Section>
+
+  <Section tone="white">
+    <div class="prose-fr mx-auto">
+      <h2>L’obligation de tri « 7 flux » sur les chantiers</h2>
+      <p>
+        Les entreprises du bâtiment sont tenues de trier sept flux distincts : bois, métal,
+        plâtre, verre, papier-carton, plastique et fractions minérales. Ce tri peut être
+        réalisé directement sur le chantier — avec plusieurs bennes mono-flux — ou après
+        collecte, dans un centre agréé : c’est le principe de nos bennes « déchets en mélange ».
+      </p>
+      <p>
+        Quelle que soit l’option retenue, le producteur du déchet reste responsable jusqu’au
+        traitement final. Le <strong>bordereau de suivi des déchets</strong> remis à chaque
+        enlèvement matérialise cette traçabilité.
+      </p>
+
+      <h2>Pourquoi le plâtre doit être séparé des gravats</h2>
+      <p>
+        C’est l’erreur de tri la plus fréquente et la plus coûteuse. Le plâtre est composé de
+        sulfate de calcium : en présence d’humidité et de matière organique, il libère du
+        sulfure d’hydrogène. Mélangé aux gravats, il fait perdre à l’ensemble son statut de
+        déchet inerte — le chargement ne peut plus être concassé ni réemployé en sous-couche
+        routière, et bascule vers une filière bien plus onéreuse.
+      </p>
+      <p>
+        Sur un chantier de rénovation qui produit à la fois des gravats et du placo, prévoyez
+        donc <a href="/nos-bennes/benne-8m3">une benne 8 m³ pour les gravats</a> et
+        <a href="/nos-bennes/benne-15m3">une benne 15 m³ pour le mélange</a> plutôt qu’une
+        seule benne tout-venant.
+      </p>
+
+      <h2>Que deviennent les déchets collectés ?</h2>
+      <p>
+        Chaque benne est pesée puis dirigée vers un centre de traitement agréé d’Indre-et-Loire.
+        Les gravats sont concassés et réemployés en travaux publics ; le bois est broyé pour
+        la fabrication de panneaux ou la valorisation énergétique ; les métaux repartent en
+        aciérie ; les déchets verts sont compostés localement ; le plâtre est recyclé en
+        nouvelles plaques. Le refus de tri, non valorisable en matière, part en valorisation
+        énergétique.
+      </p>
+    </div>
+
+    <div class="mx-auto mt-10 max-w-3xl text-center">
+      <Button href="/contact" variant="primary" size="lg" iconAfter="arrow-right">
+        Demander un devis adapté à mes déchets
+      </Button>
+    </div>
+  </Section>
+
+  <Section tone="muted" eyebrow="Questions fréquentes" title="Tri et déchets acceptés" align="center">
+    <Faq items={faq} openFirst />
+  </Section>
+</BaseLayout>

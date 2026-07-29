@@ -1,195 +1,210 @@
-/* ── Fonts (chargées via <link> dans BaseLayout) ── */
+@import 'tailwindcss';
 
-@tailwind base;
-@tailwind components;
-@tailwind utilities;
+/* Polices variables auto-hébergées : un seul fichier woff2 par famille,
+   servi depuis le domaine du site (pas de Google Fonts, pas de cookie tiers). */
+@import '@fontsource-variable/archivo/index.css';
+@import '@fontsource-variable/inter/index.css';
 
-/* ── Root tokens ── */
-:root {
-  --gold: #C4962A;
-  --champagne: #E8D5A3;
-  --ink: #06060C;
-  --surface: #0D0D18;
-  --surface-2: #141428;
-  --warm-white: #F0EDE6;
+@theme {
+  --font-display: 'Archivo Variable', ui-sans-serif, system-ui, sans-serif;
+  --font-body: 'Inter Variable', ui-sans-serif, system-ui, sans-serif;
+
+  /* Jaune benne — couleur d'action et de signalisation. */
+  --color-benne-50: #fff9ea;
+  --color-benne-100: #ffefc4;
+  --color-benne-200: #ffdd88;
+  --color-benne-300: #ffc74c;
+  --color-benne-400: #fbb01f;
+  --color-benne-500: #f2a413;
+  --color-benne-600: #d1810a;
+  --color-benne-700: #a55d0c;
+  --color-benne-800: #874a12;
+  --color-benne-900: #723d13;
+
+  /* Anthracite — fond des sections fortes et texte principal. */
+  --color-ink-50: #f5f7fa;
+  --color-ink-100: #e9edf3;
+  --color-ink-200: #cfd7e3;
+  --color-ink-300: #a6b4c9;
+  --color-ink-400: #758aa8;
+  --color-ink-500: #556c8d;
+  --color-ink-600: #425574;
+  --color-ink-700: #37455e;
+  --color-ink-800: #303b50;
+  --color-ink-900: #1b2333;
+  --color-ink-950: #0f1622;
+
+  /* Vert — valorisation, tri, recyclage. */
+  --color-tri-50: #eefbf3;
+  --color-tri-100: #d6f5e1;
+  --color-tri-500: #1f8a54;
+  --color-tri-600: #167145;
+  --color-tri-700: #135a39;
+
+  --radius-card: 1rem;
+
+  --shadow-soft: 0 1px 2px rgb(15 22 34 / 0.04), 0 8px 24px -12px rgb(15 22 34 / 0.18);
+  --shadow-lift: 0 2px 4px rgb(15 22 34 / 0.06), 0 20px 40px -20px rgb(15 22 34 / 0.28);
 }
 
-/* ── Base ── */
-*, *::before, *::after { box-sizing: border-box; }
+@layer base {
+  html {
+    scroll-behavior: smooth;
+    -webkit-text-size-adjust: 100%;
+  }
 
-html { scroll-behavior: smooth; }
+  @media (prefers-reduced-motion: reduce) {
+    html {
+      scroll-behavior: auto;
+    }
+    *,
+    *::before,
+    *::after {
+      animation-duration: 0.01ms !important;
+      transition-duration: 0.01ms !important;
+    }
+  }
 
-body {
-  background-color: var(--ink);
-  color: var(--warm-white);
-  font-family: 'Outfit', sans-serif;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-  overflow-x: hidden;
+  body {
+    font-family: var(--font-body);
+    color: var(--color-ink-900);
+    background-color: #fff;
+    text-rendering: optimizeLegibility;
+  }
+
+  h1,
+  h2,
+  h3,
+  h4 {
+    font-family: var(--font-display);
+    font-weight: 700;
+    letter-spacing: -0.02em;
+    text-wrap: balance;
+  }
+
+  p {
+    text-wrap: pretty;
+  }
+
+  :focus-visible {
+    outline: 3px solid var(--color-benne-500);
+    outline-offset: 2px;
+    border-radius: 2px;
+  }
+
+  /* Ancrage sous l'en-tête collant. */
+  [id] {
+    scroll-margin-top: 6rem;
+  }
 }
 
-/* ── Scrollbar ── */
-::-webkit-scrollbar { width: 3px; }
-::-webkit-scrollbar-track { background: var(--ink); }
-::-webkit-scrollbar-thumb { background: var(--gold); border-radius: 2px; }
+@layer components {
+  .container-page {
+    width: 100%;
+    margin-inline: auto;
+    max-width: 78rem;
+    padding-inline: 1.25rem;
+  }
 
-/* ── Selection ── */
-::selection { background: rgba(196, 150, 42, 0.3); color: var(--warm-white); }
+  @media (min-width: 1024px) {
+    .container-page {
+      padding-inline: 2rem;
+    }
+  }
 
-/* ── Scroll reveal ── */
-.reveal {
-  opacity: 0;
-  transform: translateY(36px);
-  transition:
-    opacity 0.85s cubic-bezier(0.16, 1, 0.3, 1),
-    transform 0.85s cubic-bezier(0.16, 1, 0.3, 1);
-}
-.reveal.is-visible {
-  opacity: 1;
-  transform: translateY(0);
-}
-.reveal-delay-1 { transition-delay: 0.12s; }
-.reveal-delay-2 { transition-delay: 0.24s; }
-.reveal-delay-3 { transition-delay: 0.36s; }
-.reveal-delay-4 { transition-delay: 0.48s; }
+  .prose-fr {
+    max-width: 68ch;
+  }
 
-/* ── Header scroll state ── */
-#site-header {
-  transition: background 0.5s ease, backdrop-filter 0.5s ease, border-color 0.5s ease;
-  border-bottom: 1px solid transparent;
-}
-#site-header.header-scrolled {
-  background: rgba(6, 6, 12, 0.93);
-  backdrop-filter: blur(20px);
-  -webkit-backdrop-filter: blur(20px);
-  border-bottom-color: rgba(196, 150, 42, 0.12);
+  .prose-fr p {
+    margin-block: 1rem;
+    line-height: 1.75;
+    color: var(--color-ink-700);
+  }
+
+  .prose-fr h2 {
+    margin-top: 2.5rem;
+    margin-bottom: 0.75rem;
+    font-size: 1.6rem;
+    line-height: 1.25;
+  }
+
+  .prose-fr h3 {
+    margin-top: 1.75rem;
+    margin-bottom: 0.5rem;
+    font-size: 1.2rem;
+  }
+
+  .prose-fr ul,
+  .prose-fr ol {
+    margin-block: 1rem;
+    padding-left: 1.25rem;
+    line-height: 1.75;
+    color: var(--color-ink-700);
+  }
+
+  .prose-fr ul {
+    list-style: disc;
+  }
+
+  .prose-fr ol {
+    list-style: decimal;
+  }
+
+  .prose-fr li {
+    margin-block: 0.35rem;
+  }
+
+  .prose-fr a {
+    color: var(--color-ink-950);
+    text-decoration: underline;
+    text-decoration-color: var(--color-benne-400);
+    text-underline-offset: 3px;
+    text-decoration-thickness: 2px;
+  }
+
+  .prose-fr a:hover {
+    color: var(--color-benne-700);
+  }
+
+  .prose-fr strong {
+    color: var(--color-ink-950);
+    font-weight: 600;
+  }
+
+  .prose-fr blockquote {
+    margin-block: 1.5rem;
+    border-left: 4px solid var(--color-benne-400);
+    padding-left: 1rem;
+    font-style: italic;
+    color: var(--color-ink-700);
+  }
+
+  .prose-fr table {
+    width: 100%;
+    margin-block: 1.5rem;
+    border-collapse: collapse;
+    font-size: 0.95rem;
+  }
+
+  .prose-fr th,
+  .prose-fr td {
+    border: 1px solid var(--color-ink-200);
+    padding: 0.6rem 0.75rem;
+    text-align: left;
+  }
+
+  .prose-fr th {
+    background: var(--color-ink-50);
+    font-weight: 600;
+  }
 }
 
-/* ── CTA shimmer button ── */
-@keyframes shimmer {
-  0%   { background-position: -200% center; }
-  100% { background-position: 200% center; }
-}
-.btn-shimmer {
-  display: inline-block;
-  background: linear-gradient(
-    90deg,
-    #8B6914 0%,
-    var(--gold) 25%,
-    #f0c84e 50%,
-    var(--gold) 75%,
-    #8B6914 100%
+/* Bandes diagonales rappelant le marquage d'une benne de chantier. */
+.hazard-stripes {
+  background-image: repeating-linear-gradient(
+    -45deg,
+    var(--color-benne-500) 0 12px,
+    var(--color-ink-950) 12px 24px
   );
-  background-size: 300% auto;
-  animation: shimmer 4s linear infinite;
-  color: var(--ink);
-  font-family: 'Outfit', sans-serif;
-  font-weight: 600;
-  letter-spacing: 0.15em;
-  text-transform: uppercase;
-  font-size: 0.75rem;
-  cursor: pointer;
-  transition: opacity 0.2s, transform 0.2s;
-  border: none;
-  text-decoration: none;
-}
-.btn-shimmer:hover { opacity: 0.9; transform: translateY(-1px); }
-.btn-shimmer:active { transform: translateY(0); }
-
-/* ── Gold glow card ── */
-.gold-glow {
-  transition: box-shadow 0.4s ease, border-color 0.4s ease, transform 0.4s ease;
-}
-.gold-glow:hover {
-  box-shadow: 0 0 40px rgba(196, 150, 42, 0.18), 0 0 80px rgba(196, 150, 42, 0.06);
-  transform: translateY(-4px);
-}
-
-/* ── Starfield CSS animation ── */
-@keyframes twinkle {
-  0%, 100% { opacity: 0.15; transform: scale(1); }
-  50%       { opacity: 1;    transform: scale(1.6); }
-}
-
-@keyframes shooting-star {
-  0%   { transform: translateX(0)    translateY(0)   scaleX(1); opacity: 1; }
-  100% { transform: translateX(280px) translateY(80px) scaleX(0); opacity: 0; }
-}
-
-/* ── Section divider line ── */
-.section-rule {
-  width: 48px;
-  height: 1px;
-  background: var(--gold);
-  display: block;
-  margin: 1.5rem auto 0;
-}
-
-/* ── Form styles ── */
-.form-group {
-  display: flex;
-  flex-direction: column;
-  gap: 6px;
-}
-.form-label {
-  font-family: 'Outfit', sans-serif;
-  font-size: 0.7rem;
-  letter-spacing: 0.18em;
-  text-transform: uppercase;
-  color: rgba(196, 150, 42, 0.75);
-}
-.form-input {
-  background: rgba(20, 20, 40, 0.7);
-  border: 1px solid rgba(196, 150, 42, 0.18);
-  color: var(--warm-white);
-  font-family: 'Outfit', sans-serif;
-  font-size: 0.875rem;
-  padding: 0.9rem 1rem;
-  outline: none;
-  transition: border-color 0.25s, background 0.25s;
-  width: 100%;
-  appearance: none;
-  -webkit-appearance: none;
-}
-.form-input:focus {
-  border-color: rgba(196, 150, 42, 0.55);
-  background: rgba(20, 20, 40, 0.9);
-}
-.form-input::placeholder { color: rgba(240, 237, 230, 0.25); }
-.form-input option       { background: #0D0D18; color: var(--warm-white); }
-
-/* ── Prestation card ── */
-.prestation-card {
-  background: var(--surface);
-  position: relative;
-}
-
-/* ── Avantages grid item ── */
-.avantage-item {
-  padding: 2.5rem;
-  border: 1px solid rgba(196, 150, 42, 0.1);
-  transition: border-color 0.3s, background 0.3s;
-}
-.avantage-item:hover {
-  border-color: rgba(196, 150, 42, 0.3);
-  background: rgba(196, 150, 42, 0.03);
-}
-
-/* ── Testimonial card ── */
-.temoignage-card {
-  background: linear-gradient(
-    135deg,
-    rgba(20, 20, 40, 0.8) 0%,
-    rgba(13, 13, 24, 0.9) 100%
-  );
-  border: 1px solid rgba(196, 150, 42, 0.12);
-  backdrop-filter: blur(8px);
-}
-
-/* ── Gold thin line separator ── */
-.gold-line {
-  width: 100%;
-  height: 1px;
-  background: linear-gradient(90deg, transparent, var(--gold), transparent);
-  opacity: 0.3;
 }

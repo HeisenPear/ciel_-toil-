@@ -1,0 +1,90 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import PageHeader from '../components/PageHeader.astro';
+import Section from '../components/Section.astro';
+import { SITE, CONTACT } from '../config/site';
+
+const breadcrumbs = [{ name: 'Mentions légales', url: '/mentions-legales' }];
+---
+
+<BaseLayout
+  title="Mentions légales"
+  description={`Mentions légales du site ${SITE.url} — éditeur, hébergeur, propriété intellectuelle et responsabilité.`}
+  path="/mentions-legales"
+  breadcrumbs={breadcrumbs}
+  noindex
+  hideFooterCta
+>
+  <PageHeader breadcrumbs={breadcrumbs} title="Mentions légales" />
+
+  <Section tone="white">
+    <div class="prose-fr mx-auto">
+      <p>
+        <strong>À compléter avant la mise en ligne.</strong> Les informations ci-dessous sont des
+        emplacements réservés : elles doivent être remplacées par les données réelles de
+        l’entreprise (voir <code>src/config/site.ts</code>).
+      </p>
+
+      <h2>Éditeur du site</h2>
+      <p>
+        {SITE.legalName}<br />
+        {CONTACT.address.street}<br />
+        {CONTACT.address.postalCode} {CONTACT.address.city}<br />
+        Téléphone : {CONTACT.phone}<br />
+        E-mail : {CONTACT.email}
+      </p>
+      <p>
+        SIRET : {CONTACT.siret}<br />
+        Numéro de TVA intracommunautaire : {CONTACT.tva}<br />
+        Récépissé de déclaration de transport de déchets : {CONTACT.recepisseDechets}
+      </p>
+      <p>Directeur de la publication : à compléter.</p>
+
+      <h2>Hébergement</h2>
+      <p>
+        Nom de l’hébergeur, adresse et téléphone à compléter selon la plateforme retenue
+        (par exemple Vercel Inc., 440 N Barranca Ave #4133, Covina, CA 91723, États-Unis).
+      </p>
+
+      <h2>Propriété intellectuelle</h2>
+      <p>
+        L’ensemble des contenus présents sur ce site — textes, illustrations, éléments graphiques,
+        logo et structure — est la propriété de {SITE.legalName}, sauf mention contraire.
+        Toute reproduction, représentation, modification ou adaptation, totale ou partielle,
+        est interdite sans autorisation écrite préalable.
+      </p>
+
+      <h2>Responsabilité</h2>
+      <p>
+        Les informations publiées sur ce site sont fournies à titre indicatif. Les tarifs affichés
+        sont des prix d’appel susceptibles d’évoluer et ne constituent pas une offre contractuelle :
+        seul le devis nominatif accepté par le client fait foi. Les dimensions, charges utiles et
+        délais mentionnés sont donnés à titre d’ordre de grandeur et peuvent varier selon les
+        conditions d’exploitation.
+      </p>
+      <p>
+        {SITE.legalName} ne saurait être tenue responsable des dommages résultant d’une mauvaise
+        utilisation des informations diffusées, ni de l’indisponibilité temporaire du site.
+      </p>
+
+      <h2>Liens externes</h2>
+      <p>
+        Ce site peut contenir des liens vers des sites tiers. {SITE.legalName} n’exerce aucun
+        contrôle sur ces sites et décline toute responsabilité quant à leur contenu.
+      </p>
+
+      <h2>Droit applicable</h2>
+      <p>
+        Le présent site est soumis au droit français. Tout litige relatif à son utilisation
+        relève de la compétence des tribunaux français.
+      </p>
+
+      <h2>Médiation de la consommation</h2>
+      <p>
+        Conformément à l’article L.612-1 du Code de la consommation, le client particulier peut
+        recourir gratuitement à un médiateur de la consommation en vue de la résolution amiable
+        d’un litige. Coordonnées du médiateur à compléter.
+      </p>
+    </div>
+  </Section>
+</BaseLayout>

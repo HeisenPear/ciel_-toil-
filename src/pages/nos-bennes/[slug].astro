@@ -1,0 +1,219 @@
+---
+import type { GetStaticPaths } from 'astro';
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import PageHeader from '../../components/PageHeader.astro';
+import Section from '../../components/Section.astro';
+import AnswerBox from '../../components/AnswerBox.astro';
+import BenneCard from '../../components/BenneCard.astro';
+import DevisForm from '../../components/DevisForm.astro';
+import Faq from '../../components/Faq.astro';
+import Icon from '../../components/Icon.astro';
+
+import { BENNES } from '../../data/bennes';
+import { FLUX } from '../../data/dechets';
+import { faqByTopic } from '../../data/faq';
+import { COMMUNES } from '../../data/communes';
+import { SITE } from '../../config/site';
+import { serviceSchema, faqSchema } from '../../lib/schema';
+
+export const getStaticPaths = (() =>
+  BENNES.map((benne) => ({
+    params: { slug: benne.slug },
+    props: { benne },
+  }))) satisfies GetStaticPaths;
+
+const { benne } = Astro.props;
+const { long, larg, haut } = benne.dimensions;
+
+const url = `${SITE.url}/nos-bennes/${benne.slug}`;
+const breadcrumbs = [
+  { name: 'Nos bennes', url: '/nos-bennes' },
+  { name: benne.name, url: `/nos-bennes/${benne.slug}` },
+];
+
+const autres = BENNES.filter((b) => b.slug !== benne.slug)
+  .sort((a, b) => Math.abs(a.volume - benne.volume) - Math.abs(b.volume - benne.volume))
+  .slice(0, 3);
+
+/* On ne montre que les flux réellement compatibles avec ce format. */
+const fluxCompatibles = FLUX.filter((f) => f.bennesConseillees.includes(benne.volume));
+
+const faq = faqByTopic('general', 3).concat(faqByTopic('logistique', 2));
+
+const schemas = [
+  {
+    '@type': 'Product',
+    name: `${benne.name} en location`,
+    description: benne.answer,
+    category: 'Location de benne à déchets',
+    brand: { '@type': 'Brand', name: SITE.name },
+    additionalProperty: [
+      { '@type': 'PropertyValue', name: 'Volume', value: `${benne.volume} m³` },
+      { '@type': 'PropertyValue', name: 'Longueur', value: `${long} m` },
+      { '@type': 'PropertyValue', name: 'Largeur', value: `${larg} m` },
+      { '@type': 'PropertyValue', name: 'Hauteur', value: `${haut} m` },
+      { '@type': 'PropertyValue', name: 'Charge utile', value: `${benne.charge} tonnes` },
+    ],
+    offers: {
+      '@type': 'Offer',
+      priceCurrency: 'EUR',
+      price: benne.priceFrom,
+      availability: 'https://schema.org/InStock',
+      url,
+      areaServed: { '@type': 'AdministrativeArea', name: 'Indre-et-Loire' },
+    },
+  },
+  serviceSchema({
+    name: `Location de ${benne.name.toLowerCase()} en Indre-et-Loire`,
+    description: benne.answer,
+    url,
+    areaServed: COMMUNES.filter((c) => c.priority).map((c) => c.name),
+  }),
+  faqSchema(faq),
+];
+---
+
+<BaseLayout
+  title={`${benne.name} : dimensions, charge utile et tarif`}
+  description={`${benne.name} à louer à Tours et dans le 37 : ${long} × ${larg} × ${haut} m, charge utile ${benne.charge} t, dès ${benne.priceFrom} € TTC tout compris, livrée sous 24 à 48 h.`}
+  path={`/nos-bennes/${benne.slug}`}
+  breadcrumbs={breadcrumbs}
+  schemas={schemas}
+>
+  <PageHeader
+    breadcrumbs={breadcrumbs}
+    eyebrow={`${benne.volume} m³`}
+    title={`Location de ${benne.name.toLowerCase()} à Tours et en Indre-et-Loire`}
+    lead={benne.punchline}
+    stats={[
+      { label: 'Dimensions', value: `${long} × ${larg} × ${haut} m` },
+      { label: 'Charge utile', value: `${benne.charge} t` },
+      { label: 'À partir de', value: `${benne.priceFrom} € TTC` },
+    ]}
+  />
+
+  <Section tone="white" class="!pt-12">
+    <div class="grid gap-12 lg:grid-cols-3 lg:gap-16">
+      <div class="lg:col-span-2">
+        <AnswerBox question={`À quoi sert une ${benne.name.toLowerCase()} ?`}>
+          <p>{benne.answer}</p>
+        </AnswerBox>
+
+        <div class="prose-fr mt-12 max-w-none">
+          <h2>Caractéristiques techniques</h2>
+          <div class="overflow-x-auto">
+            <table>
+              <tbody>
+                <tr>
+                  <th scope="row">Volume</th>
+                  <td>{benne.volume} m³</td>
+                </tr>
+                <tr>
+                  <th scope="row">Dimensions extérieures</th>
+                  <td>{long} m × {larg} m × {haut} m (L × l × h)</td>
+                </tr>
+                <tr>
+                  <th scope="row">Charge utile maximale</th>
+                  <td>{benne.charge} tonnes</td>
+                </tr>
+                <tr>
+                  <th scope="row">Équivalence</th>
+                  <td>{benne.equivalence}</td>
+                </tr>
+                <tr>
+                  <th scope="row">Accès nécessaire</th>
+                  <td>{benne.acces}</td>
+                </tr>
+                <tr>
+                  <th scope="row">Durée de location incluse</th>
+                  <td>7 jours calendaires, extension possible</td>
+                </tr>
+                <tr>
+                  <th scope="row">Tarif indicatif</th>
+                  <td>à partir de {benne.priceFrom} € TTC, tout compris</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+
+          <h2>Pour quels chantiers ?</h2>
+          <ul>
+            {benne.usages.map((usage) => <li>{usage}</li>)}
+          </ul>
+
+          <h2>Déchets acceptés dans cette benne</h2>
+          <p>
+            Cette benne accueille principalement {benne.dechets.join(', ').toLowerCase()}.
+            Le tri à la source réduit sensiblement le coût de traitement : un chargement
+            homogène part directement en filière de valorisation, sans passage par une
+            chaîne de tri.
+          </p>
+          {
+            fluxCompatibles.length > 0 && (
+              <ul>
+                {fluxCompatibles.map((flux) => (
+                  <li>
+                    <a href={`/dechets-acceptes#${flux.slug}`}>{flux.name}</a> — {flux.filiere}
+                  </li>
+                ))}
+              </ul>
+            )
+          }
+
+          <div
+            class="not-prose my-8 flex items-start gap-3 rounded-card border-2 border-dashed border-benne-300 bg-benne-50 p-5"
+          >
+            <Icon name="warning" size={22} class="mt-0.5 shrink-0 text-benne-700" />
+            <p class="text-sm leading-relaxed text-ink-800">
+              <strong>Interdits dans tous les cas :</strong> amiante, peintures et solvants,
+              bouteilles de gaz, extincteurs, pneumatiques, électroménager et matériel électrique
+              (DEEE), déchets de soins.
+              <a
+                href="/dechets-acceptes"
+                class="ml-1 underline decoration-benne-500 underline-offset-2">Voir le guide du tri</a
+              >.
+            </p>
+          </div>
+
+          <h2>Livraison de la {benne.name.toLowerCase()} en Indre-et-Loire</h2>
+          <p>
+            Nous livrons cette benne à Tours et dans les 272 communes du département,
+            sous 24 à 48 h ouvrées sur l’agglomération et 48 à 72 h sur le reste du 37.
+            {benne.acces} Si l’emplacement se trouve sur la voie publique, nous obtenons
+            pour vous l’autorisation d’occupation temporaire auprès de la mairie.
+          </p>
+        </div>
+      </div>
+
+      <aside class="lg:col-span-1">
+        <div class="sticky top-28 rounded-card border border-ink-200 bg-ink-50 p-6">
+          <p class="text-xs font-bold uppercase tracking-[0.18em] text-benne-700">Devis gratuit</p>
+          <h2 class="mt-2 text-xl font-bold text-ink-950">
+            Réserver une {benne.name.toLowerCase()}
+          </h2>
+          <p class="mt-2 text-sm text-ink-600">
+            Réponse sous 2 h ouvrées avec un tarif ferme, tout compris.
+          </p>
+          <div class="mt-6">
+            <DevisForm defaultBenne={benne.slug} compact />
+          </div>
+        </div>
+      </aside>
+    </div>
+  </Section>
+
+  <Section
+    tone="muted"
+    eyebrow="Comparer"
+    title="Ce format ne convient pas ? Voici les alternatives"
+    lead="Le bon volume dépend autant de la densité du déchet que de la quantité."
+  >
+    <div class="grid gap-6 md:grid-cols-3">
+      {autres.map((b) => <BenneCard benne={b} />)}
+    </div>
+  </Section>
+
+  <Section tone="white" eyebrow="Questions fréquentes" title="À savoir avant de commander" align="center">
+    <Faq items={faq} />
+  </Section>
+</BaseLayout>

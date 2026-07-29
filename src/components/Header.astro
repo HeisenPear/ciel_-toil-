@@ -1,0 +1,158 @@
+---
+import { SITE, CONTACT, NAV } from '../config/site';
+import Icon from './Icon.astro';
+import Button from './Button.astro';
+import Logo from './Logo.astro';
+
+const current = Astro.url.pathname.replace(/\/$/, '') || '/';
+
+/* La barre de bureau n'expose que les 6 entrées les plus stratégiques ;
+   le menu mobile, lui, reprend l'intégralité de la navigation. */
+const desktopHrefs = [
+  '/nos-bennes',
+  '/location-benne-chantier',
+  '/location-benne-demenagement',
+  '/tarifs',
+  '/zones-desservies',
+  '/blog',
+];
+const desktopNav = desktopHrefs
+  .map((href) => NAV.find((item) => item.href === href))
+  .filter((item): item is NonNullable<typeof item> => Boolean(item));
+
+const isActive = (href: string) => current === href || current.startsWith(`${href}/`);
+---
+
+<header class="sticky top-0 z-50">
+  <!-- Bandeau de réassurance : le numéro reste visible dès le premier écran -->
+  <div class="hidden bg-ink-950 text-ink-100 lg:block">
+    <div class="container-page flex h-9 items-center justify-between text-[0.8rem]">
+      <p class="flex items-center gap-2">
+        <Icon name="pin" size={14} class="text-benne-400" />
+        <span>Location de bennes à Tours et dans toute l’Indre-et-Loire (37)</span>
+      </p>
+      <div class="flex items-center gap-5">
+        <span class="flex items-center gap-1.5">
+          <Icon name="clock" size={14} class="text-benne-400" />
+          Lun–Ven 7 h 30 – 18 h · Sam 8 h – 12 h
+        </span>
+        <a
+          href={`tel:${CONTACT.phoneE164}`}
+          class="flex items-center gap-1.5 font-semibold text-white hover:text-benne-300"
+        >
+          <Icon name="phone" size={14} class="text-benne-400" />
+          {CONTACT.phone}
+        </a>
+      </div>
+    </div>
+  </div>
+
+  <div class="border-b border-ink-100 bg-white/95 backdrop-blur supports-[backdrop-filter]:bg-white/85">
+    <div class="container-page flex h-16 items-center justify-between gap-4 lg:h-20">
+      <a href="/" class="flex items-center gap-3" aria-label={`${SITE.name} — accueil`}>
+        <Logo class="h-9 w-auto lg:h-10" />
+      </a>
+
+      <nav aria-label="Navigation principale" class="hidden items-center gap-1 lg:flex">
+        {
+          desktopNav.map((item) => (
+            <a
+              href={item.href}
+              aria-current={isActive(item.href) ? 'page' : undefined}
+              class:list={[
+                'rounded-lg px-3 py-2 text-[0.93rem] font-medium transition-colors',
+                isActive(item.href)
+                  ? 'bg-benne-50 text-benne-800'
+                  : 'text-ink-700 hover:bg-ink-50 hover:text-ink-950',
+              ]}
+            >
+              {item.label}
+            </a>
+          ))
+        }
+      </nav>
+
+      <div class="flex items-center gap-2">
+        <a
+          href={`tel:${CONTACT.phoneE164}`}
+          class="flex items-center gap-2 rounded-full border-2 border-ink-200 px-4 py-2 text-sm font-semibold text-ink-900 transition-colors hover:border-ink-950 lg:hidden"
+          aria-label={`Appeler le ${CONTACT.phone}`}
+        >
+          <Icon name="phone" size={18} />
+          <span class="sr-only sm:not-sr-only">Appeler</span>
+        </a>
+
+        <!-- L'enveloppe porte le `hidden` : le bouton lui-même est en
+             `inline-flex`, qui l'emporterait sur une classe utilitaire
+             passée en prop. -->
+        <span class="hidden sm:block">
+          <Button href="/contact" variant="primary" icon="arrow-right">Devis gratuit</Button>
+        </span>
+
+        <button
+          type="button"
+          id="menu-toggle"
+          class="rounded-lg p-2 text-ink-900 hover:bg-ink-50 lg:hidden"
+          aria-expanded="false"
+          aria-controls="menu-mobile"
+          aria-label="Ouvrir le menu"
+        >
+          <Icon name="menu" size={26} class="block" />
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <div
+    id="menu-mobile"
+    hidden
+    class="border-b border-ink-100 bg-white shadow-lg lg:hidden"
+  >
+    <nav aria-label="Navigation mobile" class="container-page grid gap-1 py-4">
+      {
+        NAV.map((item) => (
+          <a
+            href={item.href}
+            aria-current={isActive(item.href) ? 'page' : undefined}
+            class:list={[
+              'flex items-center justify-between rounded-lg px-3 py-3 text-base font-medium',
+              isActive(item.href) ? 'bg-benne-50 text-benne-800' : 'text-ink-800 hover:bg-ink-50',
+            ]}
+          >
+            {item.label}
+            <Icon name="arrow-right" size={18} class="text-ink-300" />
+          </a>
+        ))
+      }
+      <a
+        href={`tel:${CONTACT.phoneE164}`}
+        class="mt-2 flex items-center justify-center gap-2 rounded-full bg-ink-950 px-5 py-3 font-semibold text-white"
+      >
+        <Icon name="phone" size={18} />
+        {CONTACT.phone}
+      </a>
+    </nav>
+  </div>
+</header>
+
+<script>
+  const toggle = document.getElementById('menu-toggle');
+  const menu = document.getElementById('menu-mobile');
+
+  if (toggle && menu) {
+    toggle.addEventListener('click', () => {
+      const open = toggle.getAttribute('aria-expanded') === 'true';
+      toggle.setAttribute('aria-expanded', String(!open));
+      toggle.setAttribute('aria-label', open ? 'Ouvrir le menu' : 'Fermer le menu');
+      menu.hidden = open;
+    });
+
+    // Referme le menu au retour en affichage bureau pour éviter un état incohérent.
+    window.matchMedia('(min-width: 1024px)').addEventListener('change', (event) => {
+      if (event.matches) {
+        toggle.setAttribute('aria-expanded', 'false');
+        menu.hidden = true;
+      }
+    });
+  }
+</script>

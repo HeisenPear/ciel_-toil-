@@ -1,0 +1,15 @@
+{
+  "name": "Benne Express 37 — Location de bennes à Tours",
+  "short_name": "Benne Express 37",
+  "description": "Location de bennes de 1 à 30 m³ à Tours et dans toute l'Indre-et-Loire.",
+  "lang": "fr-FR",
+  "start_url": "/",
+  "scope": "/",
+  "display": "standalone",
+  "background_color": "#0F1622",
+  "theme_color": "#F2A413",
+  "icons": [
+    { "src": "/logo.svg", "sizes": "any", "type": "image/svg+xml", "purpose": "any" },
+    { "src": "/apple-touch-icon.png", "sizes": "180x180", "type": "image/png" }
+  ]
+}

@@ -1,0 +1,83 @@
+---
+interface Props {
+  id?: string;
+  /** Sur-titre court (kicker) affiché au-dessus du titre. */
+  eyebrow?: string;
+  title?: string;
+  /** Niveau de titre : 2 par défaut, 3 pour une sous-section. */
+  level?: 2 | 3;
+  lead?: string;
+  tone?: 'white' | 'muted' | 'dark';
+  align?: 'left' | 'center';
+  class?: string;
+}
+
+const {
+  id,
+  eyebrow,
+  title,
+  level = 2,
+  lead,
+  tone = 'white',
+  align = 'left',
+  class: className = '',
+} = Astro.props;
+
+const tones = {
+  white: 'bg-white text-ink-900',
+  muted: 'bg-ink-50 text-ink-900',
+  dark: 'bg-ink-950 text-ink-100',
+};
+
+const Heading = `h${level}` as 'h2' | 'h3';
+const headingId = id ? `${id}-title` : undefined;
+---
+
+<section
+  id={id}
+  class={`${tones[tone]} py-16 lg:py-24 ${className}`}
+  aria-labelledby={title ? headingId : undefined}
+>
+  <div class="container-page">
+    {
+      (eyebrow || title || lead) && (
+        <div class:list={['max-w-3xl', align === 'center' && 'mx-auto text-center']}>
+          {eyebrow && (
+            <p
+              class:list={[
+                'text-xs font-bold uppercase tracking-[0.18em]',
+                tone === 'dark' ? 'text-benne-400' : 'text-benne-700',
+              ]}
+            >
+              {eyebrow}
+            </p>
+          )}
+          {title && (
+            <Heading
+              id={headingId}
+              class:list={[
+                'mt-3 text-3xl leading-tight lg:text-[2.6rem]',
+                tone === 'dark' ? 'text-white' : 'text-ink-950',
+              ]}
+            >
+              {title}
+            </Heading>
+          )}
+          {lead && (
+            <p
+              class:list={[
+                'mt-4 text-lg leading-relaxed',
+                tone === 'dark' ? 'text-ink-300' : 'text-ink-600',
+              ]}
+            >
+              {lead}
+            </p>
+          )}
+        </div>
+      )
+    }
+    <div class:list={[(eyebrow || title || lead) && 'mt-10 lg:mt-14']}>
+      <slot />
+    </div>
+  </div>
+</section>

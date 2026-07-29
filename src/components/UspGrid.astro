@@ -1,0 +1,19 @@
+---
+import { USP } from '../config/site';
+import Icon from './Icon.astro';
+import type { IconName } from './Icon.astro';
+---
+
+<ul class="grid gap-6 sm:grid-cols-2 lg:grid-cols-4">
+  {
+    USP.map((item) => (
+      <li class="rounded-card border border-ink-200 bg-white p-6 transition-shadow hover:shadow-[var(--shadow-soft)]">
+        <span class="flex h-11 w-11 items-center justify-center rounded-xl bg-benne-50 text-benne-700">
+          <Icon name={item.icon as IconName} size={22} />
+        </span>
+        <h3 class="mt-4 text-lg font-bold text-ink-950">{item.title}</h3>
+        <p class="mt-2 text-sm leading-relaxed text-ink-600">{item.text}</p>
+      </li>
+    ))
+  }
+</ul>
