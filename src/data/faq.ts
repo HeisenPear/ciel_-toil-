@@ -24,10 +24,11 @@ export const FAQ: QA[] = [
   {
     q: "Combien coûte la location d'une benne à Tours ?",
     a:
-      "À Tours, comptez entre 290 et 520 € TTC selon le volume, pour une location de 7 jours incluant " +
-      "la livraison, l'enlèvement et le traitement des déchets. Une benne 8 m³ à gravats démarre à 290 € TTC, " +
-      "une benne 10 m³ pour déménagement à 320 € TTC, une benne 30 m³ à 520 € TTC. " +
-      "Le prix dépend de trois facteurs : le volume, le type de déchets et la commune de livraison.",
+      "Le tarif est établi sur devis, gratuitement et sans engagement, parce qu'il dépend de trois " +
+      "facteurs que seul un échange permet de fixer : le volume de la benne, la nature des déchets " +
+      "— des gravats purs coûtent nettement moins cher à traiter qu'un mélange non trié — et la " +
+      "commune de livraison. Un appel de deux minutes suffit : nous annonçons un prix ferme et " +
+      "tout compris, incluant la livraison, la location, l'enlèvement et le traitement.",
     topics: ['tarifs', 'general'],
   },
   {
@@ -62,10 +63,10 @@ export const FAQ: QA[] = [
   {
     q: 'Combien de temps puis-je garder la benne ?',
     a:
-      "La durée standard est de 7 jours calendaires, incluse dans le tarif. " +
+      "La durée standard est de 7 jours calendaires, incluse dans le devis. " +
       "Au-delà, chaque jour supplémentaire est facturé au tarif d'immobilisation. " +
-      "Pour un chantier long, la formule au mois est plus économique. " +
-      "Si vous terminez plus tôt, il suffit d'appeler : l'enlèvement anticipé est gratuit.",
+      "Pour un chantier long, la formule au mois est plus économique : signalez-le dès l'appel. " +
+      "Si vous terminez plus tôt, il suffit de nous joindre — l'enlèvement anticipé est gratuit.",
     topics: ['logistique', 'tarifs'],
   },
   {
@@ -119,16 +120,16 @@ export const FAQ: QA[] = [
       "Oui, sans minimum de commande ni justificatif professionnel. " +
       "Les particuliers représentent une part importante de notre activité : déménagements, " +
       "vide-maisons, débarras de cave, rénovations de salle de bain, élagage de jardin. " +
-      "Le paiement se fait par carte ou virement à la commande.",
+      "Un simple appel suffit à obtenir un devis et à caler une date.",
     topics: ['demenagement', 'general'],
   },
   {
     q: "Une benne est-elle rentable pour un déménagement ?",
     a:
       "Oui dès que le volume à évacuer dépasse deux à trois remorques de voiture. " +
-      "Une benne 10 m³ à 320 € TTC évite une dizaine d'allers-retours en déchèterie, " +
-      "les frais de carburant, la location d'une remorque et surtout les files d'attente. " +
-      "La benne reste sur place plusieurs jours : vous chargez à votre rythme.",
+      "Une benne 10 m³ évite une dizaine d'allers-retours en déchèterie, les frais de carburant, " +
+      "la location d'une remorque et surtout les files d'attente. Elle reste sur place sept jours : " +
+      "vous chargez à votre rythme. Appelez-nous pour un devis, c'est immédiat.",
     topics: ['demenagement', 'tarifs'],
   },
   {
@@ -159,9 +160,9 @@ export const FAQ: QA[] = [
   {
     q: 'Comment se déroule une location de benne, étape par étape ?',
     a:
-      "En quatre étapes : 1) vous demandez un devis en précisant le volume, le type de déchets " +
-      "et la commune ; 2) vous recevez un tarif ferme sous 2 h ouvrées ; 3) la benne est déposée " +
-      "au créneau convenu, sur plaques si nécessaire ; 4) vous appelez quand vous avez terminé " +
+      "En quatre étapes : 1) vous appelez en indiquant le volume, le type de déchets et la commune ; " +
+      "2) nous annonçons un tarif ferme et tout compris dans la foulée ; 3) la benne est déposée " +
+      "au créneau convenu, sur plaques si nécessaire ; 4) vous nous rappelez quand vous avez terminé " +
       "et nous l'enlevons, avec pesée et bordereau à l'appui.",
     topics: ['general', 'logistique'],
   },

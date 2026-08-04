@@ -6,7 +6,7 @@ import AnswerBox from '../components/AnswerBox.astro';
 import BenneCard from '../components/BenneCard.astro';
 import Steps from '../components/Steps.astro';
 import Faq from '../components/Faq.astro';
-import DevisForm from '../components/DevisForm.astro';
+import CallCard from '../components/CallCard.astro';
 import CommuneLinks from '../components/CommuneLinks.astro';
 import Icon from '../components/Icon.astro';
 import Button from '../components/Button.astro';
@@ -87,7 +87,6 @@ const schemas = [
     offers: bennesChantier.map((b) => ({
       name: b.name,
       description: b.punchline,
-      price: b.priceFrom,
       url: `/nos-bennes/${b.slug}`,
     })),
   }),
@@ -231,16 +230,11 @@ const schemas = [
       </div>
 
       <div>
-        <div class="rounded-card border border-ink-200 bg-ink-50 p-6 lg:p-8">
-          <p class="text-xs font-bold uppercase tracking-[0.18em] text-benne-700">Compte pro</p>
-          <h2 class="mt-2 text-2xl font-bold text-ink-950">Ouvrir un compte entreprise</h2>
-          <p class="mt-2 text-ink-600">
-            Tarifs négociés, commande simplifiée, facturation mensuelle groupée. Réponse sous
-            2 h ouvrées.
-          </p>
-          <div class="mt-6">
-            <DevisForm />
-          </div>
+        <div class="sticky top-28">
+          <CallCard
+            title="Ouvrir un compte entreprise"
+            text="Tarifs négociés, commande par téléphone, facturation mensuelle groupée. Un appel suffit à ouvrir le compte."
+          />
         </div>
       </div>
     </div>

@@ -1,7 +1,7 @@
 ---
 title: 'Prix d’une benne à Tours : ce qui fait vraiment varier la facture'
-description: "Combien coûte la location d'une benne à Tours et en Indre-et-Loire ? Les trois facteurs qui font varier le prix, ce qui est inclus, et les erreurs qui coûtent cher."
-answer: "À Tours, une location de benne coûte entre 290 et 520 € TTC selon le volume, pour 7 jours incluant la livraison, l'enlèvement et le traitement. Trois facteurs font varier ce prix : le volume de la benne, la nature du déchet — un mélange non trié coûte nettement plus cher à traiter que des gravats purs — et la commune de livraison."
+description: "Combien coûte la location d'une benne à Tours et en Indre-et-Loire ? Les trois facteurs qui font varier le prix, ce que couvre le devis, et les erreurs qui coûtent cher."
+answer: "Le prix d'une location de benne à Tours dépend de trois facteurs : le volume, la nature du déchet — un mélange non trié coûte nettement plus cher à traiter que des gravats purs — et la commune de livraison. Le devis est gratuit et le tarif annoncé couvre la livraison, sept jours de location, l'enlèvement et le traitement. Un appel de deux minutes suffit à l'obtenir."
 pubDate: 2026-02-03
 category: 'Tarifs'
 keywords:
@@ -28,16 +28,9 @@ Un tarif d'appel très bas exclut presque toujours le quatrième poste, facturé
 
 C'est le plus visible, et paradoxalement le moins déterminant.
 
-| Format | Prix indicatif TTC / 7 jours |
-| --- | --- |
-| Big bag 1 m³ | 130 € |
-| Benne 8 m³ | 290 € |
-| Benne 10 m³ | 320 € |
-| Benne 15 m³ | 390 € |
-| Benne 20 m³ | 450 € |
-| Benne 30 m³ | 520 € |
+Le prix ne double pas quand le volume triple : le transport, lui, coûte le même prix quelle que soit la benne accrochée derrière le camion. L'écart entre un 8 m³ et un 20 m³ est bien plus faible qu'on ne l'imagine.
 
-Le prix ne double pas quand le volume triple : le transport, lui, coûte le même prix quelle que soit la benne accrochée derrière le camion. C'est pourquoi **une benne trop petite suivie d'une rotation coûte toujours plus cher qu'une benne correctement dimensionnée dès le départ**.
+C'est pourquoi **une benne trop petite suivie d'une rotation coûte toujours plus cher qu'une benne correctement dimensionnée dès le départ**. Mieux vaut nous décrire le chantier et prendre le bon format du premier coup.
 
 ## Facteur n°2 : la nature du déchet
 
@@ -71,8 +64,14 @@ Au-delà, la distance entre en jeu, mais moins qu'on ne l'imagine : nous regroup
 
 **Le tri manuel pour non-conformité.** C'est le poste le plus évitable : il s'agit de la présence d'un déchet interdit dans le chargement (peinture, bouteille de gaz, électroménager). Cinq minutes de vérification avant l'enlèvement suffisent.
 
+## Pourquoi nous n'affichons pas de grille de prix
+
+Parce qu'une grille affichée ment presque toujours par omission : elle exclut le poste de traitement, qui est justement le plus variable. Le client compare deux nombres, choisit le plus bas, et découvre la différence sur la facture.
+
+Nous préférons annoncer un prix ferme après trente secondes de questions. C'est moins spectaculaire qu'un tarif d'appel, mais c'est le prix que vous paierez.
+
 ## Comment obtenir un prix fiable du premier coup
 
-Un devis sérieux exige trois informations : le **volume estimé**, la **nature du déchet** et la **commune de livraison**. Avec ces trois éléments, nous annonçons un prix ferme sous deux heures ouvrées — et c'est celui qui figure sur la facture.
+Un devis sérieux exige trois informations : le **volume estimé**, la **nature du déchet** et la **commune de livraison**. Avec ces trois éléments, nous annonçons un prix ferme pendant l'appel — et c'est celui qui figure sur la facture.
 
-[Demandez votre devis gratuit](/contact) ou consultez la [grille tarifaire complète](/tarifs).
+**Le plus rapide reste de nous appeler.** Vous pouvez aussi [nous écrire](/contact) ou lire le détail de [ce que couvre le devis](/tarifs).

@@ -1,7 +1,6 @@
 ---
 import { SITE, CONTACT, NAV } from '../config/site';
 import Icon from './Icon.astro';
-import Button from './Button.astro';
 import Logo from './Logo.astro';
 
 const current = Astro.url.pathname.replace(/\/$/, '') || '/';
@@ -73,21 +72,16 @@ const isActive = (href: string) => current === href || current.startsWith(`${hre
       </nav>
 
       <div class="flex items-center gap-2">
+        <!-- Le numéro est le bouton principal, pas le formulaire : sur ce marché,
+             un prospect qui a une question appelle, il ne remplit pas un champ. -->
         <a
           href={`tel:${CONTACT.phoneE164}`}
-          class="flex items-center gap-2 rounded-full border-2 border-ink-200 px-4 py-2 text-sm font-semibold text-ink-900 transition-colors hover:border-ink-950 lg:hidden"
-          aria-label={`Appeler le ${CONTACT.phone}`}
+          class="hidden items-center gap-2.5 rounded-full bg-benne-500 px-5 py-2.5 font-display font-bold text-ink-950 shadow-[0_10px_24px_-12px_rgba(242,164,19,0.9)] transition-all hover:-translate-y-0.5 hover:bg-benne-400 sm:inline-flex"
+          data-appel="en-tete"
         >
-          <Icon name="phone" size={18} />
-          <span class="sr-only sm:not-sr-only">Appeler</span>
+          <Icon name="phone" size={19} />
+          {CONTACT.phone}
         </a>
-
-        <!-- L'enveloppe porte le `hidden` : le bouton lui-même est en
-             `inline-flex`, qui l'emporterait sur une classe utilitaire
-             passée en prop. -->
-        <span class="hidden sm:block">
-          <Button href="/contact" variant="primary" icon="arrow-right">Devis gratuit</Button>
-        </span>
 
         <button
           type="button"
@@ -126,9 +120,10 @@ const isActive = (href: string) => current === href || current.startsWith(`${hre
       }
       <a
         href={`tel:${CONTACT.phoneE164}`}
-        class="mt-2 flex items-center justify-center gap-2 rounded-full bg-ink-950 px-5 py-3 font-semibold text-white"
+        class="mt-2 flex items-center justify-center gap-2 rounded-full bg-benne-500 px-5 py-3.5 font-display text-lg font-bold text-ink-950"
+        data-appel="menu-mobile"
       >
-        <Icon name="phone" size={18} />
+        <Icon name="phone" size={20} />
         {CONTACT.phone}
       </a>
     </nav>

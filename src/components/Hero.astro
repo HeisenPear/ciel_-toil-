@@ -22,7 +22,7 @@ const {
     'Tarif tout compris, sans frais caché',
     'Déchets triés et valorisés en centre agréé',
   ],
-  primaryCta = { label: 'Devis gratuit en 2 h', href: '/contact' },
+  primaryCta = { label: 'Ou écrivez-nous', href: '/contact' },
 } = Astro.props;
 ---
 
@@ -69,18 +69,24 @@ const {
           }
         </ul>
 
-        <div class="mt-9 flex flex-col gap-3 sm:flex-row">
-          <Button href={primaryCta.href} variant="primary" size="lg" iconAfter="arrow-right">
-            {primaryCta.label}
-          </Button>
+        <div class="mt-9 flex flex-col gap-3 sm:flex-row sm:items-center">
           <a
             href={`tel:${CONTACT.phoneE164}`}
-            class="inline-flex items-center justify-center gap-2 rounded-full border-2 border-ink-700 px-7 py-3.5 font-semibold text-white transition-colors hover:border-benne-400 hover:text-benne-300"
+            class="inline-flex items-center justify-center gap-3 rounded-full bg-benne-500 px-8 py-4 font-display text-xl font-bold text-ink-950 shadow-[0_14px_32px_-14px_rgba(242,164,19,0.95)] transition-transform hover:-translate-y-0.5"
+            data-appel="hero"
           >
-            <Icon name="phone" size={20} />
+            <Icon name="phone" size={24} />
             {CONTACT.phone}
           </a>
+          <Button href={primaryCta.href} variant="outline" size="lg" class="!border-ink-700 !text-white hover:!bg-ink-900">
+            {primaryCta.label}
+          </Button>
         </div>
+
+        <p class="mt-4 text-sm text-ink-400">
+          Un doute sur le volume, l’accès ou le délai ? Un appel de deux minutes suffit
+          à tout caler. Devis établi dans la foulée.
+        </p>
       </div>
 
       <div class="relative">

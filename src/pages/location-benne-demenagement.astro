@@ -6,7 +6,7 @@ import AnswerBox from '../components/AnswerBox.astro';
 import BenneCard from '../components/BenneCard.astro';
 import Steps from '../components/Steps.astro';
 import Faq from '../components/Faq.astro';
-import DevisForm from '../components/DevisForm.astro';
+import CallCard from '../components/CallCard.astro';
 import CommuneLinks from '../components/CommuneLinks.astro';
 import Icon from '../components/Icon.astro';
 import Button from '../components/Button.astro';
@@ -95,7 +95,6 @@ const schemas = [
     offers: bennesParticuliers.map((b) => ({
       name: b.name,
       description: b.punchline,
-      price: b.priceFrom,
       url: `/nos-bennes/${b.slug}`,
     })),
   }),
@@ -110,7 +109,7 @@ const schemas = [
 ---
 
 <BaseLayout
-  title="Location de benne déménagement à Tours — particuliers, dès 130 €"
+  title="Location de benne déménagement à Tours — particuliers"
   description="Benne pour déménagement, vide-maison ou débarras à Tours et dans le 37. Sans minimum de commande, 7 jours sur place, livraison sous 24 à 48 h."
   path="/location-benne-demenagement"
   breadcrumbs={breadcrumbs}
@@ -124,7 +123,7 @@ const schemas = [
     stats={[
       { label: 'Sans', value: 'minimum de commande' },
       { label: 'Sur place', value: '7 jours' },
-      { label: 'À partir de', value: '130 € TTC' },
+      { label: 'Devis', value: 'immédiat par téléphone' },
     ]}
   />
 
@@ -141,11 +140,11 @@ const schemas = [
       <p>
         Pour un déménagement, la <strong>benne 10 m³</strong> est le format le plus adapté :
         elle absorbe le contenu encombrant d’un T3 complet — meubles, matelas, moquettes,
-        cartons — pour environ <strong>320 € TTC</strong> tout compris. En dessous de
-        deux ou trois remorques de voiture, la déchèterie reste plus économique ; au-delà,
-        la benne devient rentable dès le premier week-end, en évitant une dizaine
-        d’allers-retours, les frais de carburant et l’attente. La benne reste
+        cartons. En dessous de deux ou trois remorques de voiture, la déchèterie reste plus
+        économique ; au-delà, la benne devient rentable dès le premier week-end, en évitant
+        une dizaine d’allers-retours, les frais de carburant et l’attente. Elle reste
         <strong>7 jours</strong> devant chez vous et l’enlèvement anticipé est gratuit.
+        Le tarif est établi sur devis pendant l’appel, tout compris.
       </p>
     </AnswerBox>
   </Section>
@@ -246,15 +245,11 @@ const schemas = [
       </div>
 
       <div>
-        <div class="rounded-card border border-ink-200 bg-ink-50 p-6 lg:p-8">
-          <p class="text-xs font-bold uppercase tracking-[0.18em] text-benne-700">Devis gratuit</p>
-          <h2 class="mt-2 text-2xl font-bold text-ink-950">Réserver votre benne</h2>
-          <p class="mt-2 text-ink-600">
-            Sans minimum de commande. Réponse sous 2 h ouvrées avec un tarif ferme.
-          </p>
-          <div class="mt-6">
-            <DevisForm defaultBenne="benne-10m3" />
-          </div>
+        <div class="sticky top-28">
+          <CallCard
+            title="Réserver votre benne"
+            text="Sans minimum de commande. Dites-nous ce que vous avez à évacuer : on vous conseille le format et on annonce le prix."
+          />
         </div>
       </div>
     </div>

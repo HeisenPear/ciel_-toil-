@@ -5,7 +5,7 @@ import PageHeader from '../../components/PageHeader.astro';
 import Section from '../../components/Section.astro';
 import AnswerBox from '../../components/AnswerBox.astro';
 import BenneCard from '../../components/BenneCard.astro';
-import DevisForm from '../../components/DevisForm.astro';
+import CallCard from '../../components/CallCard.astro';
 import Faq from '../../components/Faq.astro';
 import Icon from '../../components/Icon.astro';
 
@@ -57,7 +57,6 @@ const schemas = [
     offers: {
       '@type': 'Offer',
       priceCurrency: 'EUR',
-      price: benne.priceFrom,
       availability: 'https://schema.org/InStock',
       url,
       areaServed: { '@type': 'AdministrativeArea', name: 'Indre-et-Loire' },
@@ -75,7 +74,7 @@ const schemas = [
 
 <BaseLayout
   title={`${benne.name} : dimensions, charge utile et tarif`}
-  description={`${benne.name} à louer à Tours et dans le 37 : ${long} × ${larg} × ${haut} m, charge utile ${benne.charge} t, dès ${benne.priceFrom} € TTC tout compris, livrée sous 24 à 48 h.`}
+  description={`${benne.name} à louer à Tours et dans le 37 : ${long} × ${larg} × ${haut} m, charge utile ${benne.charge} t. Devis gratuit par téléphone, livraison sous 24 à 48 h.`}
   path={`/nos-bennes/${benne.slug}`}
   breadcrumbs={breadcrumbs}
   schemas={schemas}
@@ -88,7 +87,7 @@ const schemas = [
     stats={[
       { label: 'Dimensions', value: `${long} × ${larg} × ${haut} m` },
       { label: 'Charge utile', value: `${benne.charge} t` },
-      { label: 'À partir de', value: `${benne.priceFrom} € TTC` },
+      { label: 'Tarif', value: 'sur devis' },
     ]}
   />
 
@@ -129,8 +128,8 @@ const schemas = [
                   <td>7 jours calendaires, extension possible</td>
                 </tr>
                 <tr>
-                  <th scope="row">Tarif indicatif</th>
-                  <td>à partir de {benne.priceFrom} € TTC, tout compris</td>
+                  <th scope="row">Tarif</th>
+                  <td>sur devis, tout compris — appelez-nous pour un prix ferme</td>
                 </tr>
               </tbody>
             </table>
@@ -186,17 +185,11 @@ const schemas = [
       </div>
 
       <aside class="lg:col-span-1">
-        <div class="sticky top-28 rounded-card border border-ink-200 bg-ink-50 p-6">
-          <p class="text-xs font-bold uppercase tracking-[0.18em] text-benne-700">Devis gratuit</p>
-          <h2 class="mt-2 text-xl font-bold text-ink-950">
-            Réserver une {benne.name.toLowerCase()}
-          </h2>
-          <p class="mt-2 text-sm text-ink-600">
-            Réponse sous 2 h ouvrées avec un tarif ferme, tout compris.
-          </p>
-          <div class="mt-6">
-            <DevisForm defaultBenne={benne.slug} compact />
-          </div>
+        <div class="sticky top-28">
+          <CallCard
+            title={`Réserver une ${benne.name.toLowerCase()}`}
+            text="Dites-nous où et pour quels déchets : on vérifie l’accès, on cale la date et on vous annonce le prix, tout compris."
+          />
         </div>
       </aside>
     </div>

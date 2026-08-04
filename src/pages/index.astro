@@ -10,6 +10,9 @@ import Faq from '../components/Faq.astro';
 import CommuneLinks from '../components/CommuneLinks.astro';
 import Button from '../components/Button.astro';
 import Icon from '../components/Icon.astro';
+import Gallery from '../components/Gallery.astro';
+import CallCard from '../components/CallCard.astro';
+import { hasPhotos } from '../config/photos';
 
 import { SITE } from '../config/site';
 import { BENNES, featuredBennes } from '../data/bennes';
@@ -22,13 +25,13 @@ const faq = faqByTopic('general');
 
 const etapes = [
   {
-    title: 'Vous demandez un devis',
-    text: 'Par téléphone ou via le formulaire, en précisant le volume, le type de déchets et la commune de livraison.',
-    icon: 'mail' as const,
+    title: 'Vous appelez',
+    text: 'Volume approximatif, type de déchets, commune : trois informations suffisent. Deux minutes au téléphone.',
+    icon: 'phone' as const,
   },
   {
-    title: 'Nous confirmons sous 2 h',
-    text: 'Vous recevez un tarif ferme, tout compris : livraison, location 7 jours, enlèvement et traitement.',
+    title: 'Nous annonçons le prix',
+    text: 'Un tarif ferme et tout compris, donné pendant l’appel : livraison, location 7 jours, enlèvement et traitement.',
     icon: 'euro' as const,
   },
   {
@@ -52,7 +55,6 @@ const schemas = [
     offers: BENNES.map((b) => ({
       name: b.name,
       description: b.punchline,
-      price: b.priceFrom,
       url: `/nos-bennes/${b.slug}`,
     })),
   }),
@@ -67,8 +69,8 @@ const schemas = [
 ---
 
 <BaseLayout
-  title="Location de benne à Tours (37) — Livraison 24 h, dès 290 €"
-  description="Bennes de 1 à 30 m³ livrées à Tours et dans toute l'Indre-et-Loire sous 24 à 48 h. Chantier, rénovation, déménagement. Devis gratuit, tarif tout compris."
+  title="Location de benne à Tours (37) — livraison sous 24 h"
+  description="Bennes de 1 à 30 m³ livrées à Tours et dans toute l'Indre-et-Loire sous 24 à 48 h. Chantier, rénovation, déménagement. Devis gratuit par téléphone, tarif tout compris."
   path="/"
   schemas={schemas}
 >
@@ -83,18 +85,18 @@ const schemas = [
       facts={[
         { label: 'Volumes', value: '1 à 30 m³' },
         { label: 'Délai', value: '24 à 48 h' },
-        { label: 'À partir de', value: '290 € TTC' },
+        { label: 'Devis', value: 'gratuit, par téléphone' },
         { label: 'Zone', value: 'Tout le 37' },
       ]}
     >
       <p>
         Pour louer une benne à Tours, choisissez le volume adapté à votre déchet — 8 m³ pour des
-        gravats, 10 m³ pour un déménagement, 15 à 30 m³ pour un chantier — puis demandez un devis en
-        indiquant la commune de livraison. Chez <strong>{SITE.name}</strong>, le tarif est ferme et
-        tout compris (livraison, location 7 jours, enlèvement, traitement) et la benne est déposée
-        sous 24 à 48 h ouvrées. Comptez de <strong>290 € TTC</strong> pour une benne 8 m³ à gravats à
-        <strong>520 € TTC</strong> pour une benne 30 m³. Si la benne est posée sur la voie publique,
-        nous nous chargeons de l’autorisation de voirie auprès de la mairie.
+        gravats, 10 m³ pour un déménagement, 15 à 30 m³ pour un chantier — puis appelez-nous en
+        indiquant la commune de livraison. Chez <strong>{SITE.name}</strong>, le tarif est établi
+        <strong>sur devis gratuit</strong> pendant l’appel : il est ferme et tout compris
+        (livraison, location 7 jours, enlèvement, traitement), et la benne est déposée sous
+        <strong>24 à 48 h ouvrées</strong>. Si elle est posée sur la voie publique, nous nous
+        chargeons de l’autorisation de voirie auprès de la mairie.
       </p>
     </AnswerBox>
   </Section>
@@ -123,9 +125,22 @@ const schemas = [
       <Button href="/nos-bennes" variant="dark" iconAfter="arrow-right">
         Voir les 6 formats de bennes
       </Button>
-      <Button href="/tarifs" variant="ghost">Consulter la grille tarifaire</Button>
+      <Button href="/tarifs" variant="ghost">Comment se fixe le prix</Button>
     </div>
   </Section>
+
+  {
+    hasPhotos() && (
+      <Section
+        tone="white"
+        eyebrow="Notre matériel"
+        title="Nos camions et nos bennes en intervention"
+        lead="Des photos prises sur nos chantiers en Indre-et-Loire, pas des images de catalogue."
+      >
+        <Gallery featured />
+      </Section>
+    )
+  }
 
   <Section
     tone="white"
@@ -252,8 +267,29 @@ const schemas = [
     </div>
   </Section>
 
+  <Section tone="white" class="!py-14">
+    <div class="grid items-center gap-8 rounded-card border border-ink-200 bg-ink-50 p-8 lg:grid-cols-2 lg:p-10">
+      <div>
+        <h2 class="text-2xl font-bold text-ink-950 lg:text-3xl">
+          Le plus simple reste de nous appeler
+        </h2>
+        <p class="mt-3 leading-relaxed text-ink-600">
+          En deux minutes, on valide le format adapté à vos déchets, on vérifie que le camion
+          passe à l’adresse indiquée, on cale une date et on vous annonce le prix, tout compris.
+          Vous n’avez rien à préparer : on pose les questions.
+        </p>
+        <ul class="mt-5 space-y-2 text-sm text-ink-700">
+          <li class="flex gap-2"><Icon name="check" size={16} class="mt-0.5 text-benne-600" />Conseil sur le volume, sans surdimensionner</li>
+          <li class="flex gap-2"><Icon name="check" size={16} class="mt-0.5 text-benne-600" />Vérification de l’accès avant de s’engager</li>
+          <li class="flex gap-2"><Icon name="check" size={16} class="mt-0.5 text-benne-600" />Prix ferme annoncé pendant l’appel</li>
+        </ul>
+      </div>
+      <CallCard showHours />
+    </div>
+  </Section>
+
   <Section
-    tone="white"
+    tone="muted"
     eyebrow="Questions fréquentes"
     title="Tout ce qu’il faut savoir avant de commander"
     align="center"

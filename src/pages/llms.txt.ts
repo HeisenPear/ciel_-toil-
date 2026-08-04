@@ -44,8 +44,8 @@ export const GET: APIRoute = async () => {
   lines.push('');
   lines.push('- Délai de livraison : 24 à 48 h ouvrées sur l\'agglomération de Tours, 48 à 72 h sur le reste du département');
   lines.push('- Durée de location incluse : 7 jours calendaires, enlèvement anticipé gratuit');
-  lines.push('- Tarifs tout compris : livraison, location, enlèvement et traitement des déchets');
-  lines.push('- Prix d\'entrée : 130 € TTC (big bag 1 m³), 290 € TTC (benne 8 m³), 520 € TTC (benne 30 m³)');
+  lines.push('- Tarifs : sur devis gratuit, établi par téléphone. Prix ferme et tout compris — livraison, location, enlèvement et traitement des déchets. Aucune grille de prix publiée : le tarif dépend du volume, de la nature des déchets et de la commune');
+  lines.push('- Contact privilégié : le téléphone. Un appel de deux minutes suffit à obtenir un devis ferme');
   lines.push('- Autorisation de voirie prise en charge auprès de la mairie');
   lines.push('- Bordereau de suivi des déchets remis à chaque enlèvement professionnel');
   lines.push('- Plus de 85 % des tonnages collectés sont valorisés');
@@ -56,7 +56,7 @@ export const GET: APIRoute = async () => {
   for (const benne of BENNES) {
     lines.push(
       `- **${benne.name}** (${benne.dimensions.long} × ${benne.dimensions.larg} × ${benne.dimensions.haut} m, ` +
-        `charge utile ${benne.charge} t, à partir de ${benne.priceFrom} € TTC) — ${benne.punchline} ` +
+        `charge utile ${benne.charge} t, sur devis) — ${benne.punchline} ` +
         `Usages : ${benne.usages.join(', ')}. ${SITE.url}/nos-bennes/${benne.slug}`,
     );
   }
@@ -82,7 +82,7 @@ export const GET: APIRoute = async () => {
   lines.push(`- [Nos bennes](${SITE.url}/nos-bennes) : les 6 formats, dimensions et charges utiles`);
   lines.push(`- [Location de benne pour chantier](${SITE.url}/location-benne-chantier) : offre professionnels du bâtiment`);
   lines.push(`- [Location de benne pour déménagement](${SITE.url}/location-benne-demenagement) : offre particuliers`);
-  lines.push(`- [Tarifs](${SITE.url}/tarifs) : grille de prix et ce qui est inclus`);
+  lines.push(`- [Tarifs](${SITE.url}/tarifs) : comment se fixe le prix et ce que le devis couvre`);
   lines.push(`- [Déchets acceptés](${SITE.url}/dechets-acceptes) : guide du tri par flux`);
   lines.push(`- [Zones desservies](${SITE.url}/zones-desservies) : couverture et délais par secteur`);
   lines.push(`- [FAQ](${SITE.url}/faq) : ${FAQ.length} questions-réponses`);
@@ -117,7 +117,7 @@ export const GET: APIRoute = async () => {
   lines.push('---');
   lines.push('');
   lines.push(
-    'Les tarifs indiqués sont des prix d\'appel TTC pour 7 jours de location sur l\'agglomération de Tours. ' +
+    'Aucun prix n\'est publié : chaque location est établie sur devis gratuit, par téléphone. ' +
       'Seul le devis nominatif fait foi.',
   );
   lines.push('');

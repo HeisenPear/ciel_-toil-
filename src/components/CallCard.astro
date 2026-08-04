@@ -1,0 +1,94 @@
+---
+/**
+ * Encart d'appel réutilisable — remplace le formulaire dans les colonnes
+ * latérales. Le numéro est l'élément le plus gros du bloc : c'est l'action
+ * qu'on veut voir déclenchée.
+ */
+import { CONTACT } from '../config/site';
+import Icon from './Icon.astro';
+
+interface Props {
+  title?: string;
+  text?: string;
+  /** Variante sombre pour les fonds clairs, et inversement. */
+  tone?: 'dark' | 'light';
+  /** Ajoute le rappel des horaires sous le numéro. */
+  showHours?: boolean;
+  class?: string;
+}
+
+const {
+  title = 'Une question ? Appelez-nous',
+  text = 'On vous répond tout de suite : volume adapté, accès, délai, prix. Sans engagement.',
+  tone = 'dark',
+  showHours = true,
+  class: className = '',
+} = Astro.props;
+
+const dark = tone === 'dark';
+---
+
+<div
+  class:list={[
+    'rounded-card p-6 lg:p-7',
+    dark ? 'bg-ink-950 text-white' : 'border border-ink-200 bg-benne-50 text-ink-900',
+    className,
+  ]}
+>
+  <span
+    class:list={[
+      'flex h-12 w-12 items-center justify-center rounded-xl',
+      dark ? 'bg-benne-500 text-ink-950' : 'bg-ink-950 text-benne-400',
+    ]}
+  >
+    <Icon name="phone" size={24} />
+  </span>
+
+  <h2 class:list={['mt-4 text-xl font-bold', dark ? 'text-white' : 'text-ink-950']}>
+    {title}
+  </h2>
+  <p class:list={['mt-2 text-sm leading-relaxed', dark ? 'text-ink-300' : 'text-ink-600']}>
+    {text}
+  </p>
+
+  <a
+    href={`tel:${CONTACT.phoneE164}`}
+    class="mt-5 flex items-center justify-center gap-2.5 rounded-full bg-benne-500 px-6 py-4 font-display text-xl font-bold text-ink-950 transition-transform hover:-translate-y-0.5"
+    data-appel="encart"
+  >
+    <Icon name="phone" size={22} />
+    {CONTACT.phone}
+  </a>
+
+  {
+    showHours && (
+      <p
+        class:list={[
+          'mt-3 flex items-center justify-center gap-1.5 text-xs',
+          dark ? 'text-ink-400' : 'text-ink-500',
+        ]}
+      >
+        <Icon name="clock" size={14} />
+        Lun–Ven 7 h 30 – 18 h · Sam 8 h – 12 h
+      </p>
+    )
+  }
+
+  <p
+    class:list={[
+      'mt-4 border-t pt-4 text-center text-xs',
+      dark ? 'border-ink-800 text-ink-400' : 'border-ink-200 text-ink-500',
+    ]}
+  >
+    Pas disponible pour appeler ?{' '}
+    <a
+      href="/contact"
+      class:list={[
+        'font-semibold underline underline-offset-2',
+        dark ? 'text-benne-400' : 'text-benne-700',
+      ]}
+    >
+      Laissez-nous un message
+    </a>
+  </p>
+</div>

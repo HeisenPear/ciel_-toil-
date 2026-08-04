@@ -1,0 +1,44 @@
+---
+/**
+ * Galerie photo du parc.
+ *
+ * Tant qu'aucune photo n'est déclarée dans `src/config/photos.ts`,
+ * le composant ne rend rien du tout : pas d'image cassée, pas de section vide.
+ */
+import { PHOTOS, featuredPhotos, hasPhotos, type Photo } from '../config/photos';
+
+interface Props {
+  /** N'afficher que les photos mises en avant. */
+  featured?: boolean;
+  columns?: 2 | 3;
+}
+
+const { featured = false, columns = 3 } = Astro.props;
+const photos: Photo[] = featured ? featuredPhotos() : PHOTOS;
+
+const cols = { 2: 'sm:grid-cols-2', 3: 'sm:grid-cols-2 lg:grid-cols-3' };
+---
+
+{
+  hasPhotos() && (
+    <ul class={`grid gap-5 ${cols[columns]}`}>
+      {photos.map((photo, index) => (
+        <li class="overflow-hidden rounded-card border border-ink-200 bg-ink-50">
+          {/* La première image peut être le LCP : elle se charge sans délai. */}
+          <img
+            src={photo.src}
+            alt={photo.alt}
+            width={photo.width}
+            height={photo.height}
+            loading={index === 0 ? 'eager' : 'lazy'}
+            decoding="async"
+            class="aspect-[4/3] w-full object-cover"
+          />
+          {photo.caption && (
+            <p class="px-4 py-3 text-sm text-ink-600">{photo.caption}</p>
+          )}
+        </li>
+      ))}
+    </ul>
+  )
+}

@@ -1,0 +1,40 @@
+---
+/**
+ * Barre d'appel fixe en bas d'écran, sur mobile uniquement.
+ *
+ * C'est le principal levier de conversion du site : sur un téléphone,
+ * l'utilisateur ne remplit pas un formulaire, il appelle. La barre reste
+ * visible quel que soit le défilement, à portée de pouce.
+ *
+ * Un padding compensatoire est ajouté au <body> côté layout pour que
+ * la barre ne recouvre jamais la fin du contenu.
+ */
+import { CONTACT } from '../config/site';
+import Icon from './Icon.astro';
+---
+
+<div
+  class="fixed inset-x-0 bottom-0 z-50 border-t border-ink-800 bg-ink-950/95 backdrop-blur lg:hidden"
+  style="padding-bottom: env(safe-area-inset-bottom);"
+>
+  <div class="flex items-stretch gap-2 px-3 py-2.5">
+    <a
+      href={`tel:${CONTACT.phoneE164}`}
+      class="flex flex-1 items-center justify-center gap-2.5 rounded-full bg-benne-500 px-5 py-3.5 font-bold text-ink-950"
+      data-appel="barre-mobile"
+    >
+      <Icon name="phone" size={20} />
+      <span>
+        Appeler
+        <span class="ml-1 font-display tabular-nums">{CONTACT.phone}</span>
+      </span>
+    </a>
+    <a
+      href="/contact"
+      class="flex items-center justify-center rounded-full border border-ink-700 px-4 text-sm font-semibold text-white"
+      aria-label="Envoyer un message"
+    >
+      <Icon name="mail" size={20} />
+    </a>
+  </div>
+</div>

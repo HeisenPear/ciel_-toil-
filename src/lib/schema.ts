@@ -135,8 +135,13 @@ type ServiceInput = {
   description: string;
   url: string;
   areaServed: string[];
-  /** Offres listées dans le catalogue du service. */
-  offers?: { name: string; description: string; price: number; url?: string }[];
+  /**
+   * Prestations listées dans le catalogue du service.
+   * Volontairement sans `price` : toutes les locations sont établies sur devis,
+   * et publier un prix dans le balisage qu'on n'affiche pas sur la page serait
+   * une incohérence sanctionnée par Google.
+   */
+  offers?: { name: string; description: string; url?: string }[];
 };
 
 export function serviceSchema({ name, description, url, areaServed, offers }: ServiceInput) {
@@ -158,15 +163,13 @@ export function serviceSchema({ name, description, url, areaServed, offers }: Se
               name: offer.name,
               description: offer.description,
               priceCurrency: 'EUR',
-              price: offer.price,
+              availability: 'https://schema.org/InStock',
+              /* Devis obligatoire : c'est la valeur schema.org prévue pour ce cas. */
               priceSpecification: {
                 '@type': 'PriceSpecification',
-                price: offer.price,
                 priceCurrency: 'EUR',
                 valueAddedTaxIncluded: true,
-                minPrice: offer.price,
               },
-              availability: 'https://schema.org/InStock',
               ...(offer.url ? { url: offer.url.startsWith('http') ? offer.url : `${SITE.url}${offer.url}` } : {}),
             })),
           },

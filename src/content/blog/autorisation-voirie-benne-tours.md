@@ -41,7 +41,7 @@ Dans les **communes patrimoniales**, le dossier peut passer par l'Architecte des
 
 Elle est fixée librement par chaque commune, généralement au mètre carré occupé et par jour. Les ordres de grandeur vont de quelques dizaines d'euros pour une semaine en périphérie à plus d'une centaine d'euros en hypercentre.
 
-Cette redevance est **refacturée à l'euro près**, sans frais de dossier de notre part. Consultez notre [grille tarifaire](/tarifs) pour le détail de ce qui est inclus dans le prix de la location.
+Cette redevance est **refacturée à l'euro près**, sans frais de dossier de notre part. Voir [ce que couvre le devis](/tarifs) pour le détail de ce qui est inclus dans la location.
 
 ## Signalisation : une obligation, pas une option
 
@@ -72,4 +72,4 @@ Nous fournissons la signalisation temporaire réglementaire avec la benne, sans 
 | Voirie, Tours | Arrêté municipal | ~10 jours ouvrés |
 | Secteur patrimonial protégé | Arrêté + avis ABF | 2 à 3 semaines |
 
-Vous ne savez pas dans quel cas vous êtes ? Décrivez-nous l'emplacement envisagé : nous vous dirons en une minute s'il relève du domaine public et nous prendrons la démarche en charge. [Demandez un devis](/contact).
+Vous ne savez pas dans quel cas vous êtes ? **Appelez-nous** et décrivez l'emplacement envisagé : nous vous dirons en une minute s'il relève du domaine public, et nous prendrons la démarche en charge.
