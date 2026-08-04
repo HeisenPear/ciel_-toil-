@@ -1,7 +1,6 @@
 ---
 import { CONTACT } from '../config/site';
 import Icon from './Icon.astro';
-import Button from './Button.astro';
 
 interface Props {
   title?: string;
@@ -9,32 +8,40 @@ interface Props {
 }
 
 const {
-  title = 'Besoin d’une benne cette semaine ?',
-  text = 'Devis ferme sous 2 h ouvrées, livraison sous 24 à 48 h sur Tours et l’Indre-et-Loire.',
+  title = 'Un doute ? Un coup de fil suffit.',
+  text = 'Volume, accès, délai, déchets acceptés, prix : on répond à tout en deux minutes, et on établit le devis dans la foulée.',
 } = Astro.props;
 ---
 
 <section class="bg-benne-500" aria-labelledby="cta-band-title">
   <div class="hazard-stripes h-2" aria-hidden="true"></div>
   <div class="container-page py-12 lg:py-14">
-    <div class="flex flex-col items-start gap-6 lg:flex-row lg:items-center lg:justify-between">
+    <div class="flex flex-col items-start gap-7 lg:flex-row lg:items-center lg:justify-between">
       <div class="max-w-2xl">
         <h2 id="cta-band-title" class="text-2xl font-bold text-ink-950 lg:text-3xl">
           {title}
         </h2>
         <p class="mt-2 text-ink-900/85">{text}</p>
       </div>
-      <div class="flex flex-col gap-3 sm:flex-row">
-        <Button href="/contact" variant="dark" size="lg" iconAfter="arrow-right">
-          Demander un devis gratuit
-        </Button>
+
+      <div class="w-full shrink-0 lg:w-auto">
         <a
           href={`tel:${CONTACT.phoneE164}`}
-          class="inline-flex items-center justify-center gap-2 rounded-full border-2 border-ink-950 px-7 py-3.5 font-semibold text-ink-950 transition-colors hover:bg-ink-950 hover:text-white"
+          class="flex items-center justify-center gap-3 rounded-full bg-ink-950 px-8 py-4 font-display text-2xl font-bold text-white transition-transform hover:-translate-y-0.5"
+          data-appel="bandeau"
         >
-          <Icon name="phone" size={20} />
+          <Icon name="phone" size={26} class="text-benne-400" />
           {CONTACT.phone}
         </a>
+        <p class="mt-3 flex items-center justify-center gap-4 text-sm text-ink-900/80">
+          <span class="flex items-center gap-1.5">
+            <Icon name="clock" size={15} />
+            Lun–Ven 7 h 30 – 18 h
+          </span>
+          <a href="/contact" class="font-semibold underline underline-offset-2 hover:text-ink-950">
+            Ou écrire
+          </a>
+        </p>
       </div>
     </div>
   </div>

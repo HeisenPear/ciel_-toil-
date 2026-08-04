@@ -5,7 +5,7 @@ import PageHeader from '../../components/PageHeader.astro';
 import Section from '../../components/Section.astro';
 import AnswerBox from '../../components/AnswerBox.astro';
 import BenneCard from '../../components/BenneCard.astro';
-import DevisForm from '../../components/DevisForm.astro';
+import CallCard from '../../components/CallCard.astro';
 import Faq from '../../components/Faq.astro';
 import CommuneLinks from '../../components/CommuneLinks.astro';
 import Icon from '../../components/Icon.astro';
@@ -66,9 +66,9 @@ const faqLocale: QA[] = [
   {
     q: `Combien coûte une benne ${commune.prep} ?`,
     a:
-      `${commune.prep.charAt(0).toUpperCase()}${commune.prep.slice(1)}, comptez à partir de 290 € TTC pour une benne 8 m³ à gravats, ` +
-      `320 € TTC pour une benne 10 m³ de déménagement et 390 € TTC pour une benne 15 m³ de rénovation, ` +
-      `livraison, 7 jours de location, enlèvement et traitement inclus. ` +
+      `Le tarif ${commune.prep} est établi sur devis, gratuitement : il dépend du volume choisi, ` +
+      `de la nature des déchets et de l'accès sur place. Le prix annoncé est ferme et tout compris — ` +
+      `livraison, 7 jours de location, enlèvement et traitement. ` +
       tarifNote,
     topics: ['local'],
   },
@@ -84,7 +84,6 @@ const schemas = [
     offers: featuredBennes().map((b) => ({
       name: b.name,
       description: b.punchline,
-      price: b.priceFrom,
       url: `/nos-bennes/${b.slug}`,
     })),
   }),
@@ -105,7 +104,7 @@ const schemas = [
 
 <BaseLayout
   title={`Location de benne ${commune.prep} (${commune.cp})`}
-  description={`Benne de 1 à 30 m³ ${commune.prep} (${commune.cp}) : livraison sous ${delai}, tarif tout compris dès 290 € TTC. Chantier, rénovation, déménagement.`}
+  description={`Benne de 1 à 30 m³ ${commune.prep} (${commune.cp}) : livraison sous ${delai}, devis gratuit par téléphone, tarif tout compris. Chantier, rénovation, déménagement.`}
   path={`/location-benne/${commune.slug}`}
   breadcrumbs={breadcrumbs}
   schemas={schemas}
@@ -130,14 +129,14 @@ const schemas = [
           facts={[
             { label: 'Code postal', value: commune.cp },
             { label: 'Délai', value: delai },
-            { label: 'À partir de', value: '290 € TTC' },
+            { label: 'Tarif', value: 'sur devis' },
             { label: 'Volumes', value: '1 à 30 m³' },
           ]}
         >
           <p>
             Pour louer une benne {commune.prep} ({commune.cp}), indiquez le volume souhaité,
-            la nature des déchets et l’adresse de livraison : nous confirmons un tarif ferme
-            sous 2 h ouvrées et déposons la benne sous <strong>{delai}</strong>.
+            la nature des déchets et l’adresse de livraison : nous annonçons un tarif ferme
+            pendant l’appel et déposons la benne sous <strong>{delai}</strong>.
             {' '}{commune.name} se situe à {commune.distance === 0 ? 'l’emplacement même de notre dépôt' : `environ ${commune.distance} km de notre dépôt de Tours`}
             {' '}et relève du secteur « {commune.zone} ». {tarifNote}
           </p>
@@ -215,17 +214,11 @@ const schemas = [
       </div>
 
       <aside class="lg:col-span-1">
-        <div class="sticky top-28 rounded-card border border-ink-200 bg-ink-50 p-6">
-          <p class="text-xs font-bold uppercase tracking-[0.18em] text-benne-700">Devis gratuit</p>
-          <h2 class="mt-2 text-xl font-bold text-ink-950">
-            Une benne {commune.prep}
-          </h2>
-          <p class="mt-2 text-sm text-ink-600">
-            Réponse sous 2 h ouvrées, livraison sous {delai}.
-          </p>
-          <div class="mt-6">
-            <DevisForm defaultCommune={commune.name} compact />
-          </div>
+        <div class="sticky top-28">
+          <CallCard
+            title={`Une benne ${commune.prep}`}
+            text={`On connaît le secteur : accès, contraintes de voirie, délai. Livraison sous ${delai}, tarif annoncé pendant l’appel.`}
+          />
         </div>
       </aside>
     </div>

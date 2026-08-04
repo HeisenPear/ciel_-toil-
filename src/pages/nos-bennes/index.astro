@@ -5,7 +5,7 @@ import Section from '../../components/Section.astro';
 import AnswerBox from '../../components/AnswerBox.astro';
 import BenneCard from '../../components/BenneCard.astro';
 import Faq from '../../components/Faq.astro';
-import Button from '../../components/Button.astro';
+import CallCard from '../../components/CallCard.astro';
 import Icon from '../../components/Icon.astro';
 
 import { BENNES } from '../../data/bennes';
@@ -27,7 +27,6 @@ const schemas = [
     offers: BENNES.map((b) => ({
       name: b.name,
       description: b.punchline,
-      price: b.priceFrom,
       url: `/nos-bennes/${b.slug}`,
     })),
   }),
@@ -37,7 +36,7 @@ const schemas = [
 
 <BaseLayout
   title="Nos bennes : 6 formats de 1 à 30 m³ — dimensions et tarifs"
-  description="Comparez nos 6 formats de bennes en Indre-et-Loire : dimensions, charge utile, déchets acceptés et tarif dès 130 €. Big bag 1 m³, bennes 8 à 30 m³."
+  description="Comparez nos 6 formats de bennes en Indre-et-Loire : dimensions, charge utile et déchets acceptés. Big bag 1 m³, bennes 8 à 30 m³. Devis gratuit par téléphone."
   path="/nos-bennes"
   breadcrumbs={breadcrumbs}
   schemas={schemas}
@@ -62,7 +61,8 @@ const schemas = [
         pleine, alors qu’une benne de 30 m³ n’est adaptée qu’aux déchets légers et volumineux
         (cartons, mobilier, déchets verts) qui ne peuvent jamais dépasser le poids autorisé.
         En pratique : 8 m³ pour des gravats, 10 m³ pour un déménagement, 15 m³ pour une rénovation
-        complète, 20 à 30 m³ pour un chantier professionnel ou un curage.
+        complète, 20 à 30 m³ pour un chantier professionnel ou un curage. Un doute ?
+        Appelez-nous, nous dimensionnons avec vous et vous annonçons le tarif dans la foulée.
       </p>
     </AnswerBox>
   </Section>
@@ -82,7 +82,7 @@ const schemas = [
     <div class="overflow-x-auto rounded-card border border-ink-200 bg-white">
       <table class="w-full min-w-[46rem] border-collapse text-sm">
         <caption class="sr-only">
-          Comparatif des formats de bennes : volume, dimensions, charge utile, usage et tarif
+          Comparatif des formats de bennes : volume, dimensions, charge utile et usage type
         </caption>
         <thead>
           <tr class="bg-ink-950 text-left text-white">
@@ -90,7 +90,6 @@ const schemas = [
             <th scope="col" class="px-4 py-3.5 font-semibold">Dimensions (L × l × h)</th>
             <th scope="col" class="px-4 py-3.5 font-semibold">Charge utile</th>
             <th scope="col" class="px-4 py-3.5 font-semibold">Usage type</th>
-            <th scope="col" class="px-4 py-3.5 text-right font-semibold">À partir de</th>
           </tr>
         </thead>
         <tbody class="divide-y divide-ink-200">
@@ -110,9 +109,6 @@ const schemas = [
                 </td>
                 <td class="px-4 py-4 text-ink-700">{benne.charge} t</td>
                 <td class="px-4 py-4 text-ink-700">{benne.usages[0]}</td>
-                <td class="px-4 py-4 text-right font-display text-lg font-bold text-ink-950">
-                  {benne.priceFrom} €
-                </td>
               </tr>
             ))
           }
@@ -121,17 +117,18 @@ const schemas = [
     </div>
     <p class="mt-4 flex items-start gap-2 text-sm text-ink-500">
       <Icon name="warning" size={16} class="mt-0.5 shrink-0 text-benne-600" />
-      Tarifs TTC indicatifs pour 7 jours de location sur Tours, incluant livraison, enlèvement et
-      traitement. Le prix définitif dépend du flux de déchets et de la commune.
+      Chaque location est établie sur devis : le prix dépend du volume, de la nature des déchets et
+      de la commune de livraison. Un appel suffit à obtenir un tarif ferme et tout compris.
     </p>
   </Section>
 
   <Section tone="white" eyebrow="Questions fréquentes" title="Bien dimensionner sa benne" align="center">
     <Faq items={faq} />
-    <p class="mt-8 text-center">
-      <Button href="/contact" variant="primary" iconAfter="arrow-right">
-        Un doute sur le volume ? Demandez conseil
-      </Button>
-    </p>
+    <div class="mx-auto mt-10 max-w-md">
+      <CallCard
+        title="Un doute sur le volume ?"
+        text="Décrivez-nous le chantier en deux phrases : on vous dit quel format prendre, et on vous annonce le prix."
+      />
+    </div>
   </Section>
 </BaseLayout>

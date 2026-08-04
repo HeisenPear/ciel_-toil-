@@ -69,11 +69,21 @@ avant toute campagne d'acquisition.
 Le formulaire embarque déjà un pot de miel anti-spam, une case de consentement RGPD
 obligatoire et une redirection vers `/merci`.
 
-### 3. Les données métier — `src/data/`
+### 3. Les photos — `public/photos/` + `src/config/photos.ts`
+
+Déposer les fichiers dans `public/photos/`, puis déclarer chaque photo dans
+`src/config/photos.ts` (chemin, `alt`, dimensions réelles). Voir
+`public/photos/README.md` pour le détail.
+
+Tant que `PHOTOS` est vide, la galerie et la section « Notre matériel » ne
+s'affichent tout simplement pas, et les illustrations vectorielles prennent le
+relais : pas d'image cassée, pas de section vide.
+
+### 4. Les données métier — `src/data/`
 
 | Fichier | Rôle |
 | --- | --- |
-| `bennes.ts` | Les 6 formats : dimensions, charge utile, équivalence concrète, accès requis, prix. **Les prix sont indicatifs et doivent être validés.** |
+| `bennes.ts` | Les 6 formats : dimensions, charge utile, équivalence concrète, accès requis. **Aucun prix** — toutes les locations sont sur devis. |
 | `communes.ts` | Les 46 communes générant une page locale. Chaque entrée porte un `angle` — un paragraphe spécifique à la commune. Voir l'avertissement ci-dessous. |
 | `dechets.ts` | Les 8 flux collectés + les 6 catégories interdites |
 | `faq.ts` | 16 questions/réponses, filtrables par thème pour éviter de dupliquer le même bloc `FAQPage` partout |
@@ -112,7 +122,7 @@ maillage interne et le JSON-LD suivent automatiquement.
   factuel et chiffré, directement extractible par un moteur génératif
 - Contenu structuré en questions/réponses, tableaux comparatifs et listes — les formats
   que les LLM citent le plus volontiers
-- Chiffres explicites plutôt que superlatifs : volumes, tonnages, délais, prix, distances
+- Chiffres explicites plutôt que superlatifs : volumes, tonnages, délais, distances
 - **`/llms.txt`** — fiche d'identité lisible par une IA (convention *llmstxt.org*),
   générée depuis `src/data/` : elle ne peut donc pas diverger du contenu publié
 - **`robots.txt`** autorisant explicitement `GPTBot`, `ClaudeBot`, `PerplexityBot`,
@@ -120,6 +130,27 @@ maillage interne et le JSON-LD suivent automatiquement.
   Les retirer de cette liste revient à sortir des réponses des IA.
 
 ---
+
+## Parti pris : l'appel avant le formulaire
+
+Sur ce marché, un prospect qui a une question **appelle** — il ne remplit pas un
+formulaire et n'attend pas une réponse par e-mail. Le site est construit autour
+de ce constat :
+
+- le **numéro est le bouton principal** de l'en-tête, du hero et de tous les
+  bandeaux d'appel à l'action ; le formulaire est systématiquement le second choix ;
+- une **barre d'appel fixe** occupe le bas de l'écran sur mobile, à portée de pouce,
+  quelle que soit la position dans la page ;
+- l'encart `CallCard` remplace le formulaire dans toutes les colonnes latérales
+  (pages produit, pages communes, articles) ;
+- chaque lien téléphone porte un attribut `data-appel` identifiant son emplacement
+  (`en-tete`, `hero`, `barre-mobile`, `encart`, `bandeau`…), prêt à être branché sur
+  un outil de mesure pour savoir **quel emplacement génère les appels**.
+
+**Aucun prix n'est publié.** Toutes les prestations sont sur devis : c'est un choix
+commercial, mais aussi une cohérence technique — le balisage `Offer` ne contient
+donc aucun `price`, car annoncer dans les données structurées un prix absent de la
+page est précisément le genre d'incohérence que Google sanctionne.
 
 ## Structure
 
@@ -129,7 +160,8 @@ src/
 ├── data/                   ← bennes, communes, déchets, FAQ
 ├── lib/schema.ts           ← générateurs JSON-LD
 ├── layouts/BaseLayout.astro← <head>, JSON-LD, header, footer
-├── components/             ← Hero, Section, BenneCard, Faq, DevisForm, AnswerBox…
+├── config/photos.ts        ← déclaration des photos (vide = illustrations SVG)
+├── components/             ← Hero, CallCard, CallBar, Gallery, BenneCard, Faq…
 ├── content/blog/           ← articles Markdown
 └── pages/
     ├── index.astro
@@ -169,10 +201,8 @@ Après le premier déploiement :
 
 - [ ] `src/config/site.ts` : tous les `TODO` remplacés (nom, URL, téléphones, e-mail,
       adresse, coordonnées GPS, SIRET, TVA, récépissé de transport de déchets)
-- [ ] Tarifs de `src/data/bennes.ts` validés par le client
+- [ ] Photos déposées dans `public/photos/` et déclarées dans `src/config/photos.ts`
 - [ ] Textes des pages communes relus par le client
 - [ ] `FORM.endpoint` configuré et testé
 - [ ] Mentions légales complétées (éditeur, directeur de publication, hébergeur, médiateur)
-- [ ] Photos réelles du parc de bennes fournies par le client — elles remplaceront
-      avantageusement les illustrations SVG sur les pages produit
 - [ ] Fiche Google Business Profile créée et reliée

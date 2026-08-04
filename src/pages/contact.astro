@@ -3,6 +3,7 @@ import BaseLayout from '../layouts/BaseLayout.astro';
 import PageHeader from '../components/PageHeader.astro';
 import Section from '../components/Section.astro';
 import DevisForm from '../components/DevisForm.astro';
+import CallCard from '../components/CallCard.astro';
 import Steps from '../components/Steps.astro';
 import Icon from '../components/Icon.astro';
 
@@ -14,14 +15,14 @@ const breadcrumbs = [{ name: 'Contact', url: '/contact' }];
 
 const etapes = [
   {
-    title: 'Vous décrivez le besoin',
-    text: 'Volume, type de déchets, commune et date souhaitée. Une minute suffit.',
-    icon: 'mail' as const,
+    title: 'Vous appelez',
+    text: 'Volume, type de déchets, commune et date souhaitée. Deux minutes suffisent.',
+    icon: 'phone' as const,
   },
   {
-    title: 'Nous répondons sous 2 h',
-    text: 'Un tarif ferme et tout compris, valable 30 jours, sans engagement.',
-    icon: 'clock' as const,
+    title: 'On annonce le prix',
+    text: 'Un tarif ferme et tout compris, donné pendant l’appel, valable 30 jours et sans engagement.',
+    icon: 'euro' as const,
   },
   {
     title: 'Vous validez la date',
@@ -39,7 +40,7 @@ const schemas = [
   serviceSchema({
     name: 'Devis gratuit pour une location de benne',
     description:
-      'Demande de devis gratuit et sans engagement pour la location d’une benne à Tours et en Indre-et-Loire. Réponse sous 2 h ouvrées.',
+      'Devis gratuit et sans engagement pour la location d’une benne à Tours et en Indre-et-Loire, établi par téléphone.',
     url: `${SITE.url}/contact`,
     areaServed: COMMUNES.filter((c) => c.priority).map((c) => c.name),
   }),
@@ -54,7 +55,7 @@ const schemas = [
 
 <BaseLayout
   title="Contact et devis gratuit — location de benne à Tours"
-  description="Demandez un devis gratuit pour la location d'une benne à Tours ou en Indre-et-Loire. Réponse sous 2 h ouvrées, tarif ferme et tout compris, livraison sous 24 à 48 h."
+  description="Appelez-nous pour un devis gratuit sur la location d'une benne à Tours ou en Indre-et-Loire : tarif ferme et tout compris annoncé pendant l'appel, livraison sous 24 à 48 h."
   path="/contact"
   breadcrumbs={breadcrumbs}
   schemas={schemas}
@@ -64,28 +65,17 @@ const schemas = [
     breadcrumbs={breadcrumbs}
     eyebrow="Devis gratuit"
     title="Parlons de votre chantier"
-    lead="Décrivez votre besoin en une minute : nous répondons sous 2 h ouvrées avec un tarif ferme, tout compris et sans engagement."
+    lead="Le plus simple, c’est le téléphone : en deux minutes on valide le format, l’accès et la date, et on vous annonce un tarif ferme et tout compris."
     stats={[
-      { label: 'Réponse', value: 'sous 2 h' },
+      { label: 'Au téléphone', value: 'réponse immédiate' },
       { label: 'Livraison', value: '24 à 48 h' },
-      { label: 'Devis', value: 'gratuit' },
+      { label: 'Devis', value: 'gratuit, sans engagement' },
     ]}
   />
 
   <Section tone="white" class="!pt-12">
     <div class="grid gap-12 lg:grid-cols-5 lg:gap-16">
-      <div class="lg:col-span-3">
-        <h2 class="text-2xl font-bold text-ink-950">Demander un devis</h2>
-        <p class="mt-2 text-ink-600">
-          Les champs marqués d’un astérisque sont nécessaires pour établir un tarif ferme.
-          Plus vous êtes précis sur les déchets et l’accès, plus le devis est fiable.
-        </p>
-        <div class="mt-8">
-          <DevisForm />
-        </div>
-      </div>
-
-      <div class="lg:col-span-2">
+      <div class="lg:col-span-2 lg:order-last">
         <div class="rounded-card border border-ink-200 bg-ink-50 p-7">
           <h2 class="text-xl font-bold text-ink-950">Nous joindre directement</h2>
 
@@ -174,6 +164,24 @@ const schemas = [
               Vérifier votre secteur
             </a>
           </p>
+        </div>
+      </div>
+
+      <div class="lg:col-span-3">
+        <CallCard
+          title="Appelez-nous, c’est le plus rapide"
+          text="Trois informations suffisent : le volume approximatif, le type de déchets et la commune. On s’occupe du reste, y compris de l’autorisation de voirie si elle est nécessaire."
+        />
+
+        <div class="mt-12">
+          <h2 class="text-2xl font-bold text-ink-950">Vous préférez écrire ?</h2>
+          <p class="mt-2 text-ink-600">
+            Ce formulaire fait le même travail, en un peu moins direct. Plus vous êtes précis
+            sur les déchets et l’accès, plus le devis est fiable.
+          </p>
+          <div class="mt-8">
+            <DevisForm />
+          </div>
         </div>
       </div>
     </div>

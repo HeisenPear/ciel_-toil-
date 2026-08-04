@@ -10,6 +10,7 @@ import {
 } from '../lib/schema';
 import Header from '../components/Header.astro';
 import Footer from '../components/Footer.astro';
+import CallBar from '../components/CallBar.astro';
 import '../styles/global.css';
 
 export interface Crumb {
@@ -125,7 +126,7 @@ const jsonLd = graph([
     <script type="application/ld+json" is:inline set:html={JSON.stringify(jsonLd)} />
   </head>
 
-  <body class="min-h-screen bg-white antialiased">
+  <body class="min-h-screen bg-white pb-20 antialiased lg:pb-0">
     <a
       href="#contenu"
       class="sr-only focus:not-sr-only focus:absolute focus:left-4 focus:top-4 focus:z-[100] focus:rounded-lg focus:bg-ink-950 focus:px-4 focus:py-2 focus:text-white"
@@ -140,5 +141,7 @@ const jsonLd = graph([
     </main>
 
     <Footer hideCta={hideFooterCta} />
+
+    <CallBar />
   </body>
 </html>

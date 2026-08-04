@@ -19,7 +19,6 @@ export type Benne = {
   equivalence: string;
   /** Type d'accès requis pour la dépose. */
   acces: string;
-  priceFrom: number; // € TTC — TODO à valider
   usages: string[];
   dechets: string[];
   /** Vrai pour la benne mise en avant sur la home. */
@@ -39,7 +38,6 @@ export const BENNES: Benne[] = [
     charge: 1,
     equivalence: 'Environ 8 à 10 brouettes de gravats.',
     acces: 'Aucun accès camion nécessaire : le sac est livré plié, enlevé par grue.',
-    priceFrom: 130,
     usages: ['Petits travaux', 'Salle de bain', 'Jardinage'],
     dechets: ['Gravats', 'Terre', 'Déchets verts'],
   },
@@ -56,7 +54,6 @@ export const BENNES: Benne[] = [
     charge: 8,
     equivalence: "Le contenu d'une salle de bain et d'une cuisine entièrement déposées.",
     acces: 'Une place de stationnement (3,5 m) et 4 m de hauteur libre.',
-    priceFrom: 290,
     usages: ['Rénovation', 'Démolition partielle', 'Terrassement'],
     dechets: ['Gravats', 'Béton', 'Terre', 'Tuiles et carrelage'],
     featured: true,
@@ -74,7 +71,6 @@ export const BENNES: Benne[] = [
     charge: 5,
     equivalence: "Le débarras complet d'un T3 (meubles + cartons).",
     acces: 'Une place de stationnement (4 m) et 4 m de hauteur libre.',
-    priceFrom: 320,
     usages: ['Déménagement', 'Vide-maison', 'Débarras de cave ou grenier'],
     dechets: ['Encombrants', 'Bois', 'Mobilier', 'Cartons'],
     featured: true,
@@ -91,7 +87,6 @@ export const BENNES: Benne[] = [
     charge: 6,
     equivalence: "La rénovation intérieure d'une maison de 100 m².",
     acces: 'Un accès camion de 6 m de long minimum, sol stabilisé.',
-    priceFrom: 390,
     usages: ['Rénovation complète', 'Chantier artisan', 'Extension'],
     dechets: ['Déchets en mélange', 'Plâtre et placo', 'Bois', 'Isolants'],
     featured: true,
@@ -108,7 +103,6 @@ export const BENNES: Benne[] = [
     charge: 8,
     equivalence: "Le vide-maison complet d'un pavillon avec dépendances.",
     acces: 'Un accès camion de 8 m et une zone de dépose dégagée.',
-    priceFrom: 450,
     usages: ['Gros œuvre', 'Vide-maison total', 'Chantier professionnel'],
     dechets: ['Déchets industriels banals', 'Bois', 'Ferraille', 'Encombrants'],
   },
@@ -124,7 +118,6 @@ export const BENNES: Benne[] = [
     charge: 9,
     equivalence: "Une opération de curage de local commercial ou de bâtiment tertiaire.",
     acces: 'Un accès poids lourd complet et une aire de manœuvre.',
-    priceFrom: 520,
     usages: ['Industrie', 'Curage de local', 'Événementiel', 'Collectivité'],
     dechets: ['Cartons', 'Plastiques', 'Déchets verts', 'Mobilier'],
   },
