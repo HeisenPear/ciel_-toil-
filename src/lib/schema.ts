@@ -18,6 +18,38 @@ export const ID = {
 
 const sameAs = [SOCIAL.googleBusiness, SOCIAL.facebook, SOCIAL.linkedin].filter(Boolean);
 
+/**
+ * Sujets sur lesquels l'entreprise fait autorité.
+ *
+ * Utile aux moteurs génératifs : c'est ce qui permet de rattacher l'entité à une
+ * question (« qui loue des bennes à Tours ? ») plutôt qu'à une simple chaîne de
+ * caractères. À garder aligné avec le contenu réellement publié sur le site.
+ */
+const EXPERTISES = [
+  'Location de benne à déchets',
+  'Évacuation de gravats et de déchets inertes',
+  'Débarras et vide-maison',
+  'Tri et valorisation des déchets de chantier',
+  'Autorisation de voirie pour dépose de benne',
+  'Obligation de tri 7 flux sur les chantiers du bâtiment',
+];
+
+/** Le téléphone est le canal principal du site : il est déclaré comme tel. */
+const contactPoint = {
+  '@type': 'ContactPoint',
+  contactType: 'customer service',
+  telephone: CONTACT.phoneE164,
+  ...(CONTACT.email ? { email: CONTACT.email } : {}),
+  availableLanguage: ['fr'],
+  areaServed: 'FR-37',
+  hoursAvailable: CONTACT.openingHours.map((h) => ({
+    '@type': 'OpeningHoursSpecification',
+    dayOfWeek: h.days,
+    opens: h.opens,
+    closes: h.closes,
+  })),
+};
+
 export function organizationSchema() {
   return {
     '@type': 'Organization',
@@ -25,9 +57,10 @@ export function organizationSchema() {
     name: SITE.name,
     legalName: SITE.legalName,
     url: SITE.url,
-    email: CONTACT.email,
     telephone: CONTACT.phoneE164,
-    foundingDate: String(SITE.foundingYear),
+    ...(CONTACT.email ? { email: CONTACT.email } : {}),
+    knowsAbout: EXPERTISES,
+    contactPoint,
     logo: {
       '@type': 'ImageObject',
       url: `${SITE.url}/logo.svg`,
@@ -61,12 +94,18 @@ export function localBusinessSchema(areaServed: string[]) {
     image: `${SITE.url}/og/og-default.jpg`,
     url: SITE.url,
     telephone: CONTACT.phoneE164,
-    email: CONTACT.email,
+    ...(CONTACT.email ? { email: CONTACT.email } : {}),
     priceRange: '€€',
     currenciesAccepted: 'EUR',
     paymentAccepted: 'Carte bancaire, Virement, Espèces',
     description: SITE.description,
+    knowsAbout: EXPERTISES,
+    contactPoint,
     parentOrganization: { '@id': ID.organization },
+    /* Relie la page à la fiche Google Business : les deux se confortent
+       mutuellement dans le pack local. */
+    ...(SOCIAL.googleMaps ? { hasMap: SOCIAL.googleMaps } : {}),
+    ...(sameAs.length ? { sameAs } : {}),
     address: {
       '@type': 'PostalAddress',
       streetAddress: CONTACT.address.street,
@@ -135,16 +174,16 @@ type ServiceInput = {
   description: string;
   url: string;
   areaServed: string[];
-  /**
-   * Prestations listées dans le catalogue du service.
-   * Volontairement sans `price` : toutes les locations sont établies sur devis,
-   * et publier un prix dans le balisage qu'on n'affiche pas sur la page serait
-   * une incohérence sanctionnée par Google.
-   */
-  offers?: { name: string; description: string; url?: string }[];
 };
 
-export function serviceSchema({ name, description, url, areaServed, offers }: ServiceInput) {
+/**
+ * Le site ne publie plus de catalogue de formats : il n'y a donc pas
+ * d'`OfferCatalog`. Un balisage qui listerait des produits absents des pages
+ * serait une incohérence sanctionnée par Google — et le format de benne n'est
+ * de toute façon plus un produit à choisir, mais le résultat d'un échange
+ * téléphonique.
+ */
+export function serviceSchema({ name, description, url, areaServed }: ServiceInput) {
   return {
     '@type': 'Service',
     '@id': `${url}#service`,
@@ -153,28 +192,42 @@ export function serviceSchema({ name, description, url, areaServed, offers }: Se
     serviceType: 'Location de benne à déchets',
     provider: { '@id': ID.localBusiness },
     areaServed: areaServed.map((city) => ({ '@type': 'City', name: city })),
-    ...(offers?.length
-      ? {
-          hasOfferCatalog: {
-            '@type': 'OfferCatalog',
-            name,
-            itemListElement: offers.map((offer) => ({
-              '@type': 'Offer',
-              name: offer.name,
-              description: offer.description,
-              priceCurrency: 'EUR',
-              availability: 'https://schema.org/InStock',
-              /* Devis obligatoire : c'est la valeur schema.org prévue pour ce cas. */
-              priceSpecification: {
-                '@type': 'PriceSpecification',
-                priceCurrency: 'EUR',
-                valueAddedTaxIncluded: true,
-              },
-              ...(offer.url ? { url: offer.url.startsWith('http') ? offer.url : `${SITE.url}${offer.url}` } : {}),
-            })),
-          },
-        }
-      : {}),
+    /* Le devis est le point d'entrée, et il se prend par téléphone. */
+    termsOfService: `${SITE.url}/tarifs`,
+    availableChannel: {
+      '@type': 'ServiceChannel',
+      serviceUrl: `${SITE.url}/contact`,
+      servicePhone: {
+        '@type': 'ContactPoint',
+        telephone: CONTACT.phoneE164,
+        contactType: 'customer service',
+        availableLanguage: ['fr'],
+      },
+    },
+  };
+}
+
+/**
+ * Nœud `WebPage` de la page courante.
+ *
+ * `speakable` désigne le bloc « réponse directe » (`AnswerBox`) : c'est le
+ * paragraphe autoportant que l'on souhaite voir extrait et cité — par les
+ * assistants vocaux comme par les moteurs génératifs.
+ */
+export function webPageSchema(input: { url: string; name: string; description: string }) {
+  return {
+    '@type': 'WebPage',
+    '@id': input.url,
+    url: input.url,
+    name: input.name,
+    description: input.description,
+    inLanguage: 'fr-FR',
+    isPartOf: { '@id': ID.website },
+    about: { '@id': ID.localBusiness },
+    speakable: {
+      '@type': 'SpeakableSpecification',
+      cssSelector: ['[data-answer-block]'],
+    },
   };
 }
 

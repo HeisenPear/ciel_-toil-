@@ -10,7 +10,6 @@ export type Flux = {
   definition: string;
   exemples: string[];
   interdits: string[];
-  bennesConseillees: number[];
   /** Filière de traitement en aval. */
   filiere: string;
   /** Taux de valorisation indicatif. */
@@ -26,7 +25,6 @@ export const FLUX: Flux[] = [
       "pas et ne réagissent pas chimiquement : béton, brique, tuile, carrelage, parpaing, pierre, terre non polluée.",
     exemples: ['Béton et parpaings', 'Briques et tuiles', 'Carrelage et faïence', 'Terre et cailloux', 'Enrobés sans goudron'],
     interdits: ['Plâtre et placo', 'Amiante', 'Bois', 'Plastique', 'Laine de verre'],
-    bennesConseillees: [1, 8],
     filiere: 'Concassage puis réemploi en sous-couche routière ou remblai.',
     valorisation: 'Jusqu’à 95 % valorisés',
   },
@@ -38,7 +36,6 @@ export const FLUX: Flux[] = [
       "bois, plastique, isolants, menuiseries, plâtre, emballages. Le tri est réalisé après collecte en centre agréé.",
     exemples: ['Cloisons et plaques de plâtre', 'Menuiseries et vitrages', 'Isolants', 'Bois de coffrage', 'Emballages de chantier'],
     interdits: ['Amiante', 'Peintures et solvants', 'Batteries', 'Pneus', 'Déchets alimentaires'],
-    bennesConseillees: [10, 15, 20],
     filiere: 'Tri mécanisé et manuel en centre agréé, puis orientation par matière.',
     valorisation: '60 à 75 % valorisés',
   },
@@ -51,7 +48,6 @@ export const FLUX: Flux[] = [
       "et du vide-maison.",
     exemples: ['Meubles démontés ou non', 'Matelas et sommiers', 'Moquettes et tapis', 'Textiles', 'Objets divers'],
     interdits: ['Électroménager (filière DEEE)', 'Écrans et informatique', 'Produits chimiques', 'Bouteilles de gaz'],
-    bennesConseillees: [10, 20, 30],
     filiere: 'Démantèlement, valorisation matière et valorisation énergétique du refus.',
     valorisation: '55 à 70 % valorisés',
   },
@@ -63,7 +59,6 @@ export const FLUX: Flux[] = [
       "charpente, mobilier en panneaux, cagettes. Il est broyé puis valorisé en panneaux ou en énergie.",
     exemples: ['Palettes', 'Charpente et coffrage', 'Panneaux et mélaminé', 'Portes et volets bois', 'Cagettes'],
     interdits: ['Traverses de chemin de fer', 'Bois traité en autoclave classe 4', 'Bois peint au plomb'],
-    bennesConseillees: [15, 20, 30],
     filiere: 'Broyage puis panneaux de particules ou combustible biomasse.',
     valorisation: 'Jusqu’à 90 % valorisés',
   },
@@ -75,7 +70,6 @@ export const FLUX: Flux[] = [
       "tontes, tailles, branchages, souches, feuilles. Il part directement en plateforme de compostage.",
     exemples: ['Tontes de pelouse', 'Tailles de haies', 'Branchages et élagage', 'Souches', 'Feuilles mortes'],
     interdits: ['Terre et cailloux', 'Sacs plastique', 'Pots en plastique', 'Bâches'],
-    bennesConseillees: [8, 10, 20, 30],
     filiere: 'Compostage en plateforme agréée d’Indre-et-Loire.',
     valorisation: '100 % valorisés',
   },
@@ -87,7 +81,6 @@ export const FLUX: Flux[] = [
       "Leur valeur de reprise peut réduire le coût global de votre location.",
     exemples: ['Poutrelles et fers à béton', 'Tôles et gouttières', 'Radiateurs en fonte', 'Câbles', 'Structures métalliques'],
     interdits: ['Bouteilles de gaz', 'Fûts non vidés', 'Véhicules hors d’usage', 'Déchets amiantés'],
-    bennesConseillees: [8, 15, 20],
     filiere: 'Cisaillage et refonte en aciérie.',
     valorisation: '100 % recyclés',
   },
@@ -99,7 +92,6 @@ export const FLUX: Flux[] = [
       "et génère du sulfure d'hydrogène en décharge. Plaques, carreaux et enduits vont dans un flux dédié.",
     exemples: ['Plaques de plâtre (BA13)', 'Carreaux de plâtre', 'Enduits et cloisons sèches', 'Plafonds démontés'],
     interdits: ['Gravats', 'Laine de verre non séparée', 'Bois'],
-    bennesConseillees: [10, 15],
     filiere: 'Recyclage en nouvelles plaques de plâtre.',
     valorisation: 'Jusqu’à 85 % recyclés',
   },
@@ -112,7 +104,6 @@ export const FLUX: Flux[] = [
       "du producteur et exigent un bordereau de suivi.",
     exemples: ['Cartons et papiers', 'Films et plastiques', 'Palettes', 'Chutes de production', 'Mobilier de bureau'],
     interdits: ['Déchets dangereux', 'DASRI (déchets de soins)', 'Déchets amiantés', 'Déchets alimentaires en vrac'],
-    bennesConseillees: [20, 30],
     filiere: 'Tri en centre agréé, valorisation matière puis énergétique.',
     valorisation: '65 à 80 % valorisés',
   },

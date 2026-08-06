@@ -4,7 +4,6 @@ import Hero from '../components/Hero.astro';
 import Section from '../components/Section.astro';
 import AnswerBox from '../components/AnswerBox.astro';
 import UspGrid from '../components/UspGrid.astro';
-import BenneCard from '../components/BenneCard.astro';
 import Steps from '../components/Steps.astro';
 import Faq from '../components/Faq.astro';
 import CommuneLinks from '../components/CommuneLinks.astro';
@@ -14,8 +13,7 @@ import Gallery from '../components/Gallery.astro';
 import CallCard from '../components/CallCard.astro';
 import { hasPhotos } from '../config/photos';
 
-import { SITE } from '../config/site';
-import { BENNES, featuredBennes } from '../data/bennes';
+import { SITE, CONTACT } from '../config/site';
 import { FLUX } from '../data/dechets';
 import { faqByTopic } from '../data/faq';
 import { priorityCommunes, COMMUNES } from '../data/communes';
@@ -52,11 +50,6 @@ const schemas = [
     description: SITE.description,
     url: SITE.url,
     areaServed: COMMUNES.map((c) => c.name),
-    offers: BENNES.map((b) => ({
-      name: b.name,
-      description: b.punchline,
-      url: `/nos-bennes/${b.slug}`,
-    })),
   }),
   howToSchema({
     name: 'Comment louer une benne à Tours',
@@ -76,7 +69,7 @@ const schemas = [
 >
   <Hero
     title="Location de benne à Tours et dans toute l’Indre-et-Loire"
-    lead="Benne Express 37 livre des bennes de 1 à 30 m³ à Tours et dans les 272 communes d’Indre-et-Loire, sous 24 à 48 h, pour les chantiers du bâtiment comme pour les particuliers en déménagement ou en rénovation."
+    lead={`${SITE.name} livre des bennes de 1 à 30 m³ à Tours et dans les 272 communes d’Indre-et-Loire, sous 24 à 48 h, pour les chantiers du bâtiment comme pour les particuliers en déménagement ou en rénovation.`}
   />
 
   <Section tone="white" class="!pb-0 !pt-14">
@@ -90,13 +83,14 @@ const schemas = [
       ]}
     >
       <p>
-        Pour louer une benne à Tours, choisissez le volume adapté à votre déchet — 8 m³ pour des
-        gravats, 10 m³ pour un déménagement, 15 à 30 m³ pour un chantier — puis appelez-nous en
-        indiquant la commune de livraison. Chez <strong>{SITE.name}</strong>, le tarif est établi
-        <strong>sur devis gratuit</strong> pendant l’appel : il est ferme et tout compris
-        (livraison, location 7 jours, enlèvement, traitement), et la benne est déposée sous
-        <strong>24 à 48 h ouvrées</strong>. Si elle est posée sur la voie publique, nous nous
-        chargeons de l’autorisation de voirie auprès de la mairie.
+        Pour louer une benne à Tours, un appel suffit : vous indiquez la nature des déchets, une
+        quantité approximative et la commune de livraison, et <strong>nous choisissons le format
+        avec vous</strong> — vous n’avez rien à sélectionner dans un catalogue. Chez
+        <strong>{SITE.name}</strong>, le tarif est établi <strong>sur devis gratuit</strong> pendant
+        l’appel : il est ferme et tout compris (livraison, location 7 jours, enlèvement,
+        traitement), et la benne est déposée sous <strong>24 à 48 h ouvrées</strong>. Si elle est
+        posée sur la voie publique, nous nous chargeons de l’autorisation de voirie auprès de la
+        mairie.
       </p>
     </AnswerBox>
   </Section>
@@ -113,19 +107,50 @@ const schemas = [
   <Section
     id="bennes"
     tone="muted"
-    eyebrow="Nos bennes"
-    title="Quelle taille de benne choisir ?"
-    lead="Le bon volume dépend d’abord de la nature du déchet. Les gravats atteignent la charge utile avant le volume ; les encombrants, l’inverse."
+    eyebrow="Dimensionnement"
+    title="Quelle benne ? C’est nous qui la choisissons"
+    lead="Le bon volume dépend d’abord de la nature du déchet : les gravats atteignent la charge utile avant le volume, les encombrants font l’inverse. Vous n’avez pas à trancher — dites-nous ce que vous jetez, on s’occupe du reste."
   >
-    <div class="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
-      {featuredBennes().map((benne) => <BenneCard benne={benne} />)}
-    </div>
+    <ul class="grid gap-6 md:grid-cols-3">
+      {
+        [
+          {
+            icon: 'hammer' as const,
+            title: 'Des gravats',
+            text: 'Béton, terre, tuiles, carrelage : lourd et dense. On part sur une petite benne, qui tient sur une place de stationnement.',
+          },
+          {
+            icon: 'home' as const,
+            title: 'Un déménagement',
+            text: 'Meubles, matelas, cartons : beaucoup de volume, peu de poids. On vise le volume utile, chargé à votre rythme.',
+          },
+          {
+            icon: 'building' as const,
+            title: 'Une rénovation',
+            text: 'Cloisons, plâtre, isolants, menuiseries : un mélange qui monte vite. On voit large pour éviter la rotation.',
+          },
+        ].map((cas) => (
+          <li class="rounded-card border border-ink-200 bg-white p-6">
+            <span class="flex h-11 w-11 items-center justify-center rounded-xl bg-benne-50 text-benne-700">
+              <Icon name={cas.icon} size={22} />
+            </span>
+            <h3 class="mt-4 text-lg font-bold text-ink-950">{cas.title}</h3>
+            <p class="mt-2 text-sm leading-relaxed text-ink-600">{cas.text}</p>
+          </li>
+        ))
+      }
+    </ul>
 
     <div class="mt-10 flex flex-wrap items-center gap-4">
-      <Button href="/nos-bennes" variant="dark" iconAfter="arrow-right">
-        Voir les 6 formats de bennes
-      </Button>
-      <Button href="/tarifs" variant="ghost">Comment se fixe le prix</Button>
+      <a
+        href={`tel:${CONTACT.phoneE164}`}
+        data-appel="home-dimensionnement"
+        class="inline-flex items-center justify-center gap-2 rounded-full bg-benne-500 px-7 py-3.5 font-semibold text-ink-950 shadow-[0_10px_24px_-12px_rgba(242,164,19,0.9)] transition-all hover:-translate-y-0.5 hover:bg-benne-400"
+      >
+        <Icon name="phone" size={18} />
+        {CONTACT.phone}
+      </a>
+      <Button href="/nos-bennes" variant="ghost">Comment on dimensionne</Button>
     </div>
   </Section>
 
@@ -160,8 +185,8 @@ const schemas = [
         </h3>
         <p class="mt-3 leading-relaxed text-ink-600">
           Pour les artisans, entreprises générales, couvreurs, maçons et syndics d’Indre-et-Loire :
-          bennes 8 à 30 m³, rotations sous 24 h, bordereau de suivi des déchets systématique et
-          facturation mensuelle possible.
+          bennes de tous volumes, rotations sous 24 h, bordereau de suivi des déchets systématique
+          et facturation mensuelle possible.
         </p>
         <ul class="mt-5 space-y-2 text-sm text-ink-700">
           <li class="flex gap-2"><Icon name="check" size={16} class="mt-0.5 text-benne-600" />Rotation le jour même sur l’agglomération</li>
@@ -184,8 +209,8 @@ const schemas = [
         </h3>
         <p class="mt-3 leading-relaxed text-ink-600">
           Déménagement, vide-maison, débarras de cave ou de grenier, rénovation de salle de bain,
-          élagage de jardin : une benne 8 ou 10 m³ déposée devant chez vous, que vous chargez à
-          votre rythme pendant 7 jours.
+          élagage de jardin : une benne déposée devant chez vous, que vous chargez à votre rythme
+          pendant 7 jours.
         </p>
         <ul class="mt-5 space-y-2 text-sm text-ink-700">
           <li class="flex gap-2"><Icon name="check" size={16} class="mt-0.5 text-benne-600" />Sans minimum de commande</li>
@@ -250,7 +275,7 @@ const schemas = [
     tone="muted"
     eyebrow="Zone d’intervention"
     title="Location de benne dans toute l’Indre-et-Loire"
-    lead="Notre dépôt est à Tours. Nous organisons des tournées par secteur, ce qui nous permet de desservir Chinon, Loches, Amboise ou Château-Renault sans surcoût prohibitif."
+    lead="Notre base est à Veigné, aux portes sud de Tours. Nous organisons des tournées par secteur, ce qui nous permet de desservir Chinon, Loches, Amboise ou Château-Renault sans surcoût prohibitif."
   >
     <CommuneLinks communes={priorityCommunes()} />
 

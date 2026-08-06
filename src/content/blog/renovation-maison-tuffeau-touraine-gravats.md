@@ -17,7 +17,7 @@ Le tuffeau, cette pierre calcaire blanche qui donne au Val de Loire son architec
 
 Sa porosité et sa couleur claire donnent une impression de légèreté trompeuse. En pratique, les gravats de tuffeau se situent dans la même gamme de densité que les autres matériaux minéraux : autour de **1,3 à 1,5 tonne par mètre cube** une fois concassés et mélangés au mortier de dépose.
 
-Conséquence directe : sur un chantier de dépose d'enduit ou de reprise de maçonnerie, la [benne 8 m³](/nos-bennes/benne-8m3) atteint sa charge utile de 8 tonnes autour de 5 à 6 m³ réellement chargés. Inutile de viser plus grand : la benne serait refusée au chargement avant d'être pleine.
+Conséquence directe : sur un chantier de dépose d'enduit ou de reprise de maçonnerie, la [benne 8 m³](/nos-bennes) atteint sa charge utile de 8 tonnes autour de 5 à 6 m³ réellement chargés. Inutile de viser plus grand : la benne serait refusée au chargement avant d'être pleine.
 
 ## Ce qui contamine un chargement de tuffeau
 

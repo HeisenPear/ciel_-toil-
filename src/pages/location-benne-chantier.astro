@@ -3,7 +3,6 @@ import BaseLayout from '../layouts/BaseLayout.astro';
 import PageHeader from '../components/PageHeader.astro';
 import Section from '../components/Section.astro';
 import AnswerBox from '../components/AnswerBox.astro';
-import BenneCard from '../components/BenneCard.astro';
 import Steps from '../components/Steps.astro';
 import Faq from '../components/Faq.astro';
 import CallCard from '../components/CallCard.astro';
@@ -11,7 +10,6 @@ import CommuneLinks from '../components/CommuneLinks.astro';
 import Icon from '../components/Icon.astro';
 import Button from '../components/Button.astro';
 
-import { BENNES } from '../data/bennes';
 import { faqByTopic } from '../data/faq';
 import { COMMUNES, priorityCommunes } from '../data/communes';
 import { SITE } from '../config/site';
@@ -19,7 +17,6 @@ import { serviceSchema, faqSchema, howToSchema } from '../lib/schema';
 
 const breadcrumbs = [{ name: 'Location de benne pour chantier', url: '/location-benne-chantier' }];
 const faq = faqByTopic('chantier');
-const bennesChantier = BENNES.filter((b) => b.volume >= 8);
 
 const metiers = [
   {
@@ -84,11 +81,6 @@ const schemas = [
       'Location de bennes 8 à 30 m³ pour les professionnels du bâtiment à Tours et en Indre-et-Loire : rotations rapides, tri en centre agréé et bordereau de suivi des déchets.',
     url: `${SITE.url}/location-benne-chantier`,
     areaServed: COMMUNES.map((c) => c.name),
-    offers: bennesChantier.map((b) => ({
-      name: b.name,
-      description: b.punchline,
-      url: `/nos-bennes/${b.slug}`,
-    })),
   }),
   howToSchema({
     name: 'Organiser l’évacuation des déchets d’un chantier en Indre-et-Loire',
@@ -165,12 +157,37 @@ const schemas = [
 
   <Section
     tone="muted"
-    eyebrow="Formats disponibles"
-    title="Les bennes adaptées aux chantiers"
-    lead="Du 8 m³ à gravats au 30 m³ pour déchets légers volumineux."
+    eyebrow="Dimensionnement"
+    title="Le format se cale au téléphone, pas dans un catalogue"
+    lead="Vous connaissez votre chantier mieux qu’un tableau comparatif. Décrivez-le : on sort le format et le prix dans la foulée."
   >
-    <div class="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
-      {bennesChantier.map((benne) => <BenneCard benne={benne} />)}
+    <div class="grid items-center gap-8 rounded-card border border-ink-200 bg-white p-8 lg:grid-cols-2 lg:p-10">
+      <div>
+        <p class="leading-relaxed text-ink-700">
+          Sur un chantier, le bon format dépend de la densité du flux, du rythme d’avancement et de
+          la place disponible sur l’emprise. Un même pavillon en rénovation demande une petite benne
+          à gravats en phase de dépose, puis un grand volume en mélange à la finition. Nous calons ce
+          séquencement avec vous plutôt que de vous faire choisir une ligne dans une grille.
+        </p>
+        <ul class="mt-6 space-y-2.5 text-sm text-ink-700">
+          <li class="flex gap-2">
+            <Icon name="check" size={16} class="mt-0.5 shrink-0 text-benne-600" />
+            Conseil sur le flux à isoler pour faire baisser le coût de traitement
+          </li>
+          <li class="flex gap-2">
+            <Icon name="check" size={16} class="mt-0.5 shrink-0 text-benne-600" />
+            Rotation programmée à l’avance sur les chantiers longs
+          </li>
+          <li class="flex gap-2">
+            <Icon name="check" size={16} class="mt-0.5 shrink-0 text-benne-600" />
+            Vérification de l’accès poids lourd et de la portance du sol
+          </li>
+        </ul>
+      </div>
+      <CallCard
+        title="Un chantier à évacuer ?"
+        text="Donnez-nous la nature des déchets, le rythme et l’adresse : on cale le format, la rotation et le prix en un appel."
+      />
     </div>
   </Section>
 

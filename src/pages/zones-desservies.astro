@@ -31,7 +31,7 @@ const schemas = [
   serviceSchema({
     name: 'Zone d’intervention — location de bennes en Indre-et-Loire',
     description:
-      'Livraison de bennes dans les 272 communes d’Indre-et-Loire depuis notre dépôt de Tours, avec des délais de 24 à 72 h selon le secteur.',
+      'Livraison de bennes dans les 272 communes d’Indre-et-Loire depuis notre base de Veigné, aux portes sud de Tours, avec des délais de 24 à 72 h selon le secteur.',
     url: `${SITE.url}/zones-desservies`,
     areaServed: COMMUNES.map((c) => c.name),
   }),
@@ -52,7 +52,7 @@ const schemas = [
 
 <BaseLayout
   title="Zones desservies — location de benne en Indre-et-Loire (37)"
-  description="Nous livrons des bennes dans les 272 communes d'Indre-et-Loire depuis Tours : agglomération, Val de Loire, Nord et Sud Touraine. Délais par secteur."
+  description="Nous livrons des bennes dans les 272 communes d'Indre-et-Loire depuis Veigné, au sud de Tours : agglomération, Val de Loire, Nord et Sud Touraine. Délais par secteur."
   path="/zones-desservies"
   breadcrumbs={breadcrumbs}
   schemas={schemas}
@@ -61,7 +61,7 @@ const schemas = [
     breadcrumbs={breadcrumbs}
     eyebrow="Indre-et-Loire (37)"
     title="Location de benne dans toute l’Indre-et-Loire"
-    lead="Notre dépôt est à Tours. Nous organisons des tournées par secteur pour desservir l’ensemble du département, de Château-Renault à Descartes et de Bléré à Bourgueil."
+    lead="Notre base est à Veigné, aux portes sud de Tours. Nous organisons des tournées par secteur pour desservir l’ensemble du département, de Château-Renault à Descartes et de Bléré à Bourgueil."
     stats={[
       { label: 'Communes', value: '272' },
       { label: 'Secteurs', value: '5' },
@@ -81,7 +81,7 @@ const schemas = [
     >
       <p>
         Nous livrons des bennes dans les <strong>272 communes d’Indre-et-Loire</strong>,
-        depuis notre dépôt de Tours. Sur l’agglomération — Tours, Joué-lès-Tours,
+        depuis notre base de Veigné, aux portes sud de Tours. Sur l’agglomération — Tours, Joué-lès-Tours,
         Saint-Cyr-sur-Loire, Saint-Pierre-des-Corps, Chambray-lès-Tours, Saint-Avertin —
         la livraison intervient sous <strong>24 à 48 h ouvrées</strong> et le tarif est
         identique partout. Sur le reste du département, les livraisons sont regroupées en

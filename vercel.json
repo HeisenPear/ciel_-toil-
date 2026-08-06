@@ -47,6 +47,7 @@
   "redirects": [
     { "source": "/sitemap.xml", "destination": "/sitemap-index.xml", "permanent": true },
     { "source": "/bennes", "destination": "/nos-bennes", "permanent": true },
+    { "source": "/nos-bennes/:slug", "destination": "/nos-bennes", "permanent": true },
     { "source": "/tarif", "destination": "/tarifs", "permanent": true },
     { "source": "/devis", "destination": "/contact", "permanent": true }
   ]

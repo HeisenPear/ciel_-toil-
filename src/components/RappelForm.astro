@@ -1,0 +1,102 @@
+---
+/**
+ * Demande de rappel — porte de sortie pour qui ne peut pas appeler
+ * (chantier bruyant, réunion, demande hors horaires).
+ *
+ * Volontairement réduit à trois champs : chaque champ supplémentaire coûte
+ * des demandes abandonnées, et tout ce qui manque se demande de vive voix
+ * au moment du rappel. Le devis, lui, se fait au téléphone.
+ */
+import { CONTACT, FORM, SITE } from '../config/site';
+import { COMMUNES } from '../data/communes';
+import Icon from './Icon.astro';
+
+/* Sans endpoint configuré, on retombe sur un mailto : le formulaire reste
+   fonctionnel dès la mise en ligne, même avant le branchement du service. */
+const usesMailto = FORM.endpoint === '';
+const action = usesMailto ? `mailto:${CONTACT.email}` : FORM.endpoint;
+const method = usesMailto ? 'post' : 'POST';
+const enctype = usesMailto ? 'text/plain' : undefined;
+
+const field =
+  'mt-1.5 w-full rounded-lg border border-ink-200 bg-white px-3.5 py-2.5 text-ink-900 shadow-sm transition-colors placeholder:text-ink-400 focus:border-benne-500 focus:outline-none focus:ring-2 focus:ring-benne-200';
+const label = 'block text-sm font-semibold text-ink-800';
+---
+
+<form action={action} method={method} enctype={enctype} class="grid gap-5 sm:grid-cols-2">
+  {!usesMailto && <input type="hidden" name="_subject" value={`Demande de rappel — ${SITE.name}`} />}
+  {!usesMailto && <input type="hidden" name="_redirect" value={FORM.redirect} />}
+  {!usesMailto && <input type="hidden" name="_next" value={`${SITE.url}${FORM.redirect}`} />}
+
+  <!-- Pot de miel anti-spam : invisible et ignoré des lecteurs d'écran -->
+  <div class="hidden" aria-hidden="true">
+    <label for="societe-web">Ne pas remplir</label>
+    <input type="text" id="societe-web" name="_gotcha" tabindex="-1" autocomplete="off" />
+  </div>
+
+  <div>
+    <label class={label} for="nom">Votre nom <span class="text-benne-700">*</span></label>
+    <input
+      class={field}
+      type="text"
+      id="nom"
+      name="nom"
+      required
+      autocomplete="name"
+      placeholder="Marie Dupont"
+    />
+  </div>
+
+  <div>
+    <label class={label} for="telephone">Téléphone <span class="text-benne-700">*</span></label>
+    <input
+      class={field}
+      type="tel"
+      id="telephone"
+      name="telephone"
+      required
+      autocomplete="tel"
+      inputmode="tel"
+      placeholder="06 12 34 56 78"
+    />
+  </div>
+
+  <div class="sm:col-span-2">
+    <label class={label} for="commune">Commune de livraison <span class="text-benne-700">*</span></label>
+    <input
+      class={field}
+      type="text"
+      id="commune"
+      name="commune"
+      required
+      list="communes-37"
+      placeholder="Tours"
+      autocomplete="address-level2"
+    />
+    <datalist id="communes-37">
+      {COMMUNES.map((commune) => <option value={commune.name}>{commune.cp}</option>)}
+    </datalist>
+  </div>
+
+  <div class="flex flex-col gap-3 sm:col-span-2 sm:flex-row sm:items-center">
+    <button
+      type="submit"
+      class="inline-flex items-center justify-center gap-2 rounded-full bg-ink-950 px-7 py-3.5 font-semibold text-white transition-all hover:-translate-y-0.5 hover:bg-ink-800"
+    >
+      Être rappelé
+      <Icon name="arrow-right" size={18} />
+    </button>
+    <p class="flex items-center gap-2 text-sm text-ink-500">
+      <Icon name="clock" size={16} class="text-benne-600" />
+      Rappel dans la journée ouvrée
+    </p>
+  </div>
+
+  <p class="text-xs leading-relaxed text-ink-500 sm:col-span-2">
+    Ces informations servent uniquement à vous rappeler. Elles ne sont ni revendues ni transmises à
+    des tiers.{' '}
+    <a href="/politique-de-confidentialite" class="underline decoration-benne-400 underline-offset-2"
+      >Politique de confidentialité</a
+    >.
+  </p>
+</form>

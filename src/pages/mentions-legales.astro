@@ -19,31 +19,33 @@ const breadcrumbs = [{ name: 'Mentions légales', url: '/mentions-legales' }];
 
   <Section tone="white">
     <div class="prose-fr mx-auto">
-      <p>
-        <strong>À compléter avant la mise en ligne.</strong> Les informations ci-dessous sont des
-        emplacements réservés : elles doivent être remplacées par les données réelles de
-        l’entreprise (voir <code>src/config/site.ts</code>).
-      </p>
-
       <h2>Éditeur du site</h2>
       <p>
-        {SITE.legalName}<br />
+        {SITE.legalName}, entrepreneur individuel<br />
         {CONTACT.address.street}<br />
         {CONTACT.address.postalCode} {CONTACT.address.city}<br />
-        Téléphone : {CONTACT.phone}<br />
-        E-mail : {CONTACT.email}
+        Téléphone : {CONTACT.phone}
+        {CONTACT.email && (<><br />E-mail : {CONTACT.email}</>)}
       </p>
       <p>
         SIRET : {CONTACT.siret}<br />
-        Numéro de TVA intracommunautaire : {CONTACT.tva}<br />
-        Récépissé de déclaration de transport de déchets : {CONTACT.recepisseDechets}
+        {
+          CONTACT.tva
+            ? `Numéro de TVA intracommunautaire : ${CONTACT.tva}`
+            : 'TVA non applicable, article 293 B du Code général des impôts'
+        }
+        {
+          CONTACT.recepisseDechets && (
+            <><br />Récépissé de déclaration de transport de déchets : {CONTACT.recepisseDechets}</>
+          )
+        }
       </p>
-      <p>Directeur de la publication : à compléter.</p>
+      <p>Directeur de la publication : {SITE.legalName}.</p>
 
       <h2>Hébergement</h2>
       <p>
-        Nom de l’hébergeur, adresse et téléphone à compléter selon la plateforme retenue
-        (par exemple Vercel Inc., 440 N Barranca Ave #4133, Covina, CA 91723, États-Unis).
+        Vercel Inc., 440 N Barranca Ave #4133, Covina, CA 91723, États-Unis —
+        <a href="https://vercel.com">vercel.com</a>.
       </p>
 
       <h2>Propriété intellectuelle</h2>
@@ -56,11 +58,10 @@ const breadcrumbs = [{ name: 'Mentions légales', url: '/mentions-legales' }];
 
       <h2>Responsabilité</h2>
       <p>
-        Les informations publiées sur ce site sont fournies à titre indicatif. Les tarifs affichés
-        sont des prix d’appel susceptibles d’évoluer et ne constituent pas une offre contractuelle :
-        seul le devis nominatif accepté par le client fait foi. Les dimensions, charges utiles et
-        délais mentionnés sont donnés à titre d’ordre de grandeur et peuvent varier selon les
-        conditions d’exploitation.
+        Les informations publiées sur ce site sont fournies à titre indicatif. Aucun prix n’y est
+        affiché : chaque location fait l’objet d’un devis gratuit établi par téléphone, et seul le
+        devis nominatif accepté par le client fait foi. Les volumes et délais mentionnés sont
+        donnés à titre d’ordre de grandeur et peuvent varier selon les conditions d’exploitation.
       </p>
       <p>
         {SITE.legalName} ne saurait être tenue responsable des dommages résultant d’une mauvaise

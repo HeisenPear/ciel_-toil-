@@ -1,6 +1,5 @@
 ---
 import { SITE, CONTACT } from '../config/site';
-import { BENNES } from '../data/bennes';
 import { priorityCommunes, COMMUNES } from '../data/communes';
 import Icon from './Icon.astro';
 import Logo from './Logo.astro';
@@ -42,18 +41,22 @@ const villesFooter = [
             <Icon name="phone" size={18} class="text-benne-400" />
             {CONTACT.phone}
           </a>
-          <a
-            href={`mailto:${CONTACT.email}`}
-            class="flex items-center gap-2.5 text-ink-300 hover:text-white"
-          >
-            <Icon name="mail" size={18} class="text-benne-400" />
-            {CONTACT.email}
-          </a>
+          {
+            CONTACT.email && (
+              <a
+                href={`mailto:${CONTACT.email}`}
+                class="flex items-center gap-2.5 text-ink-300 hover:text-white"
+              >
+                <Icon name="mail" size={18} class="text-benne-400" />
+                {CONTACT.email}
+              </a>
+            )
+          }
           <p class="flex items-start gap-2.5 text-ink-300">
             <Icon name="pin" size={18} class="mt-0.5 shrink-0 text-benne-400" />
             <span>
-              {CONTACT.address.street}<br />
-              {`${CONTACT.address.postalCode} ${CONTACT.address.city}`}
+              Base à {CONTACT.address.city} ({CONTACT.address.postalCode})<br />
+              Livraison dans tout l’Indre-et-Loire
             </span>
           </p>
         </address>
@@ -70,22 +73,27 @@ const villesFooter = [
         </dl>
       </div>
 
-      <nav class="lg:col-span-2" aria-labelledby="footer-bennes">
-        <h2 id="footer-bennes" class="text-sm font-semibold uppercase tracking-wider text-white">
-          Nos bennes
-        </h2>
-        <ul class="mt-4 space-y-2.5 text-sm">
-          {
-            BENNES.map((benne) => (
-              <li>
-                <a href={`/nos-bennes/${benne.slug}`} class="text-ink-300 hover:text-benne-300">
-                  {benne.name}
-                </a>
-              </li>
-            ))
-          }
-        </ul>
-      </nav>
+      <div class="lg:col-span-2">
+        <h2 class="text-sm font-semibold uppercase tracking-wider text-white">Le plus rapide</h2>
+        <a
+          href={`tel:${CONTACT.phoneE164}`}
+          data-appel="footer"
+          class="mt-4 flex items-center gap-2.5 font-display text-xl font-bold text-benne-400 hover:text-benne-300"
+        >
+          <Icon name="phone" size={20} />
+          {CONTACT.phone}
+        </a>
+        <p class="mt-3 text-sm leading-relaxed text-ink-400">
+          Un appel de deux minutes suffit : on dimensionne la benne et on annonce le prix, tout
+          compris.
+        </p>
+        <a
+          href="/nos-bennes"
+          class="mt-4 inline-flex items-center gap-1.5 text-sm font-semibold text-ink-300 hover:text-benne-300"
+        >
+          Quelle benne choisir ?
+        </a>
+      </div>
 
       <nav class="lg:col-span-3" aria-labelledby="footer-services">
         <h2 id="footer-services" class="text-sm font-semibold uppercase tracking-wider text-white">

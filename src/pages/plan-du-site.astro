@@ -5,7 +5,6 @@ import PageHeader from '../components/PageHeader.astro';
 import Section from '../components/Section.astro';
 import Icon from '../components/Icon.astro';
 
-import { BENNES } from '../data/bennes';
 import { communesByZone } from '../data/communes';
 
 const breadcrumbs = [{ name: 'Plan du site', url: '/plan-du-site' }];
@@ -16,7 +15,7 @@ const groupes = communesByZone();
 
 const principales = [
   { label: 'Accueil', href: '/' },
-  { label: 'Nos bennes', href: '/nos-bennes' },
+  { label: 'Quelle benne choisir', href: '/nos-bennes' },
   { label: 'Location de benne pour chantier', href: '/location-benne-chantier' },
   { label: 'Location de benne pour déménagement', href: '/location-benne-demenagement' },
   { label: 'Tarifs', href: '/tarifs' },
@@ -32,7 +31,7 @@ const link = 'text-ink-700 hover:text-benne-700 underline decoration-ink-200 und
 
 <BaseLayout
   title="Plan du site"
-  description="Toutes les pages du site : formats de bennes, services, tarifs, guide du tri, communes desservies en Indre-et-Loire et articles de blog."
+  description="Toutes les pages du site : services, tarifs, guide du tri, dimensionnement, communes desservies en Indre-et-Loire et articles de blog."
   path="/plan-du-site"
   breadcrumbs={breadcrumbs}
 >
@@ -48,19 +47,6 @@ const link = 'text-ink-700 hover:text-benne-700 underline decoration-ink-200 und
         <h2 id="plan-principales" class="text-lg font-bold text-ink-950">Pages principales</h2>
         <ul class="mt-4 space-y-2.5">
           {principales.map((item) => <li><a href={item.href} class={link}>{item.label}</a></li>)}
-        </ul>
-
-        <h2 class="mt-10 text-lg font-bold text-ink-950">Nos bennes</h2>
-        <ul class="mt-4 space-y-2.5">
-          {
-            BENNES.map((benne) => (
-              <li>
-                <a href={`/nos-bennes/${benne.slug}`} class={link}>
-                  {benne.name}
-                </a>
-              </li>
-            ))
-          }
         </ul>
 
         <h2 class="mt-10 text-lg font-bold text-ink-950">Informations légales</h2>

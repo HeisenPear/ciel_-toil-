@@ -4,7 +4,6 @@ import BaseLayout from '../../layouts/BaseLayout.astro';
 import PageHeader from '../../components/PageHeader.astro';
 import Section from '../../components/Section.astro';
 import AnswerBox from '../../components/AnswerBox.astro';
-import BenneCard from '../../components/BenneCard.astro';
 import CallCard from '../../components/CallCard.astro';
 import Faq from '../../components/Faq.astro';
 import CommuneLinks from '../../components/CommuneLinks.astro';
@@ -12,7 +11,6 @@ import Icon from '../../components/Icon.astro';
 import Button from '../../components/Button.astro';
 
 import { COMMUNES, voisinesDe, type Commune } from '../../data/communes';
-import { BENNES, featuredBennes } from '../../data/bennes';
 import { faqByTopic, type QA } from '../../data/faq';
 import { SITE, CONTACT } from '../../config/site';
 import { serviceSchema, faqSchema } from '../../lib/schema';
@@ -37,6 +35,13 @@ const tarifNote =
       ? `${commune.name} est desservie par nos tournées régulières : la participation au transport reste modérée.`
       : `${commune.name} se situe en limite de nos tournées longue distance. Réservez 3 à 4 jours à l’avance pour caler la dépose sur notre passage dans le secteur.`;
 
+/* Tours est notre repère de distance commun ; la commune de Tours elle-même
+   ne peut évidemment pas être « à 0 km de Tours ». */
+const situation =
+  commune.distance === 0
+    ? 'au cœur de notre zone d’intervention'
+    : `à environ ${commune.distance} km de Tours`;
+
 const voisines = voisinesDe(commune);
 const url = `${SITE.url}/location-benne/${commune.slug}`;
 const breadcrumbs = [
@@ -51,7 +56,7 @@ const faqLocale: QA[] = [
     q: `Sous quel délai livrez-vous une benne ${commune.prep} ?`,
     a:
       `Une benne est livrée ${commune.prep} sous ${delai} ouvrées pour toute commande validée avant 16 h. ` +
-      `La commune se situe à environ ${commune.distance} km de notre dépôt de Tours et relève du secteur « ${commune.zone} ». ` +
+      `La commune se situe ${situation} et relève du secteur « ${commune.zone} ». ` +
       tarifNote,
     topics: ['local'],
   },
@@ -78,14 +83,9 @@ const faqLocale: QA[] = [
 const schemas = [
   serviceSchema({
     name: `Location de benne ${commune.prep} (${commune.cp})`,
-    description: `Location de bennes de 1 à 30 m³ ${commune.prep}, livrées sous ${delai} depuis notre dépôt de Tours. Chantier, rénovation, déménagement et particuliers.`,
+    description: `Location de bennes de 1 à 30 m³ ${commune.prep}, livrées sous ${delai} depuis notre base de Veigné, au sud de Tours. Chantier, rénovation, déménagement et particuliers.`,
     url,
     areaServed: [commune.name, ...voisines.map((v) => v.name)],
-    offers: featuredBennes().map((b) => ({
-      name: b.name,
-      description: b.punchline,
-      url: `/nos-bennes/${b.slug}`,
-    })),
   }),
   faqSchema(faqLocale),
   {
@@ -116,7 +116,7 @@ const schemas = [
     lead={`Bennes de 1 à 30 m³ livrées ${commune.prep} sous ${delai} ouvrées, pour les chantiers du bâtiment comme pour les particuliers en déménagement ou en rénovation.`}
     stats={[
       { label: 'Délai', value: delai },
-      { label: 'Depuis Tours', value: commune.distance === 0 ? 'Dépôt sur place' : `${commune.distance} km` },
+      { label: 'Depuis Tours', value: commune.distance === 0 ? 'Centre-ville' : `${commune.distance} km` },
       { label: 'Secteur', value: commune.zone },
     ]}
   />
@@ -134,11 +134,12 @@ const schemas = [
           ]}
         >
           <p>
-            Pour louer une benne {commune.prep} ({commune.cp}), indiquez le volume souhaité,
-            la nature des déchets et l’adresse de livraison : nous annonçons un tarif ferme
+            Pour louer une benne {commune.prep} ({commune.cp}), un appel suffit : indiquez la
+            nature des déchets, une quantité approximative et l’adresse de livraison.
+            <strong>Nous choisissons le format avec vous</strong>, annonçons un tarif ferme
             pendant l’appel et déposons la benne sous <strong>{delai}</strong>.
-            {' '}{commune.name} se situe à {commune.distance === 0 ? 'l’emplacement même de notre dépôt' : `environ ${commune.distance} km de notre dépôt de Tours`}
-            {' '}et relève du secteur « {commune.zone} ». {tarifNote}
+            {' '}{commune.name} se situe {situation} et relève du secteur
+            {' '}« {commune.zone} ». {tarifNote}
           </p>
         </AnswerBox>
 
@@ -160,13 +161,15 @@ const schemas = [
           <p>
             Le choix du format dépend d’abord de la densité du déchet. Pour des
             <strong> gravats</strong> issus d’une démolition ou d’une réfection de terrasse,
-            une <a href="/nos-bennes/benne-8m3">benne 8 m³</a> suffit : sa charge utile de
+            une <a href="/nos-bennes">benne 8 m³</a> suffit : sa charge utile de
             8 tonnes est atteinte avant le remplissage. Pour un
             <strong> déménagement ou un débarras</strong>, la
-            <a href="/nos-bennes/benne-10m3">benne 10 m³</a> absorbe le contenu d’un T3
+            <a href="/nos-bennes">benne 10 m³</a> absorbe le contenu d’un T3
             complet. Pour une <strong>rénovation intérieure</strong> avec cloisons,
             menuiseries et isolants, comptez une
-            <a href="/nos-bennes/benne-15m3">benne 15 m³</a>.
+            <a href="/nos-bennes">benne 15 m³</a>. Ces ordres de grandeur sont là pour vous
+            situer : le format définitif, nous le déterminons ensemble au téléphone, une fois
+            connus l’accès et la quantité réelle.
           </p>
 
           <h3>Dépose sur voie publique {commune.prep}</h3>
@@ -226,17 +229,26 @@ const schemas = [
 
   <Section
     tone="muted"
-    eyebrow="Formats disponibles"
-    title={`Les bennes les plus demandées ${commune.prep}`}
+    eyebrow="Dimensionnement"
+    title={`Quelle benne ${commune.prep} ?`}
+    lead="Le format dépend de la nature des déchets et de l’accès à l’adresse. Les deux se règlent en un appel, sans que vous ayez à choisir."
   >
-    <div class="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
-      {featuredBennes().map((benne) => <BenneCard benne={benne} />)}
+    <div class="flex flex-col gap-6 rounded-card border border-ink-200 bg-white p-8 sm:flex-row sm:items-center sm:justify-between lg:p-10">
+      <p class="max-w-2xl leading-relaxed text-ink-700">
+        Nous livrons {commune.prep} des bennes de tous volumes, du petit contenant à gravats au
+        grand volume pour un vide-maison. Dites-nous ce que vous avez à évacuer : nous vérifions
+        l’accès au point de dépose, nous déterminons le format et nous vous annonçons un tarif
+        ferme, tout compris, pendant l’appel.
+      </p>
+      <a
+        href={`tel:${CONTACT.phoneE164}`}
+        data-appel={`commune-${commune.slug}-formats`}
+        class="inline-flex shrink-0 items-center justify-center gap-2 rounded-full bg-ink-950 px-6 py-3.5 font-semibold text-white transition-colors hover:bg-ink-800"
+      >
+        <Icon name="phone" size={18} />
+        {CONTACT.phone}
+      </a>
     </div>
-    <p class="mt-8">
-      <Button href="/nos-bennes" variant="dark" iconAfter="arrow-right">
-        Voir les {BENNES.length} formats de bennes
-      </Button>
-    </p>
   </Section>
 
   {

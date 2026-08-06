@@ -1,18 +1,36 @@
 /**
  * Source de vérité unique du site.
  *
- * ⚠️ À PERSONNALISER AVANT MISE EN LIGNE — les valeurs marquées `TODO`
- * sont des placeholders. Les modifier ici les met à jour partout
- * (pages, données structurées JSON-LD, sitemap, robots.txt, llms.txt).
+ * Les valeurs sont celles de l'entreprise, à l'exception de celles encore
+ * marquées `TODO` (voir `docs/fiche-google-business.md` § 1). Les modifier ici
+ * les met à jour partout : pages, JSON-LD, sitemap, robots.txt, llms.txt,
+ * mentions légales.
+ *
+ * Les champs vides (`''`) sont gérés partout : le site n'affiche jamais un
+ * bloc vide ni un lien mort. Renseigner la valeur suffit à faire réapparaître
+ * l'information.
  */
 
 export const SITE = {
-  /** Nom commercial affiché partout. */
-  name: 'Benne Express 37',
+  /**
+   * Nom affiché partout.
+   *
+   * Entreprise individuelle : le nom de l'exploitant est le nom de
+   * l'entreprise. C'est aussi celui qui devra figurer sur la fiche Google —
+   * y ajouter un mot-clé ou une ville est un motif de suspension.
+   */
+  name: 'Rudy Capello',
   /** Raison sociale utilisée dans les mentions légales et le JSON-LD. */
-  legalName: 'Benne Express 37 SARL', // TODO
-  /** URL canonique de production, sans slash final. */
-  url: 'https://www.benne-express-37.fr', // TODO
+  legalName: 'Rudy Capello',
+  /**
+   * URL canonique de production, sans slash final.
+   *
+   * Pointe aujourd'hui sur le domaine Vercel du projet `location-benne`, seul
+   * domaine réellement servi. À remplacer par le nom de domaine définitif le
+   * jour où il est branché — un canonical vers un domaine qui ne résout pas
+   * empêche toute indexation.
+   */
+  url: 'https://location-benne-xi.vercel.app', // TODO — domaine définitif
   /** Baseline courte (≤ 70 caractères), reprise dans les title de secours. */
   tagline: 'Location de bennes à Tours et en Indre-et-Loire',
   description:
@@ -22,25 +40,33 @@ export const SITE = {
   locale: 'fr_FR',
   lang: 'fr',
   themeColor: '#F2A413',
-  /** Année de création, utilisée pour l'ancienneté et le JSON-LD. */
-  foundingYear: 2015, // TODO
 } as const;
 
 export const CONTACT = {
-  phone: '02 47 00 00 00', // TODO
-  phoneE164: '+33247000000', // TODO
-  mobile: '06 00 00 00 00', // TODO
-  mobileE164: '+33600000000', // TODO
-  email: 'contact@benne-express-37.fr', // TODO
+  phone: '06 31 46 43 50',
+  phoneE164: '+33631464350',
+  /**
+   * Vide tant qu'aucune adresse professionnelle n'existe : le domaine n'est pas
+   * déposé, donc aucune boîte ne relèverait le courrier. Un `mailto:` mort
+   * coûte plus qu'il ne rapporte — les blocs e-mail disparaissent d'eux-mêmes.
+   */
+  email: '', // TODO — dès qu'une adresse professionnelle existe
+  /**
+   * Siège de l'entreprise individuelle. Publié uniquement là où la loi
+   * l'impose (mentions légales) et dans le JSON-LD, jamais mis en avant comme
+   * une adresse d'accueil : les clients ne s'y déplacent pas, c'est la benne
+   * qui vient. La fiche Google doit être créée en « zone de service », adresse
+   * masquée.
+   */
   address: {
-    street: '1 rue de la Benne', // TODO
-    postalCode: '37000', // TODO
-    city: 'Tours',
+    street: '90 rue de la Bichotière',
+    postalCode: '37250',
+    city: 'Veigné',
     region: 'Centre-Val de Loire',
     country: 'FR',
   },
-  /** Coordonnées du dépôt — utilisées par le JSON-LD LocalBusiness. */
-  geo: { lat: 47.394144, lng: 0.68484 }, // TODO (centre de Tours par défaut)
+  /** Coordonnées du siège — utilisées par le JSON-LD LocalBusiness. */
+  geo: { lat: 47.2836, lng: 0.7161 }, // Veigné (bourg) — à affiner sur le point exact de la fiche Google
   /** Horaires au format `schema.org` openingHours. */
   openingHours: [
     { days: ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday'], opens: '07:30', closes: '18:00' },
@@ -51,10 +77,17 @@ export const CONTACT = {
     { label: 'Samedi', value: '8 h 00 – 12 h 00' },
     { label: 'Dimanche', value: 'Fermé' },
   ],
-  siret: '000 000 000 00000', // TODO
-  tva: 'FR00000000000', // TODO
-  /** Récépissé de déclaration de transport de déchets (obligatoire). */
-  recepisseDechets: 'N° 2015-37-XXXX', // TODO
+  siret: '510 816 473 00019',
+  /**
+   * Vide tant que le régime de TVA n'est pas connu. Une entreprise en
+   * franchise en base n'a pas de numéro à publier, mais doit porter la mention
+   * « TVA non applicable, article 293 B du CGI » — c'est ce qu'affichent les
+   * mentions légales tant que ce champ reste vide. Si l'entreprise est
+   * assujettie, le numéro est FR 72 510 816 473.
+   */
+  tva: '', // TODO — selon le régime de TVA
+  /** Récépissé de déclaration de transport de déchets (obligatoire pour la collecte). */
+  recepisseDechets: '', // TODO — numéro délivré par la préfecture d'Indre-et-Loire
 } as const;
 
 /**
@@ -71,8 +104,21 @@ export const FORM = {
   redirect: '/merci',
 } as const;
 
+/**
+ * Profils externes.
+ *
+ * `googleBusiness` et `googleMaps` alimentent le JSON-LD (`sameAs` et `hasMap`) :
+ * ce sont les deux liens qui relient le site à la fiche Google Business Profile,
+ * condition d'un référencement local solide. Voir `docs/fiche-google-business.md`
+ * pour la procédure de création de la fiche et l'endroit où récupérer ces URL.
+ */
 export const SOCIAL = {
-  googleBusiness: '', // TODO — URL de la fiche établissement Google
+  /** URL courte de la fiche (Google Business Profile → « Partager le profil »). */
+  googleBusiness: '', // TODO — ex. https://g.co/kgs/xxxxxxx
+  /** Lien Google Maps de l'établissement (partage → copier le lien). */
+  googleMaps: '', // TODO — ex. https://maps.app.goo.gl/xxxxxxx
+  /** Lien direct « laisser un avis », à envoyer aux clients par SMS. */
+  googleReview: '', // TODO — ex. https://g.page/r/xxxxxxxxxxxx/review
   facebook: '', // TODO
   linkedin: '', // TODO
 } as const;
@@ -105,7 +151,7 @@ export type NavItem = { label: string; href: string; children?: NavItem[] };
 
 export const NAV: NavItem[] = [
   {
-    label: 'Nos bennes',
+    label: 'Quelle benne ?',
     href: '/nos-bennes',
   },
   {
