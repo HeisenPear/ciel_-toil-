@@ -39,7 +39,7 @@ const contactPoint = {
   '@type': 'ContactPoint',
   contactType: 'customer service',
   telephone: CONTACT.phoneE164,
-  email: CONTACT.email,
+  ...(CONTACT.email ? { email: CONTACT.email } : {}),
   availableLanguage: ['fr'],
   areaServed: 'FR-37',
   hoursAvailable: CONTACT.openingHours.map((h) => ({
@@ -57,9 +57,8 @@ export function organizationSchema() {
     name: SITE.name,
     legalName: SITE.legalName,
     url: SITE.url,
-    email: CONTACT.email,
     telephone: CONTACT.phoneE164,
-    foundingDate: String(SITE.foundingYear),
+    ...(CONTACT.email ? { email: CONTACT.email } : {}),
     knowsAbout: EXPERTISES,
     contactPoint,
     logo: {
@@ -95,7 +94,7 @@ export function localBusinessSchema(areaServed: string[]) {
     image: `${SITE.url}/og/og-default.jpg`,
     url: SITE.url,
     telephone: CONTACT.phoneE164,
-    email: CONTACT.email,
+    ...(CONTACT.email ? { email: CONTACT.email } : {}),
     priceRange: '€€',
     currenciesAccepted: 'EUR',
     paymentAccepted: 'Carte bancaire, Virement, Espèces',

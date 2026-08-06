@@ -35,6 +35,13 @@ const tarifNote =
       ? `${commune.name} est desservie par nos tournées régulières : la participation au transport reste modérée.`
       : `${commune.name} se situe en limite de nos tournées longue distance. Réservez 3 à 4 jours à l’avance pour caler la dépose sur notre passage dans le secteur.`;
 
+/* Tours est notre repère de distance commun ; la commune de Tours elle-même
+   ne peut évidemment pas être « à 0 km de Tours ». */
+const situation =
+  commune.distance === 0
+    ? 'au cœur de notre zone d’intervention'
+    : `à environ ${commune.distance} km de Tours`;
+
 const voisines = voisinesDe(commune);
 const url = `${SITE.url}/location-benne/${commune.slug}`;
 const breadcrumbs = [
@@ -49,7 +56,7 @@ const faqLocale: QA[] = [
     q: `Sous quel délai livrez-vous une benne ${commune.prep} ?`,
     a:
       `Une benne est livrée ${commune.prep} sous ${delai} ouvrées pour toute commande validée avant 16 h. ` +
-      `La commune se situe à environ ${commune.distance} km de notre dépôt de Tours et relève du secteur « ${commune.zone} ». ` +
+      `La commune se situe ${situation} et relève du secteur « ${commune.zone} ». ` +
       tarifNote,
     topics: ['local'],
   },
@@ -76,7 +83,7 @@ const faqLocale: QA[] = [
 const schemas = [
   serviceSchema({
     name: `Location de benne ${commune.prep} (${commune.cp})`,
-    description: `Location de bennes de 1 à 30 m³ ${commune.prep}, livrées sous ${delai} depuis notre dépôt de Tours. Chantier, rénovation, déménagement et particuliers.`,
+    description: `Location de bennes de 1 à 30 m³ ${commune.prep}, livrées sous ${delai} depuis notre base de Veigné, au sud de Tours. Chantier, rénovation, déménagement et particuliers.`,
     url,
     areaServed: [commune.name, ...voisines.map((v) => v.name)],
   }),
@@ -109,7 +116,7 @@ const schemas = [
     lead={`Bennes de 1 à 30 m³ livrées ${commune.prep} sous ${delai} ouvrées, pour les chantiers du bâtiment comme pour les particuliers en déménagement ou en rénovation.`}
     stats={[
       { label: 'Délai', value: delai },
-      { label: 'Depuis Tours', value: commune.distance === 0 ? 'Dépôt sur place' : `${commune.distance} km` },
+      { label: 'Depuis Tours', value: commune.distance === 0 ? 'Centre-ville' : `${commune.distance} km` },
       { label: 'Secteur', value: commune.zone },
     ]}
   />
@@ -131,8 +138,8 @@ const schemas = [
             nature des déchets, une quantité approximative et l’adresse de livraison.
             <strong>Nous choisissons le format avec vous</strong>, annonçons un tarif ferme
             pendant l’appel et déposons la benne sous <strong>{delai}</strong>.
-            {' '}{commune.name} se situe à {commune.distance === 0 ? 'l’emplacement même de notre dépôt' : `environ ${commune.distance} km de notre dépôt de Tours`}
-            {' '}et relève du secteur « {commune.zone} ». {tarifNote}
+            {' '}{commune.name} se situe {situation} et relève du secteur
+            {' '}« {commune.zone} ». {tarifNote}
           </p>
         </AnswerBox>
 

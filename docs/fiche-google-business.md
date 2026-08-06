@@ -1,10 +1,11 @@
-# Fiche Google Business Profile — Benne Express 37
+# Fiche Google Business Profile — Rudy Capello
 
 Tout ce qu'il faut pour créer, remplir et entretenir la fiche établissement.
-Les valeurs entre `[À COMPLÉTER]` sont les seules qui manquent : une fois figées,
-elles sont à reporter **à l'identique** dans `src/config/site.ts` (le site et la
-fiche doivent dire exactement la même chose — c'est ce que Google appelle la
-cohérence NAP, *Name / Address / Phone*).
+Les valeurs sont déjà celles de l'entreprise et **sont exactement celles du site**
+(`src/config/site.ts`) : le nom, l'adresse et le téléphone doivent rester
+identiques au caractère près entre les deux — c'est ce que Google appelle la
+cohérence NAP, *Name / Address / Phone*. Seules les rares valeurs marquées
+`[À COMPLÉTER]` manquent encore.
 
 > **Pourquoi cette fiche compte plus que le site pour le référencement local**
 > Sur une requête « location benne Tours », Google affiche d'abord un bloc de
@@ -16,20 +17,23 @@ cohérence NAP, *Name / Address / Phone*).
 
 ## 1. Données à figer avant de commencer
 
-| Donnée | Valeur | Reporter dans |
+| Donnée | Valeur | Champ du site |
 | --- | --- | --- |
-| Nom commercial exact | `[À COMPLÉTER]` | `SITE.name` |
-| Raison sociale | `[À COMPLÉTER]` | `SITE.legalName` |
-| SIRET | `[À COMPLÉTER]` | `CONTACT.siret` |
-| N° TVA intracommunautaire | `[À COMPLÉTER]` | `CONTACT.tva` |
-| Récépissé de transport de déchets | `[À COMPLÉTER]` | `CONTACT.recepisseDechets` |
-| Téléphone principal | `[À COMPLÉTER]` | `CONTACT.phone` / `phoneE164` |
-| Mobile / urgences | `[À COMPLÉTER]` | `CONTACT.mobile` / `mobileE164` |
-| E-mail | `[À COMPLÉTER]` | `CONTACT.email` |
-| Adresse du dépôt | `[À COMPLÉTER]` | `CONTACT.address` |
-| Coordonnées GPS du dépôt | `[À COMPLÉTER]` | `CONTACT.geo` |
-| Année de création | `[À COMPLÉTER]` | `SITE.foundingYear` |
-| Nom de domaine retenu | `[À COMPLÉTER]` | `SITE.url` |
+| Nom | **Rudy Capello** | `SITE.name` ✅ |
+| Raison sociale | **Rudy Capello**, entrepreneur individuel | `SITE.legalName` ✅ |
+| SIRET | **510 816 473 00019** | `CONTACT.siret` ✅ |
+| Téléphone | **06 31 46 43 50** | `CONTACT.phone` ✅ |
+| Adresse du siège | **90 rue de la Bichotière, 37250 Veigné** | `CONTACT.address` ✅ |
+| Coordonnées GPS | 47.2836, 0.7161 (bourg de Veigné) | `CONTACT.geo` — à affiner sur le point exact |
+| N° TVA intracommunautaire | `[À COMPLÉTER]` — si assujetti : FR 72 510 816 473 | `CONTACT.tva` |
+| Récépissé de transport de déchets | `[À COMPLÉTER]` — préfecture d'Indre-et-Loire | `CONTACT.recepisseDechets` |
+| E-mail professionnel | `[À COMPLÉTER]` | `CONTACT.email` |
+| Nom de domaine | `[À COMPLÉTER]` — le site tourne sur l'URL Vercel | `SITE.url` |
+
+> **Horaires à confirmer.** Le site annonce lundi–vendredi 7 h 30 – 18 h et samedi
+> 8 h – 12 h (§ 7). Ce sont des valeurs reprises du modèle initial, pas des horaires
+> validés : les corriger dans `CONTACT.openingHours` avant de les saisir sur la fiche.
+> Une fiche annoncée ouverte quand personne ne décroche produit des avis négatifs.
 
 Trois liens sont à récupérer **après** création de la fiche et à reporter dans
 `SOCIAL` (ils alimentent le balisage `sameAs` et `hasMap` du site) :
@@ -64,16 +68,24 @@ Trois liens sont à récupérer **après** création de la fiche et à reporter 
 
 ## 3. Nom de l'établissement
 
-> `[À COMPLÉTER — nom commercial exact, tel qu'il figure sur les camions et les factures]`
+> **Rudy Capello**
 
-**Règle absolue : le nom ne contient aucun mot-clé.** « Benne Express 37 —
-Location de bennes Tours pas cher » est un motif de suspension immédiate, et la
-suspension fait disparaître la fiche du pack local du jour au lendemain. Le nom
-de la fiche doit être le nom réel de l'entreprise, celui qu'un client lit sur
-le camion.
+**Règle absolue : le nom ne contient aucun mot-clé.** « Rudy Capello — Location
+de bennes Tours pas cher » est un motif de suspension immédiate, et la suspension
+fait disparaître la fiche du pack local du jour au lendemain. Le nom de la fiche
+doit être le nom réel de l'entreprise, celui qu'un client lit sur le camion.
 
-Si le nom commercial contient légitimement un terme métier (« Benne Express »),
-c'est autorisé : c'est le nom, pas un ajout.
+L'entreprise étant une entreprise individuelle, son nom est celui de
+l'exploitant : c'est parfaitement normal dans le métier et ne pénalise en rien
+le classement — l'activité est portée par la catégorie (§ 4) et par les services
+(§ 9), pas par le nom.
+
+> **Si les camions portent une enseigne** (un nom commercial peint sur les
+> portières, différent de « Rudy Capello »), c'est cette enseigne qui doit
+> figurer sur la fiche **et** sur le site : dans ce cas, changer `SITE.name`
+> dans `src/config/site.ts` et le texte du logo dans
+> `src/components/Logo.astro`, et rien d'autre — le nom se propage partout
+> automatiquement.
 
 ---
 
@@ -103,11 +115,11 @@ pas à une prestation réellement vendue — une catégorie de trop dilue la fic
 
 ## 5. Description de l'établissement (750 caractères maximum)
 
-À copier telle quelle une fois le nom validé — **734 caractères** sur les 750
+À copier telle quelle une fois le nom validé — **730 caractères** sur les 750
 autorisés, sauts de ligne compris :
 
 ```
-Benne Express 37 loue des bennes à déchets à Tours et dans toute l'Indre-et-Loire. Nous intervenons chez les professionnels du bâtiment — maçons, couvreurs, entreprises générales, syndics — comme chez les particuliers : déménagement, vide-maison, débarras de cave ou de grenier, rénovation.
+Rudy Capello loue des bennes à déchets à Tours et dans toute l'Indre-et-Loire. Nous intervenons chez les professionnels du bâtiment — maçons, couvreurs, entreprises générales, syndics — comme chez les particuliers : déménagement, vide-maison, débarras de cave ou de grenier, rénovation.
 
 Vous n'avez aucun format à choisir. Décrivez vos déchets et la quantité au téléphone : nous déterminons la benne adaptée, vérifions l'accès et annonçons un tarif ferme et tout compris — livraison, mise à disposition 7 jours, enlèvement et traitement.
 
@@ -134,19 +146,23 @@ communes qui pèsent réellement**.
 
 1. Indre-et-Loire (département)
 2. Tours
-3. Joué-lès-Tours
-4. Saint-Cyr-sur-Loire
-5. Saint-Avertin
-6. Chambray-lès-Tours
-7. La Riche
-8. Saint-Pierre-des-Corps
-9. Fondettes
-10. Amboise
-11. Chinon
-12. Loches
-13. Château-Renault
-14. Bourgueil
-15. Montlouis-sur-Loire
+3. Veigné
+4. Montbazon
+5. Joué-lès-Tours
+6. Saint-Avertin
+7. Chambray-lès-Tours
+8. Saint-Cyr-sur-Loire
+9. Saint-Pierre-des-Corps
+10. La Riche
+11. Fondettes
+12. Amboise
+13. Chinon
+14. Loches
+15. Château-Renault
+
+> Veigné et Montbazon ouvrent la liste juste après Tours parce que la proximité
+> reste, avec les avis, le premier facteur du pack local : c'est là que la fiche
+> a le plus de chances de sortir en tête.
 
 > Cette liste reprend l'ordre de priorité de `src/data/communes.ts`. Les 46
 > communes disposant d'une page dédiée sur le site restent couvertes par la zone
@@ -337,7 +353,7 @@ son téléphone avant de repartir.
 ```
 Bonjour [PRÉNOM], la benne a bien été enlevée. Si tout s'est bien passé, un avis
 Google nous aiderait beaucoup — c'est 30 secondes : [LIEN AVIS]
-Merci ! [PRÉNOM CHAUFFEUR], Benne Express 37
+Merci ! Rudy
 ```
 
 **Ce qui est interdit** (et détectable) : offrir une remise contre un avis,
@@ -351,21 +367,21 @@ lue par les futurs clients bien plus que par l'auteur de l'avis.
 ```
 Merci [PRÉNOM] ! Content que la dépose se soit bien passée [PRÉCISION : à
 Joué-lès-Tours / pour votre vide-maison]. À bientôt si un nouveau chantier se
-présente. L'équipe Benne Express 37
+présente. Rudy Capello
 ```
 
 *Avis 3 étoiles :*
 ```
 Merci pour ce retour, [PRÉNOM] — et désolé pour [POINT PRÉCIS]. Vous avez
 raison, c'est un point que nous devons améliorer. Je vous rappelle cette semaine
-pour en parler directement. [PRÉNOM GÉRANT], Benne Express 37
+pour en parler directement. Rudy
 ```
 
 *Avis 1 étoile :*
 ```
 Bonjour [PRÉNOM]. Ce que vous décrivez ne correspond pas à ce que nous voulons
 faire, et je le regrette. Je souhaite comprendre ce qui s'est passé et vous
-proposer une solution : joignez-moi au [TÉLÉPHONE]. [PRÉNOM GÉRANT], gérant
+proposer une solution : joignez-moi au 06 31 46 43 50. Rudy Capello
 ```
 
 Ne jamais répondre à chaud, ne jamais contredire publiquement, ne jamais citer

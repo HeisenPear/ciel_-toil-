@@ -30,7 +30,7 @@ const breadcrumbs = [
       <h2>Responsable du traitement</h2>
       <p>
         {SITE.legalName}, {CONTACT.address.street}, {CONTACT.address.postalCode}
-        {' '}{CONTACT.address.city}. Contact : {CONTACT.email}.
+        {' '}{CONTACT.address.city}. Contact : {CONTACT.email || CONTACT.phone}.
       </p>
 
       <h2>Données collectées</h2>
@@ -89,8 +89,8 @@ const breadcrumbs = [
         d’effacement, de limitation, d’opposition et de portabilité de vos données.
       </p>
       <p>
-        Pour exercer ces droits, écrivez à {CONTACT.email} ou à l’adresse postale indiquée
-        ci-dessus. Vous pouvez également introduire une réclamation auprès de la CNIL
+        Pour exercer ces droits, {CONTACT.email ? `écrivez à ${CONTACT.email} ou` : `appelez le ${CONTACT.phone} ou écrivez`}
+        {' '}à l’adresse postale indiquée ci-dessus. Vous pouvez également introduire une réclamation auprès de la CNIL
         (3 place de Fontenoy, 75007 Paris — www.cnil.fr).
       </p>
 

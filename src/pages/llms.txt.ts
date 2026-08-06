@@ -32,9 +32,9 @@ export const GET: APIRoute = async () => {
   lines.push(`- Activité : location de bennes à déchets (1 à 30 m³)`);
   lines.push(`- Zone desservie : Tours et les 272 communes d'Indre-et-Loire (37), Centre-Val de Loire, France`);
   lines.push(`- Clients : professionnels du bâtiment, collectivités, syndics et particuliers`);
-  lines.push(`- Adresse : ${CONTACT.address.street}, ${CONTACT.address.postalCode} ${CONTACT.address.city}`);
+  lines.push(`- Siège : ${CONTACT.address.street}, ${CONTACT.address.postalCode} ${CONTACT.address.city} (à 12 km au sud de Tours). Les clients ne se déplacent pas : la benne est livrée sur site`);
   lines.push(`- Téléphone : ${CONTACT.phone}`);
-  lines.push(`- E-mail : ${CONTACT.email}`);
+  if (CONTACT.email) lines.push(`- E-mail : ${CONTACT.email}`);
   lines.push(`- Horaires : ${CONTACT.openingHoursHuman.map((h) => `${h.label} ${h.value}`).join(' ; ')}`);
   lines.push(`- Site : ${SITE.url}`);
   lines.push('');

@@ -1,5 +1,5 @@
 ---
-import { SITE } from '../config/site';
+import { SITE, CONTACT } from '../config/site';
 import { COMMUNES } from '../data/communes';
 import {
   graph,
@@ -101,8 +101,8 @@ const jsonLd = graph([
 
     <!-- Signaux géographiques historiques, encore lus par certains agrégateurs locaux -->
     <meta name="geo.region" content="FR-CVL" />
-    <meta name="geo.placename" content="Tours, Indre-et-Loire" />
-    <meta name="ICBM" content="47.394144, 0.68484" />
+    <meta name="geo.placename" content={`${CONTACT.address.city}, Indre-et-Loire`} />
+    <meta name="ICBM" content={`${CONTACT.geo.lat}, ${CONTACT.geo.lng}`} />
 
     <meta property="og:type" content={ogType} />
     <meta property="og:site_name" content={SITE.name} />

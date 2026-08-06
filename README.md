@@ -1,8 +1,9 @@
-# Benne Express 37 — site vitrine
+# Rudy Capello — site vitrine
 
-Site vitrine d'un loueur de bennes basé à **Tours**, intervenant sur l'ensemble du
-département d'**Indre-et-Loire (37)**. Cible : professionnels du bâtiment (chantiers,
-rénovation) et particuliers (déménagement, vide-maison, débarras).
+Site vitrine d'un loueur de bennes basé à **Veigné**, aux portes sud de **Tours**,
+intervenant sur l'ensemble du département d'**Indre-et-Loire (37)**. Cible :
+professionnels du bâtiment (chantiers, rénovation) et particuliers (déménagement,
+vide-maison, débarras).
 
 Le site est conçu pour deux canaux d'acquisition :
 

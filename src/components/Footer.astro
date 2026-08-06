@@ -41,18 +41,22 @@ const villesFooter = [
             <Icon name="phone" size={18} class="text-benne-400" />
             {CONTACT.phone}
           </a>
-          <a
-            href={`mailto:${CONTACT.email}`}
-            class="flex items-center gap-2.5 text-ink-300 hover:text-white"
-          >
-            <Icon name="mail" size={18} class="text-benne-400" />
-            {CONTACT.email}
-          </a>
+          {
+            CONTACT.email && (
+              <a
+                href={`mailto:${CONTACT.email}`}
+                class="flex items-center gap-2.5 text-ink-300 hover:text-white"
+              >
+                <Icon name="mail" size={18} class="text-benne-400" />
+                {CONTACT.email}
+              </a>
+            )
+          }
           <p class="flex items-start gap-2.5 text-ink-300">
             <Icon name="pin" size={18} class="mt-0.5 shrink-0 text-benne-400" />
             <span>
-              {CONTACT.address.street}<br />
-              {`${CONTACT.address.postalCode} ${CONTACT.address.city}`}
+              Base à {CONTACT.address.city} ({CONTACT.address.postalCode})<br />
+              Livraison dans tout l’Indre-et-Loire
             </span>
           </p>
         </address>

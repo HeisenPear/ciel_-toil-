@@ -2,7 +2,7 @@
  * Communes d'Indre-et-Loire couvertes par le service.
  * Chaque entrée génère une page locale `/location-benne/<slug>`.
  *
- * `distance` = distance routière approximative depuis le dépôt de Tours (km).
+ * `distance` = distance routière approximative depuis Tours (km), qui sert de repère commun à toutes les pages.
  * `angle` = accroche locale unique, indispensable pour éviter le contenu dupliqué
  * (chaque page doit apporter une information que les autres n'ont pas).
  */
