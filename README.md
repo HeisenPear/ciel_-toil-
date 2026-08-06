@@ -6,9 +6,9 @@ rénovation) et particuliers (déménagement, vide-maison, débarras).
 
 Le site est conçu pour deux canaux d'acquisition :
 
-- **SEO local** — pages par intention (chantier / déménagement), par produit (6 formats de
-  bennes) et par commune (46 pages locales), données structurées `LocalBusiness`, maillage
-  interne dense.
+- **SEO local** — pages par intention (chantier / déménagement), par commune (46 pages
+  locales) et par usage (dimensionnement, tri des déchets), données structurées
+  `LocalBusiness`, maillage interne dense.
 - **GEO** (*Generative Engine Optimization*) — être cité par ChatGPT, Claude, Perplexity,
   Gemini et les AI Overviews : blocs de réponse directe, contenu factuel et chiffré,
   `robots.txt` autorisant explicitement les crawlers d'IA, et un fichier `/llms.txt`
@@ -52,12 +52,16 @@ pages, JSON-LD, `robots.txt`, `llms.txt`, sitemap, mentions légales.
 | --- | --- |
 | `SITE` | Nom commercial, raison sociale, URL canonique, description, année de création |
 | `CONTACT` | Téléphones, e-mail, adresse, coordonnées GPS du dépôt, horaires, SIRET, TVA, récépissé de transport de déchets |
-| `FORM` | Endpoint du formulaire de devis (voir plus bas) |
-| `SOCIAL` | Fiche Google Business, Facebook, LinkedIn — alimentent le `sameAs` du JSON-LD |
+| `FORM` | Endpoint du formulaire de rappel (voir plus bas) |
+| `SOCIAL` | Fiche Google Business, lien Maps, lien d'avis, réseaux — alimentent `sameAs` et `hasMap` dans le JSON-LD. Procédure complète : [`docs/fiche-google-business.md`](docs/fiche-google-business.md) |
 | `USP` | Les 4 arguments de réassurance affichés sur l'accueil |
 | `NAV` | La navigation principale |
 
-### 2. Le formulaire de devis
+### 2. Le formulaire de rappel
+
+Il n'y a plus de formulaire de devis : le devis se prend au téléphone. Le seul
+formulaire du site est une **demande de rappel à trois champs** (nom, téléphone,
+commune), sur `/contact` uniquement, pour les visiteurs qui ne peuvent pas appeler.
 
 Le site étant statique, l'envoi est délégué à un service tiers. Renseignez
 `FORM.endpoint` avec l'URL fournie par Formspree, Web3Forms, Basin ou l'API du client.
@@ -66,8 +70,9 @@ Le site étant statique, l'envoi est délégué à un service tiers. Renseignez
 il reste donc fonctionnel dès la mise en ligne, mais l'expérience est dégradée. À brancher
 avant toute campagne d'acquisition.
 
-Le formulaire embarque déjà un pot de miel anti-spam, une case de consentement RGPD
-obligatoire et une redirection vers `/merci`.
+Le formulaire embarque un pot de miel anti-spam et une redirection vers `/merci`.
+Pas de case à cocher : une demande de rappel relève des mesures précontractuelles
+prises à la demande de la personne, et chaque champ en moins est une demande de plus.
 
 ### 3. Les photos — `public/photos/` + `src/config/photos.ts`
 
@@ -83,7 +88,6 @@ relais : pas d'image cassée, pas de section vide.
 
 | Fichier | Rôle |
 | --- | --- |
-| `bennes.ts` | Les 6 formats : dimensions, charge utile, équivalence concrète, accès requis. **Aucun prix** — toutes les locations sont sur devis. |
 | `communes.ts` | Les 46 communes générant une page locale. Chaque entrée porte un `angle` — un paragraphe spécifique à la commune. Voir l'avertissement ci-dessous. |
 | `dechets.ts` | Les 8 flux collectés + les 6 catégories interdites |
 | `faq.ts` | 16 questions/réponses, filtrables par thème pour éviter de dupliquer le même bloc `FAQPage` partout |
@@ -107,12 +111,13 @@ maillage interne et le JSON-LD suivent automatiquement.
 - `title` sous 65 caractères (le suffixe de marque n'est ajouté que s'il tient),
   `description` entre 130 et 165 caractères
 - Canonical, `hreflang` fr-FR + x-default, Open Graph et Twitter Card sur chaque page
-- **JSON-LD en `@graph`** avec des `@id` stables : `Organization`, `WebSite`,
-  `LocalBusiness` + `WasteManagementService` (adresse, horaires, `geo`, `areaServed`,
-  rayon d'intervention), puis selon la page `Service` avec `OfferCatalog`, `Product`,
-  `FAQPage`, `HowTo`, `BreadcrumbList`, `BlogPosting`, `ItemList`, `Place`
+- **JSON-LD en `@graph`** avec des `@id` stables : `Organization` (+ `knowsAbout`,
+  `ContactPoint`), `WebSite`, `LocalBusiness` + `WasteManagementService` (adresse,
+  horaires, `geo`, `areaServed`, rayon d'intervention, `hasMap` vers la fiche Google),
+  `WebPage` avec `speakable`, puis selon la page `Service`, `FAQPage`, `HowTo`,
+  `BreadcrumbList`, `BlogPosting`, `ItemList`, `Place`
 - Fil d'Ariane visible **et** balisé
-- Maillage interne : communes voisines, bennes proches, articles liés, plan du site
+- Maillage interne : communes voisines, articles liés, plan du site
 - Sitemap avec priorités différenciées ; pages légales et `/merci` exclues et en `noindex`
 - Images : SVG inline (aucune requête), image Open Graph 1200×630 générée au build
 
@@ -131,41 +136,52 @@ maillage interne et le JSON-LD suivent automatiquement.
 
 ---
 
-## Parti pris : l'appel avant le formulaire
+## Parti pris : un seul chemin, le téléphone
 
 Sur ce marché, un prospect qui a une question **appelle** — il ne remplit pas un
 formulaire et n'attend pas une réponse par e-mail. Le site est construit autour
 de ce constat :
 
 - le **numéro est le bouton principal** de l'en-tête, du hero et de tous les
-  bandeaux d'appel à l'action ; le formulaire est systématiquement le second choix ;
+  bandeaux d'appel à l'action ;
 - une **barre d'appel fixe** occupe le bas de l'écran sur mobile, à portée de pouce,
   quelle que soit la position dans la page ;
-- l'encart `CallCard` remplace le formulaire dans toutes les colonnes latérales
-  (pages produit, pages communes, articles) ;
+- l'encart `CallCard` occupe toutes les colonnes latérales (pages communes,
+  articles, dimensionnement) ;
+- le seul formulaire du site est une demande de rappel à trois champs, sur
+  `/contact`, présentée comme la porte de sortie et non comme le chemin normal ;
 - chaque lien téléphone porte un attribut `data-appel` identifiant son emplacement
   (`en-tete`, `hero`, `barre-mobile`, `encart`, `bandeau`…), prêt à être branché sur
   un outil de mesure pour savoir **quel emplacement génère les appels**.
 
 **Aucun prix n'est publié.** Toutes les prestations sont sur devis : c'est un choix
-commercial, mais aussi une cohérence technique — le balisage `Offer` ne contient
-donc aucun `price`, car annoncer dans les données structurées un prix absent de la
-page est précisément le genre d'incohérence que Google sanctionne.
+commercial, mais aussi une cohérence technique — le balisage ne contient donc aucun
+`price`, car annoncer dans les données structurées un prix absent de la page est
+précisément le genre d'incohérence que Google sanctionne.
+
+**Aucun catalogue de bennes non plus.** Le visiteur n'a pas de format à choisir :
+`/nos-bennes` explique la règle de dimensionnement (plus le déchet est dense, plus
+la benne est petite) et renvoie l'arbitrage au téléphone, là où l'accès et la
+quantité réelle peuvent être vérifiés. Conséquence côté balisage : plus d'`Offer`
+ni d'`OfferCatalog` — on ne déclare pas des produits que le site ne montre pas.
 
 ## Structure
 
 ```
+docs/
+└── fiche-google-business.md ← dossier complet de la fiche établissement
+
 src/
 ├── config/site.ts          ← LE fichier à personnaliser
-├── data/                   ← bennes, communes, déchets, FAQ
+├── data/                   ← communes, déchets, FAQ
 ├── lib/schema.ts           ← générateurs JSON-LD
 ├── layouts/BaseLayout.astro← <head>, JSON-LD, header, footer
 ├── config/photos.ts        ← déclaration des photos (vide = illustrations SVG)
-├── components/             ← Hero, CallCard, CallBar, Gallery, BenneCard, Faq…
+├── components/             ← Hero, CallCard, CallBar, Gallery, RappelForm, Faq…
 ├── content/blog/           ← articles Markdown
 └── pages/
     ├── index.astro
-    ├── nos-bennes/[slug].astro          → 6 pages produit
+    ├── nos-bennes/index.astro           → dimensionnement (pas de catalogue)
     ├── location-benne/[commune].astro   → 46 pages locales
     ├── location-benne-chantier.astro
     ├── location-benne-demenagement.astro
@@ -176,7 +192,7 @@ src/
     └── llms.txt.ts         ← généré au build
 ```
 
-73 pages générées.
+67 pages générées.
 
 ---
 

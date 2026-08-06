@@ -71,8 +71,21 @@ export const FORM = {
   redirect: '/merci',
 } as const;
 
+/**
+ * Profils externes.
+ *
+ * `googleBusiness` et `googleMaps` alimentent le JSON-LD (`sameAs` et `hasMap`) :
+ * ce sont les deux liens qui relient le site à la fiche Google Business Profile,
+ * condition d'un référencement local solide. Voir `docs/fiche-google-business.md`
+ * pour la procédure de création de la fiche et l'endroit où récupérer ces URL.
+ */
 export const SOCIAL = {
-  googleBusiness: '', // TODO — URL de la fiche établissement Google
+  /** URL courte de la fiche (Google Business Profile → « Partager le profil »). */
+  googleBusiness: '', // TODO — ex. https://g.co/kgs/xxxxxxx
+  /** Lien Google Maps de l'établissement (partage → copier le lien). */
+  googleMaps: '', // TODO — ex. https://maps.app.goo.gl/xxxxxxx
+  /** Lien direct « laisser un avis », à envoyer aux clients par SMS. */
+  googleReview: '', // TODO — ex. https://g.page/r/xxxxxxxxxxxx/review
   facebook: '', // TODO
   linkedin: '', // TODO
 } as const;
@@ -105,7 +118,7 @@ export type NavItem = { label: string; href: string; children?: NavItem[] };
 
 export const NAV: NavItem[] = [
   {
-    label: 'Nos bennes',
+    label: 'Quelle benne ?',
     href: '/nos-bennes',
   },
   {

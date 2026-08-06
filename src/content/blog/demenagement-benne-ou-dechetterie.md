@@ -31,7 +31,7 @@ Comptez **une heure à une heure trente par rotation**, soit 8 à 12 heures de t
 
 ## Ce que coûte une benne
 
-Une [benne 10 m³](/nos-bennes/benne-10m3) livrée à Tours est facturée sur devis, **tout compris** : livraison, sept jours de mise à disposition, enlèvement et traitement des déchets. Un appel de deux minutes suffit à obtenir le prix ferme.
+Une [benne 10 m³](/nos-bennes) livrée à Tours est facturée sur devis, **tout compris** : livraison, sept jours de mise à disposition, enlèvement et traitement des déchets. Un appel de deux minutes suffit à obtenir le prix ferme.
 
 Le temps que vous y consacrez : le chargement, une seule fois, chez vous.
 
@@ -55,7 +55,7 @@ C'est pour cette raison que la majorité de nos clients particuliers en Indre-et
 
 Pour une succession ou une vente, l'équation ne se pose même pas. Un pavillon complet avec dépendances produit 15 à 20 m³. C'est une trentaine de rotations en remorque, sur plusieurs week-ends, avec des contraintes de délai souvent serrées.
 
-Une [benne 20 m³](/nos-bennes/benne-20m3) règle le sujet en une fois. Et si vous dépassez, une rotation — l'enlèvement de la benne pleine et la dépose immédiate d'une vide au même emplacement — se fait souvent le jour même sur l'agglomération de Tours.
+Une [benne 20 m³](/nos-bennes) règle le sujet en une fois. Et si vous dépassez, une rotation — l'enlèvement de la benne pleine et la dépose immédiate d'une vide au même emplacement — se fait souvent le jour même sur l'agglomération de Tours.
 
 ## Ce qui ne va ni en benne ni en remorque
 

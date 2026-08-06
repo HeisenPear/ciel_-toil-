@@ -7,7 +7,6 @@ import Faq from '../components/Faq.astro';
 import CallCard from '../components/CallCard.astro';
 import Icon from '../components/Icon.astro';
 
-import { BENNES } from '../data/bennes';
 import { faqByTopic } from '../data/faq';
 import { COMMUNES } from '../data/communes';
 import { SITE } from '../config/site';
@@ -63,11 +62,6 @@ const schemas = [
       'selon le volume, la nature des déchets et la commune de livraison.',
     url: `${SITE.url}/tarifs`,
     areaServed: COMMUNES.filter((c) => c.priority).map((c) => c.name),
-    offers: BENNES.map((b) => ({
-      name: b.name,
-      description: b.punchline,
-      url: `/nos-bennes/${b.slug}`,
-    })),
   }),
   faqSchema(faq),
 ];

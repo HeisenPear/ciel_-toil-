@@ -3,132 +3,246 @@ import BaseLayout from '../../layouts/BaseLayout.astro';
 import PageHeader from '../../components/PageHeader.astro';
 import Section from '../../components/Section.astro';
 import AnswerBox from '../../components/AnswerBox.astro';
-import BenneCard from '../../components/BenneCard.astro';
 import Faq from '../../components/Faq.astro';
 import CallCard from '../../components/CallCard.astro';
+import Steps from '../../components/Steps.astro';
 import Icon from '../../components/Icon.astro';
 
-import { BENNES } from '../../data/bennes';
 import { faqByTopic } from '../../data/faq';
 import { COMMUNES } from '../../data/communes';
-import { SITE } from '../../config/site';
-import { serviceSchema, faqSchema } from '../../lib/schema';
+import { SITE, CONTACT } from '../../config/site';
+import { serviceSchema, faqSchema, howToSchema } from '../../lib/schema';
 
-const breadcrumbs = [{ name: 'Nos bennes', url: '/nos-bennes' }];
+const breadcrumbs = [{ name: 'Quelle benne', url: '/nos-bennes' }];
 const faq = faqByTopic('general', 4);
+
+/* Le site ne publie plus de catalogue de formats : le dimensionnement se fait
+   au téléphone. Ces situations restent le contenu que cherchent les visiteurs
+   (« quelle benne pour des gravats ») — elles informent sans rien faire choisir. */
+const situations = [
+  {
+    icon: 'hammer' as const,
+    title: 'Gravats, béton, terre, tuiles',
+    text:
+      "Ce sont les déchets les plus lourds : la charge utile du camion est atteinte bien avant que la benne " +
+      "soit pleine. On part donc sur une petite benne, souvent posée sur une seule place de stationnement.",
+    reperes: 'Démolition, terrassement, dépose de carrelage ou de toiture.',
+  },
+  {
+    icon: 'home' as const,
+    title: 'Déménagement, vide-maison, débarras',
+    text:
+      "Meubles, matelas, cartons, moquettes : beaucoup de volume pour peu de poids. On vise ici le volume " +
+      "utile plutôt que le tonnage, avec une benne que vous chargez à votre rythme pendant la semaine.",
+    reperes: 'Débarras de cave ou de grenier, succession, fin de bail.',
+  },
+  {
+    icon: 'building' as const,
+    title: 'Rénovation complète',
+    text:
+      "Cloisons, plâtre, isolants, menuiseries, revêtements de sol : un mélange qui monte vite en volume. " +
+      "L'objectif est d'éviter la rotation intermédiaire, donc de voir un peu large dès le départ.",
+    reperes: "Rénovation d'un pavillon, réaménagement d'appartement, extension.",
+  },
+  {
+    icon: 'truck' as const,
+    title: 'Chantier professionnel',
+    text:
+      "Là, ce n'est plus une benne mais un rythme : on cale une rotation régulière, avec un flux trié par " +
+      "matière quand c'est possible et un bordereau de suivi à chaque enlèvement.",
+    reperes: 'Entreprise générale, couvreur, maçon, syndic, collectivité.',
+  },
+];
+
+const etapes = [
+  {
+    title: 'Vous décrivez le déchet',
+    text: "Gravats, encombrants, bois, mélange de rénovation : c'est la nature du déchet qui commande, pas le volume.",
+    icon: 'recycle' as const,
+  },
+  {
+    title: 'Vous donnez un ordre de grandeur',
+    text: "Une pièce, un étage, une maison entière, dix mètres carrés de carrelage : approximatif suffit largement.",
+    icon: 'box' as const,
+  },
+  {
+    title: 'On vérifie l’accès',
+    text: "Commune, largeur de rue, hauteur libre, stationnement : on s'assure que le camion passe avant de s'engager.",
+    icon: 'pin' as const,
+  },
+  {
+    title: 'On annonce le format et le prix',
+    text: 'Le format adapté et un tarif ferme, tout compris, annoncés pendant l’appel. Livraison sous 24 à 48 h.',
+    icon: 'phone' as const,
+  },
+];
 
 const schemas = [
   serviceSchema({
-    name: 'Location de bennes de 1 à 30 m³',
+    name: 'Dimensionnement et location de benne en Indre-et-Loire',
     description:
-      'Six formats de bennes à la location en Indre-et-Loire, du big bag 1 m³ à la benne 30 m³, avec dimensions, charge utile et tarifs.',
+      "Choix du format de benne réalisé par téléphone avec le loueur, selon la nature des déchets, la quantité " +
+      "et l'accès au chantier. Devis gratuit, tarif ferme et tout compris, livraison sous 24 à 48 h.",
     url: `${SITE.url}/nos-bennes`,
     areaServed: COMMUNES.filter((c) => c.priority).map((c) => c.name),
-    offers: BENNES.map((b) => ({
-      name: b.name,
-      description: b.punchline,
-      url: `/nos-bennes/${b.slug}`,
-    })),
+  }),
+  howToSchema({
+    name: 'Comment choisir la taille de sa benne',
+    description:
+      'Méthode en quatre étapes pour déterminer le volume de benne adapté à un chantier ou à un débarras, ' +
+      'sans se tromper de format.',
+    steps: etapes.map((e) => ({ name: e.title, text: e.text })),
   }),
   faqSchema(faq),
 ];
 ---
 
 <BaseLayout
-  title="Nos bennes : 6 formats de 1 à 30 m³ — dimensions et tarifs"
-  description="Comparez nos 6 formats de bennes en Indre-et-Loire : dimensions, charge utile et déchets acceptés. Big bag 1 m³, bennes 8 à 30 m³. Devis gratuit par téléphone."
+  title="Quelle benne choisir ? On la dimensionne avec vous"
+  description="Quelle taille de benne pour des gravats, un déménagement ou une rénovation ? On ne vous demande pas de choisir dans un catalogue : décrivez votre chantier, on dimensionne au téléphone et on annonce le prix."
   path="/nos-bennes"
   breadcrumbs={breadcrumbs}
   schemas={schemas}
 >
   <PageHeader
     breadcrumbs={breadcrumbs}
-    eyebrow="Catalogue"
-    title="Nos bennes à louer, de 1 à 30 m³"
-    lead="Six formats couvrant tous les besoins, du sac de gravats en centre-ville de Tours à la benne 30 m³ pour un curage de local commercial."
+    eyebrow="Dimensionnement"
+    title="Quelle benne pour vos déchets ?"
+    lead="Vous n’avez pas à choisir un format dans un catalogue. Décrivez-nous le chantier en deux phrases : on dimensionne, on vérifie l’accès et on vous annonce le prix pendant l’appel."
     stats={[
-      { label: 'Formats', value: '6' },
-      { label: 'Volume', value: '1 à 30 m³' },
-      { label: 'Charge utile', value: 'jusqu’à 9 t' },
+      { label: 'Formats', value: 'du plus petit au plus grand' },
+      { label: 'Dimensionnement', value: 'en 2 min au téléphone' },
+      { label: 'Livraison', value: '24 à 48 h' },
     ]}
   />
 
   <Section tone="white" class="!pb-0 !pt-12">
-    <AnswerBox question="Quelle benne choisir selon le type de déchet ?">
+    <AnswerBox
+      question="Quelle taille de benne choisir pour ses déchets ?"
+      facts={[
+        { label: 'Règle', value: 'dense = petit volume' },
+        { label: 'Décision', value: 'par téléphone' },
+        { label: 'Devis', value: 'gratuit et ferme' },
+        { label: 'Zone', value: 'tout le 37' },
+      ]}
+    >
       <p>
-        La règle est simple : <strong>plus le déchet est dense, plus la benne doit être petite</strong>.
-        Une benne de 8 m³ atteint sa charge utile de 8 tonnes avec des gravats bien avant d’être
-        pleine, alors qu’une benne de 30 m³ n’est adaptée qu’aux déchets légers et volumineux
-        (cartons, mobilier, déchets verts) qui ne peuvent jamais dépasser le poids autorisé.
-        En pratique : 8 m³ pour des gravats, 10 m³ pour un déménagement, 15 m³ pour une rénovation
-        complète, 20 à 30 m³ pour un chantier professionnel ou un curage. Un doute ?
-        Appelez-nous, nous dimensionnons avec vous et vous annonçons le tarif dans la foulée.
+        La taille de benne dépend d’abord de la <strong>nature du déchet</strong>, pas de la
+        quantité : plus un déchet est dense, plus la benne doit être petite. Des gravats atteignent
+        la charge utile autorisée bien avant de remplir la benne, alors que des encombrants de
+        déménagement occupent tout le volume sans jamais approcher du poids limite. C’est pourquoi
+        nous ne publions pas de catalogue à choisir soi-même : chez <strong>{SITE.name}</strong>,
+        vous décrivez vos déchets, la quantité approximative et la commune, et
+        <strong>nous déterminons le format avec vous au téléphone</strong> — avec un tarif ferme et
+        tout compris annoncé dans la foulée, et une livraison sous 24 à 48 h ouvrées.
       </p>
     </AnswerBox>
   </Section>
 
-  <Section tone="white">
-    <div class="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
-      {BENNES.map((benne) => <BenneCard benne={benne} />)}
+  <Section
+    tone="white"
+    eyebrow="Les quatre cas de figure"
+    title="Ce qui change le dimensionnement"
+    lead="Quatre situations couvrent la quasi-totalité des demandes. Repérez la vôtre : elle nous donne déjà l’essentiel."
+  >
+    <ul class="grid gap-6 md:grid-cols-2">
+      {
+        situations.map((situation) => (
+          <li class="flex flex-col rounded-card border border-ink-200 bg-white p-7">
+            <span class="flex h-12 w-12 items-center justify-center rounded-xl bg-benne-50 text-benne-700">
+              <Icon name={situation.icon} size={24} />
+            </span>
+            <h3 class="mt-5 text-xl font-bold text-ink-950">{situation.title}</h3>
+            <p class="mt-3 leading-relaxed text-ink-600">{situation.text}</p>
+            <p class="mt-4 flex items-start gap-2 border-t border-ink-100 pt-4 text-sm text-ink-500">
+              <Icon name="check" size={16} class="mt-0.5 shrink-0 text-benne-600" />
+              {situation.reperes}
+            </p>
+          </li>
+        ))
+      }
+    </ul>
+
+    <div
+      class="mt-8 flex flex-col gap-4 rounded-card border-2 border-dashed border-benne-300 bg-benne-50 p-6 sm:flex-row sm:items-center sm:justify-between"
+    >
+      <p class="flex items-start gap-3 text-ink-800">
+        <Icon name="warning" size={22} class="mt-0.5 shrink-0 text-benne-700" />
+        <span>
+          <strong>Se tromper de format coûte plus cher que d’appeler :</strong> une benne
+          sous-dimensionnée impose une rotation, une benne surchargée est refusée au chargement.
+          Deux minutes au téléphone évitent les deux.
+        </span>
+      </p>
+      <a
+        href={`tel:${CONTACT.phoneE164}`}
+        data-appel="nos-bennes-encart"
+        class="inline-flex shrink-0 items-center justify-center gap-2 rounded-full bg-ink-950 px-6 py-3 font-semibold text-white transition-colors hover:bg-ink-800"
+      >
+        <Icon name="phone" size={18} />
+        {CONTACT.phone}
+      </a>
     </div>
   </Section>
 
   <Section
-    tone="muted"
-    eyebrow="Comparatif"
-    title="Tableau comparatif des bennes"
-    lead="Toutes les caractéristiques réunies pour choisir en une minute."
+    tone="dark"
+    eyebrow="Au téléphone"
+    title="Ce qu’on vous demande, et rien d’autre"
+    lead="Aucune visite préalable dans la majorité des cas : quatre informations suffisent à sortir un prix ferme."
   >
-    <div class="overflow-x-auto rounded-card border border-ink-200 bg-white">
-      <table class="w-full min-w-[46rem] border-collapse text-sm">
-        <caption class="sr-only">
-          Comparatif des formats de bennes : volume, dimensions, charge utile et usage type
-        </caption>
-        <thead>
-          <tr class="bg-ink-950 text-left text-white">
-            <th scope="col" class="px-4 py-3.5 font-semibold">Benne</th>
-            <th scope="col" class="px-4 py-3.5 font-semibold">Dimensions (L × l × h)</th>
-            <th scope="col" class="px-4 py-3.5 font-semibold">Charge utile</th>
-            <th scope="col" class="px-4 py-3.5 font-semibold">Usage type</th>
-          </tr>
-        </thead>
-        <tbody class="divide-y divide-ink-200">
-          {
-            BENNES.map((benne) => (
-              <tr class="transition-colors hover:bg-benne-50/60">
-                <th scope="row" class="px-4 py-4 text-left">
-                  <a
-                    href={`/nos-bennes/${benne.slug}`}
-                    class="font-semibold text-ink-950 underline decoration-benne-400 decoration-2 underline-offset-4 hover:text-benne-700"
-                  >
-                    {benne.name}
-                  </a>
-                </th>
-                <td class="px-4 py-4 text-ink-700">
-                  {benne.dimensions.long} × {benne.dimensions.larg} × {benne.dimensions.haut} m
-                </td>
-                <td class="px-4 py-4 text-ink-700">{benne.charge} t</td>
-                <td class="px-4 py-4 text-ink-700">{benne.usages[0]}</td>
-              </tr>
-            ))
-          }
-        </tbody>
-      </table>
-    </div>
-    <p class="mt-4 flex items-start gap-2 text-sm text-ink-500">
-      <Icon name="warning" size={16} class="mt-0.5 shrink-0 text-benne-600" />
-      Chaque location est établie sur devis : le prix dépend du volume, de la nature des déchets et
-      de la commune de livraison. Un appel suffit à obtenir un tarif ferme et tout compris.
-    </p>
+    <Steps steps={etapes} tone="dark" />
   </Section>
 
-  <Section tone="white" eyebrow="Questions fréquentes" title="Bien dimensionner sa benne" align="center">
-    <Faq items={faq} />
-    <div class="mx-auto mt-10 max-w-md">
-      <CallCard
-        title="Un doute sur le volume ?"
-        text="Décrivez-nous le chantier en deux phrases : on vous dit quel format prendre, et on vous annonce le prix."
-      />
+  <Section tone="white">
+    <div class="grid gap-12 lg:grid-cols-5 lg:gap-16">
+      <div class="prose-fr max-w-none lg:col-span-3">
+        <h2>Pourquoi nous ne publions pas de grille de formats</h2>
+        <p>
+          Un catalogue de bennes donne l’illusion du choix, mais il déplace la responsabilité du
+          dimensionnement sur le client — qui n’a, la plupart du temps, aucune raison de savoir
+          combien pèse un mètre cube de gravats ou combien de volume représente le contenu d’un
+          garage. Résultat classique : une benne trop petite, une rotation imprévue, et une facture
+          supérieure à ce qui était annoncé.
+        </p>
+        <p>
+          Notre parc couvre l’ensemble des besoins, du petit contenant pour quelques centaines de
+          kilos de gravats en centre-ville de Tours jusqu’aux grands volumes pour un curage de local.
+          Plutôt que de vous faire trancher, nous préférons poser trois questions et engager notre
+          conseil : c’est nous qui déposons la benne, donc nous qui vérifions que le camion passe,
+          que le sol tient et que le format est le bon.
+        </p>
+
+        <h2>Et si le volume est plus important que prévu ?</h2>
+        <p>
+          Cela arrive, en particulier sur les vide-maisons. Nous organisons alors une
+          <strong>rotation</strong> : la benne pleine est enlevée et une benne vide est reposée au
+          même emplacement, souvent le jour même sur l’agglomération de Tours. Le principe est
+          annoncé dès l’appel initial, jamais découvert sur la facture.
+        </p>
+
+        <h2>Où la benne peut-elle être déposée ?</h2>
+        <p>
+          Sur votre terrain, dans une cour, sur un parking privé ou sur la voie publique. Dans ce
+          dernier cas, une autorisation d’occupation temporaire du domaine public est nécessaire :
+          nous nous en chargeons auprès de la mairie, y compris à Tours, où le délai d’instruction
+          demande quelques jours ouvrés. Sur sol fragile — pavage, enrobé neuf, dalle — nous posons
+          la benne sur plaques de répartition.
+        </p>
+      </div>
+
+      <div class="lg:col-span-2">
+        <div class="sticky top-28">
+          <CallCard
+            title="Décrivez-nous votre chantier"
+            text="Nature des déchets, quantité approximative, commune : on vous dit quelle benne prendre et ce que ça coûte, tout de suite."
+          />
+        </div>
+      </div>
     </div>
+  </Section>
+
+  <Section tone="muted" eyebrow="Questions fréquentes" title="Bien dimensionner sa benne" align="center">
+    <Faq items={faq} openFirst />
   </Section>
 </BaseLayout>

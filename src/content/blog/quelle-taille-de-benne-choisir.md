@@ -37,17 +37,17 @@ Les volumes « ressentis » sont presque toujours faux. Voici des repères mesur
 
 Une réfection de salle de bain complète (faïence, carrelage, chape, sanitaires) produit entre 3 et 5 m³ de gravats, soit environ 5 tonnes. Une dépose de terrasse de 30 m² sur dalle béton en produit 6 à 8.
 
-Dans les deux cas, la [benne 8 m³](/nos-bennes/benne-8m3) est le bon format — et elle a l'avantage de tenir sur une place de stationnement standard, ce qui compte en centre-ville de Tours.
+Dans les deux cas, la [benne 8 m³](/nos-bennes) est le bon format — et elle a l'avantage de tenir sur une place de stationnement standard, ce qui compte en centre-ville de Tours.
 
 ### Déménagement et débarras → benne 10 m³
 
-Le contenu encombrant d'un T3 — vieux meubles, matelas, moquettes, cartons, objets divers — représente en moyenne 8 à 10 m³ pour un poids inférieur à 1,5 tonne. La [benne 10 m³](/nos-bennes/benne-10m3) est ici parfaitement calibrée.
+Le contenu encombrant d'un T3 — vieux meubles, matelas, moquettes, cartons, objets divers — représente en moyenne 8 à 10 m³ pour un poids inférieur à 1,5 tonne. La [benne 10 m³](/nos-bennes) est ici parfaitement calibrée.
 
 Pour un vide-maison complet avec dépendances, passez directement à une benne 20 m³ : le coût supplémentaire est inférieur à celui d'une rotation.
 
 ### Rénovation intérieure complète → benne 15 m³
 
-Une rénovation de pavillon de 100 m² — dépose de cloisons, plafonds, isolants, menuiseries, revêtements de sol — produit typiquement 12 à 15 m³ de déchets mélangés. La [benne 15 m³](/nos-bennes/benne-15m3) évite la rotation intermédiaire.
+Une rénovation de pavillon de 100 m² — dépose de cloisons, plafonds, isolants, menuiseries, revêtements de sol — produit typiquement 12 à 15 m³ de déchets mélangés. La [benne 15 m³](/nos-bennes) évite la rotation intermédiaire.
 
 Attention : si le chantier produit **aussi** des gravats, ne les mélangez pas. Voir plus bas.
 

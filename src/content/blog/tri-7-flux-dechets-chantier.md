@@ -53,7 +53,7 @@ Le coût de traitement varie du simple au quintuple selon le flux. Deux exemples
 
 **Le plâtre.** C'est le contaminant le plus problématique. Composé de sulfate de calcium, il libère du sulfure d'hydrogène en présence d'humidité et de matière organique. Une seule plaque de placo dans une benne de gravats suffit à déclasser tout le chargement.
 
-Conséquence pratique, valable sur presque tous les chantiers de rénovation : prévoir **deux bennes distinctes** — une [benne 8 m³ pour les gravats](/nos-bennes/benne-8m3) et une [benne 15 m³ pour le mélange](/nos-bennes/benne-15m3) — revient moins cher qu'une seule benne tout-venant de 20 m³, malgré le second transport.
+Conséquence pratique, valable sur presque tous les chantiers de rénovation : prévoir **deux bennes distinctes** — une [benne 8 m³ pour les gravats](/nos-bennes) et une [benne 15 m³ pour le mélange](/nos-bennes) — revient moins cher qu'une seule benne tout-venant de 20 m³, malgré le second transport.
 
 ## La traçabilité : le bordereau de suivi
 

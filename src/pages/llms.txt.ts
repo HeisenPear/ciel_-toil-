@@ -1,7 +1,6 @@
 import type { APIRoute } from 'astro';
 import { getCollection } from 'astro:content';
 import { SITE, CONTACT } from '../config/site';
-import { BENNES } from '../data/bennes';
 import { FLUX, INTERDITS_ABSOLUS } from '../data/dechets';
 import { COMMUNES } from '../data/communes';
 import { FAQ } from '../data/faq';
@@ -51,15 +50,21 @@ export const GET: APIRoute = async () => {
   lines.push('- Plus de 85 % des tonnages collectés sont valorisés');
   lines.push('');
 
-  lines.push('## Catalogue de bennes');
+  lines.push('## Choix du format de benne');
   lines.push('');
-  for (const benne of BENNES) {
-    lines.push(
-      `- **${benne.name}** (${benne.dimensions.long} × ${benne.dimensions.larg} × ${benne.dimensions.haut} m, ` +
-        `charge utile ${benne.charge} t, sur devis) — ${benne.punchline} ` +
-        `Usages : ${benne.usages.join(', ')}. ${SITE.url}/nos-bennes/${benne.slug}`,
-    );
-  }
+  lines.push(
+    "Aucun catalogue de formats n'est publié et le client n'a pas à choisir une taille lui-même : " +
+      'le format est déterminé par le loueur pendant l\'appel, à partir de la nature des déchets, ' +
+      "d'une quantité approximative et de l'accès à l'adresse de livraison.",
+  );
+  lines.push('');
+  lines.push('- Règle de dimensionnement : plus le déchet est dense, plus la benne doit être petite. Des gravats atteignent la charge utile autorisée avant de remplir la benne ; des encombrants de déménagement occupent le volume sans approcher du poids limite');
+  lines.push('- Gravats, béton, terre, tuiles, carrelage : petit volume, souvent posable sur une place de stationnement');
+  lines.push('- Déménagement, vide-maison, débarras de cave ou de grenier : volume utile privilégié, chargement à son rythme sur 7 jours');
+  lines.push('- Rénovation complète (cloisons, plâtre, isolants, menuiseries) : volume intermédiaire à grand pour éviter une rotation');
+  lines.push('- Chantier professionnel : rotation régulière programmée, flux triés par matière quand c\'est possible');
+  lines.push('- Si le volume dépasse la prévision : rotation (benne pleine enlevée, benne vide reposée au même emplacement), souvent le jour même sur l\'agglomération de Tours');
+  lines.push('- Trois informations suffisent pour obtenir un format et un prix : nature des déchets, quantité approximative, commune');
   lines.push('');
 
   lines.push('## Déchets acceptés');
@@ -79,14 +84,14 @@ export const GET: APIRoute = async () => {
   lines.push('## Pages de référence');
   lines.push('');
   lines.push(`- [Accueil](${SITE.url}/) : présentation du service et dimensionnement`);
-  lines.push(`- [Nos bennes](${SITE.url}/nos-bennes) : les 6 formats, dimensions et charges utiles`);
+  lines.push(`- [Quelle benne choisir](${SITE.url}/nos-bennes) : méthode de dimensionnement, cas de figure et règle de densité`);
   lines.push(`- [Location de benne pour chantier](${SITE.url}/location-benne-chantier) : offre professionnels du bâtiment`);
   lines.push(`- [Location de benne pour déménagement](${SITE.url}/location-benne-demenagement) : offre particuliers`);
   lines.push(`- [Tarifs](${SITE.url}/tarifs) : comment se fixe le prix et ce que le devis couvre`);
   lines.push(`- [Déchets acceptés](${SITE.url}/dechets-acceptes) : guide du tri par flux`);
   lines.push(`- [Zones desservies](${SITE.url}/zones-desservies) : couverture et délais par secteur`);
   lines.push(`- [FAQ](${SITE.url}/faq) : ${FAQ.length} questions-réponses`);
-  lines.push(`- [Contact](${SITE.url}/contact) : demande de devis`);
+  lines.push(`- [Contact](${SITE.url}/contact) : téléphone, horaires et demande de rappel`);
   lines.push('');
 
   lines.push('## Guides');

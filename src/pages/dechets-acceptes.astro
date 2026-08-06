@@ -8,7 +8,6 @@ import Icon from '../components/Icon.astro';
 import Button from '../components/Button.astro';
 
 import { FLUX, INTERDITS_ABSOLUS } from '../data/dechets';
-import { getBenne, BENNES } from '../data/bennes';
 import { faqByTopic } from '../data/faq';
 import { faqSchema } from '../lib/schema';
 
@@ -28,8 +27,6 @@ const schemas = [
     })),
   },
 ];
-
-const benneFor = (volume: number) => BENNES.find((b) => b.volume === volume) ?? getBenne('benne-10m3');
 ---
 
 <BaseLayout
@@ -97,19 +94,9 @@ const benneFor = (volume: number) => BENNES.find((b) => b.volume === volume) ?? 
                   <dd class="mt-0.5 font-semibold text-tri-600">{flux.valorisation}</dd>
                 </div>
                 <div>
-                  <dt class="font-semibold text-ink-800">Bennes conseillées</dt>
-                  <dd class="mt-1.5 flex flex-wrap gap-1.5">
-                    {flux.bennesConseillees.map((volume) => {
-                      const benne = benneFor(volume);
-                      return benne ? (
-                        <a
-                          href={`/nos-bennes/${benne.slug}`}
-                          class="rounded-full bg-ink-100 px-2.5 py-1 text-xs font-semibold text-ink-800 transition-colors hover:bg-benne-200"
-                        >
-                          {benne.name}
-                        </a>
-                      ) : null;
-                    })}
+                  <dt class="font-semibold text-ink-800">Format de benne</dt>
+                  <dd class="mt-0.5 text-ink-600">
+                    Déterminé avec vous au téléphone, selon la quantité et l’accès.
                   </dd>
                 </div>
               </dl>
@@ -207,8 +194,8 @@ const benneFor = (volume: number) => BENNES.find((b) => b.volume === volume) ?? 
       </p>
       <p>
         Sur un chantier de rénovation qui produit à la fois des gravats et du placo, prévoyez
-        donc <a href="/nos-bennes/benne-8m3">une benne 8 m³ pour les gravats</a> et
-        <a href="/nos-bennes/benne-15m3">une benne 15 m³ pour le mélange</a> plutôt qu’une
+        donc <a href="/nos-bennes">une benne 8 m³ pour les gravats</a> et
+        <a href="/nos-bennes">une benne 15 m³ pour le mélange</a> plutôt qu’une
         seule benne tout-venant.
       </p>
 
